@@ -1,0 +1,382 @@
+%==============================================================================
+%------------------------------------------------------------------------------
+% Notizen, Bemerkungen, Quellen
+%------------------------------------------------------------------------------
+% Bemerkungen:
+% 	- Kompilieren mit PDFLaTeX
+%	- Römische Seitenzahlen im Anhang manuell anpassen !!!
+
+% Notizen:
+%	- 
+
+% Quellen:
+%	-
+%==============================================================================
+
+
+
+
+
+
+%==============================================================================
+%------------------------------------------------------------------------------
+% Dokument Einstellungen
+%------------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\documentclass[
+a4paper,
+12pt,
+headsepline,           % Linie zw. Kopfzeile und Text
+oneside,               % einseitig
+pointlessnumbers,      % keine Punkte nach den letzten Ziffern in Überschriften
+bibtotoc,              % LV im IV
+%DIV=15,               % Satzspiegel auf 15er Raster, schmalere Ränder   
+%BCOR15mm               % Bindekorrektur
+%,draft
+]{scrbook}
+\KOMAoptions{DIV=last} % Neuberechnung Satzspiegel nach Laden von Paket helvet
+%==============================================================================
+
+
+
+
+
+
+%==============================================================================
+%------------------------------------------------------------------------------
+% Seitenlayout
+%------------------------------------------------------------------------------
+\pagestyle{headings}
+\usepackage{blindtext}
+
+% für Texte in deutscher Sprache
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Helvetica als Standard-Dokumentschrift
+\usepackage[scaled]{helvet}
+\renewcommand{\familydefault}{\sfdefault} 
+
+\usepackage{geometry}
+\usepackage{layout}
+
+%------------------------------------------------------------------------------
+% Grafiken
+%------------------------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{float} % um figure/Bild/Abbildung an bestimmte Stelle mit [H]
+\usepackage{framed}
+
+%------------------------------------------------------------------------------
+% Literaturverzeichnis mit BibLKaTeX
+%------------------------------------------------------------------------------
+\usepackage[babel,german=quotes]{csquotes}
+%\usepackage[backend=bibtex8]{biblatex}
+\usepackage[backend=biber,bibencoding=utf8,style=numeric]{biblatex}
+%\bibliography{bibliography}
+\addbibresource{bibliography.bib}
+
+%------------------------------------------------------------------------------
+% Für Tabellen mit fester Gesamtbreite und variabler Spaltenbreite
+%------------------------------------------------------------------------------
+\usepackage{tabularx} 
+
+%------------------------------------------------------------------------------
+% Besondere Schriftauszeichnungen
+%------------------------------------------------------------------------------
+\usepackage{url}              % \url{http://...} in Schreibmaschinenschrift
+\usepackage{color}            % zum Setzen farbigen Textes
+
+%------------------------------------------------------------------------------
+% Pakete für Mathe-Umgebungen, -Symbole und Neudefinition von Kommandos
+%------------------------------------------------------------------------------
+\usepackage{amssymb, amsmath, amsthm} % Pakete für Mathe-Umgebungen und -Symbole
+
+% Mengen Buchstaben:
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+
+%------------------------------------------------------------------------------
+% Mathematische Umgebungen (Satz, Definition, Beweis ...)
+%------------------------------------------------------------------------------
+\newtheorem{myDef}{Definition}
+\newtheorem{myTheorem}{Theorem}
+\newtheorem{mySatz}{Satz}
+\newtheorem{myBeweis}{Beweis}
+\newtheorem*{myBemerkung}{Bemerkung}
+
+%------------------------------------------------------------------------------
+% Formatierung
+%------------------------------------------------------------------------------
+\usepackage{enumitem}
+\usepackage{setspace}         % Paket für div. Abstände, z.B. ZA
+%\onehalfspacing              % nur dann, wenn gefordert; ist sehr groß!!
+\setlength{\parindent}{0pt}   % kein linker Einzug der ersten Absatzzeile
+\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex} % Absatzabstand, leicht variabel
+
+% Tiefe, bis zu der Überschriften in das Inhaltsverzeichnis kommen
+\setcounter{tocdepth}{3}      % ist Standard
+
+%------------------------------------------------------------------------------
+% Quellcode
+%------------------------------------------------------------------------------
+%https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+% Beispiele für Quellcode
+\usepackage{listings}
+\lstset{language=Java,
+  showstringspaces=false,
+  frame=single,
+  numbers=left,
+  basicstyle=\ttfamily,
+  numberstyle=\tiny}
+
+\usepackage{subfloat}
+\usepackage{subcaption}
+\usepackage{mathrsfs}
+
+%verhindet, dass sich Fußnote auf zwei Seiten erstreckt
+\interfootnotelinepenalty=10000 
+
+%------------------------------------------------------------------------------
+% Persönliche Daten
+%------------------------------------------------------------------------------
+\newcommand{\Heiko}{Heiko Karus}
+\newcommand{\Philipp}{Philipp Gehring}
+\newcommand{\Felix}{Felix Götz}
+
+\newcommand{\Hemail}{Heiko.Karus@uni-ulm.de}
+\newcommand{\Pemail}{Philipp.Gehring@uni-ulm.de}
+\newcommand{\Femail}{Felix.Goetz@uni-ulm.de}
+
+\newcommand{\Hmatnr}{0000000}
+\newcommand{\Pmatnr}{0000000}
+\newcommand{\Fmatnr}{1063352}
+
+\newcommand{\titel}{Maximal Range Flight}
+\newcommand{\jahr}{2021}
+\newcommand{\gutachterA}{Prof. Dr. rer. nat. Dirk Lebiedz}
+\newcommand{\gutachterB}{M.Sc. Jörn Dietrich}
+
+\newcommand{\fakultaet}{Mathematik und Wirtschaftswissenschaften}
+\newcommand{\institut}{Institut für numerische Mathematik}
+
+%------------------------------------------------------------------------------
+% Informationen, die LaTeX in die PDF-Datei schreibt
+%------------------------------------------------------------------------------
+\pdfinfo{
+  /Author (Karus, Gehring, Goetz)
+ % /Title (\titel)
+  /Producer     (pdfeTex 3.14159-1.30.6-2.2)
+  /Keywords ()
+}
+
+%\usepackage{hyperref}
+\usepackage[colorlinks=true, urlcolor=blue, linkcolor=green]{hyperref}
+\hypersetup{
+pdftitle=\titel,
+pdfauthor=\Heiko \Philipp \Felix,
+pdfsubject={Projekt Numerik 4},
+pdfproducer={pdfeTex 3.14159-1.30.6-2.2},
+colorlinks=false,
+pdfborder=0 0 0	% keine Box um die Links!
+}
+
+%------------------------------------------------------------------------------
+% Weiter hinzugefügte Pakete
+%------------------------------------------------------------------------------
+\usepackage{xcolor, colortbl}
+
+\counterwithout{footnote}{chapter}
+\usepackage{multirow}
+\usepackage{longtable}
+%==============================================================================
+
+
+
+
+
+
+%==============================================================================
+%------------------------------------------------------------------------------
+% Beginn Dokument
+%------------------------------------------------------------------------------
+% Trennungsregeln
+\hyphenation{Sil-ben-trenn-ung}
+
+\begin{document}
+
+% Seitenlayout
+\newgeometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+
+\frontmatter
+
+%------------------------------------------------------------------------------
+% Titelseite
+%------------------------------------------------------------------------------
+\thispagestyle{empty}
+\begin{addmargin*}[4mm]{-10mm}
+
+\includegraphics[height=1.8cm]{images/00_Sonstiges/unilogo_bild}
+\hfill
+\includegraphics[height=1.8cm]{images/00_Sonstiges/unilogo_wort}\\[2em]
+
+%\includegraphics[height=1.8cm]{images/00_Sonstiges/THU}
+%\hfill
+%\includegraphics[height=1.8cm]{images/00_Sonstiges/unilogo_bild}
+%\includegraphics[height=1.8cm]{images/00_Sonstiges/unilogo_wort}\\[2em]
+
+%\includegraphics[height=1.4cm]{images/unilogo_wort}
+%\hfill
+%\includegraphics[height=1.4cm]{images/THU_word}\\[1em]
+%\includegraphics[height=1.4cm]{images/unilogo_bild}
+%\hfill
+%\includegraphics[height=1.4cm]{images/THU_logo}\\[1em]
+
+{\footnotesize
+%{\bfseries Universität Ulm} \textbar ~89069 Ulm \textbar ~Germany
+\hspace*{130mm}\parbox[t]{35mm}{
+\bfseries Fakultät für\\
+\fakultaet\\
+\mdseries \institut
+}\\[2cm]
+
+\parbox{140mm}{\bfseries \LARGE \titel}\\[2.5em]
+{\footnotesize Projekt Numerik 4}\\[2em]
+
+{\footnotesize \bfseries Vorgelegt von:}\\
+{\footnotesize \Heiko \\ E-Mail: \Hemail \\ Matrikel-Nr.: \Hmatnr}\\ \\%[2em]
+{\footnotesize \Philipp \\ E-Mail: \Pemail \\ Matrikel-Nr.: \Pmatnr}\\ \\%[2em]
+{\footnotesize \Felix \\ E-Mail: \Femail \\ Matrikel-Nr.: \Fmatnr}\\ \\[2em]
+
+{\footnotesize \bfseries Gutachter:}\\                     
+{\footnotesize \gutachterA}\\ \\%[2em]
+{\footnotesize \gutachterB}\\[2em]
+
+{\footnotesize \jahr}
+}
+\end{addmargin*}
+
+%------------------------------------------------------------------------------
+% Impressum
+%------------------------------------------------------------------------------
+\clearpage
+\thispagestyle{empty}
+{ \small
+  \flushleft
+  Fassung \today \\\vfill
+  \copyright~\jahr~\Heiko,~\Philipp,~\Felix\\[0.5em]
+% Wenn Sie Ihre Arbeit unter einer freien Lizenz bereitstellen möchten, können Sie die nächste Zeile in Ihren Code aufnehmen. Bitte beachten Sie, dass Sie hierfür an allen Inhalten, inklusive enthaltener Abbildungen, die notwendigen Rechte benötigen! Beim Veröffentlichungsexemplar Ihrer Dissertation achten Sie bitte darauf, dass der Lizenztext nicht den Angaben in den Metadaten der genutzten Publikationsplattform widerspricht. Nähere Information zu den Creative Commons Lizenzen erhalten Sie hier: https://creativecommons.org/licenses/
+%This work is licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License. To view a copy of this license, visit \href{https://creativecommons.org/licenses/by/4.0/}{https://creativecommons.org/licenses/by/4.0/} or send a letter to Creative Commons, 543 Howard Street, 5th Floor, San Francisco, California, 94105, USA. \\
+  Satz: PDF-\LaTeXe
+}
+
+% ab hier Zeilenabstand etwas größer 
+\setstretch{1.2}
+
+%------------------------------------------------------------------------------
+% Vorwort, Kurzfassung und Abstract
+%------------------------------------------------------------------------------
+% Vorwort
+%\clearpage
+%\input{chapters/Vorwort}
+
+%Kurzfassung
+%\clearpage
+%\input{chapters/Kurzfassung}
+
+% Abstract
+%\clearpage
+%\input{chapters/Abstract}
+
+%------------------------------------------------------------------------------
+% Inhaltsverzeichnis
+%------------------------------------------------------------------------------
+\tableofcontents
+\addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
+
+%------------------------------------------------------------------------------
+% Hauptteil
+%------------------------------------------------------------------------------
+\mainmatter
+\input{chapters/MotivationUndZiel}
+\input{chapters/Modellaufbau}
+\input{chapters/TechnischeUmsetzung}
+\input{chapters/ZusammenfassungAusblick}
+
+%------------------------------------------------------------------------------
+% Anhang
+%------------------------------------------------------------------------------
+\backmatter
+\pagenumbering{roman}
+\setcounter{page}{5} % ACHTUNG MANUELL ANPASSEN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\appendix
+% hier Anhänge einbinden
+%\input{Anhang.tex}
+%\input{chapters/sources}
+
+\backmatter
+
+%------------------------------------------------------------------------------
+% Literatur-, Abbildungs-, Tabellen-, Formel- und Abkuerzungsverzeichnis
+%------------------------------------------------------------------------------
+% Literaturverzeichnis
+\clearpage
+\printbibliography
+
+% Abbildungsverzeichnis
+%\clearpage
+%\listoffigures
+%\addcontentsline{toc}{chapter}{\listfigurename}
+
+% Tabellenverzeichnis
+%\clearpage
+%\listoftables
+%\addcontentsline{toc}{chapter}{\listtablename}
+
+% Formelverzeichnis
+%\clearpage
+%\input{chapters/Formelverzeichnis}
+%%\addcontentsline{toc}{chapter}{Formelverzeichnis}
+
+% Abkuerzungsverzeichnis
+%\clearpage
+%\input{chapters/Abkuerzungsverzeichnis}
+%%\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis}
+
+%------------------------------------------------------------------------------
+% Eigenständigkeitserklärung
+%------------------------------------------------------------------------------
+\clearpage
+\thispagestyle{empty}
+\chapter{Eigenständigkeitserklärung}
+
+\begin{tabbing}
+\hspace{30mm}\=\hspace{60mm}\=\kill
+Namen: \> \Heiko \> (Matrikelnummer: \Hmatnr) \\ 
+  \>  \Philipp \> (Matrikelnummer: \Pmatnr) \\ 
+  \>  \Felix \> (Matrikelnummer: \Fmatnr)
+\end{tabbing} 
+
+\minisec{Erklärung}
+
+Wir erklären, dass wir die Arbeit selbständig verfasst und keine anderen als die angegebenen Quellen und Hilfsmittel verwendet haben.\vspace{2cm}
+
+Ulm, den \dotfill
+
+\hspace{10cm} {\footnotesize \Heiko}\\[2em]
+
+
+Ulm, den \dotfill 
+
+\hspace{10cm} {\footnotesize \Philipp} \\[2em]
+
+
+Ulm, den \dotfill
+
+\hspace{10cm} {\footnotesize \Felix}
+\end{document}
+%==============================================================================

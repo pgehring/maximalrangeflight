@@ -1,0 +1,82 @@
+\chapter{Modellaufbau}
+Modelliert werden soll das Flugzeug A380-800 der Firma Airbus. Dabei seien:
+\begin{itemize}
+\item $x(t)$: $x$-Koordinate des Massenschwerpunktes $S$
+%
+\item $h(t)$: $h$-Koordinate des Massenschwerpunktes $S$
+%
+\item $v(t)$: Geschwindigkeit
+%
+\item $\gamma(t)$: Anstellwinkel
+%
+\item $T(t)$: Schub, Steuerung
+%
+\item $C_L(t)$: Auftriebsbeiwert, Steuerung
+\end{itemize}
+Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden folgende Hilfsgrößen benötigt:
+\begin{itemize}
+\item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi e AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet.
+%
+\item Staudruck: \[q(v(t), h(t)) := \dfrac{1}{2} \cdot \rho(h(t)) \cdot v^2(t)\]
+%
+\item Luftdichte: \[\rho(h(t)) := \alpha e^{-\beta h(t)}\]
+\end{itemize}
+Die Kräfte lassen sich dann berechnen mit:
+\begin{itemize}
+\item Auftriebskraft: \[L(v(t), h(t), C_L(t)) := F \cdot C_L(t) \cdot q(v(t), h(t))\] wobei $F$ die wirksame Fläche, d.h. die von der Luft angeströmte Fläche, ist.
+%
+\item Luftwiderstand: \[D(v(t), h(t), C_L(t)) := F \cdot C_D(C_L(t)) \cdot q(v(t), h(t))\]
+\item Erdanziehungskraft: \[W = mg\]
+\end{itemize}
+
+Für das Modell werden folgende Parameter verwendet:
+\begin{center}
+\begin{tabular}{|l|l|r|l|}
+\hline
+Parameter & Bedeutung & Wert & Einheit \\ 
+\hline 
+$\alpha$ &  & $1.247015$ & $[]$ \\ 
+$\beta$ &  & $0.000104$ & $[]$ \\ 
+$g$ & Erdbeschleunigung & $9.81$ & $[m/s^2]$ \\ 
+$t_f$ & Endzeitpunkt & $1800$ & $[s]$ \\ 
+$C_{D_0}$ & Nullluftwiderstandsbeiwert & $0.032$ & $[]$ \\ 
+$AR$ & Streckung & $7.5$ & $[]$ \\ 
+$e$ & Oswaldfaktor & $0.8$ & $[]$ \\ 
+$F$ & wirksame Fläche & $845$ & $[m^2]$ \\ 
+$m$ & Masse & $276800$ & $[kg]$ \\ 
+$q_{\max}$ & maximaler Staudruck & $44154$ & $[N/m^2]$ \\ 
+$T_{\max}$ & maximale Schubkraft & $1260000$ & $[N]$ \\ 
+$C_{L, \min}$ & minimaler Auftriebsbeiwert & $0$ & $[]$ \\ 
+$C_{L, \max}$ & maximaler Auftriebsbeiwert & $1.48$ & $[]$ \\ 
+\hline
+\end{tabular} 
+\end{center}
+
+Es ergibt sich das Optimalsteuerungsproblem:
+\[\begin{split}
+\min_{T, C_L} X() &:= -(x(t_f) - x_0) \\\
+\text{unter}  \hspace{20mm} \dot{x}(t) &= v(t) \cos(\gamma(t)) \ \qquad \qquad \qquad  \ \ \text{(Dynamik)}\\\
+\dot{h}(t) &= v(t) \sin(\gamma(t)) \\\
+\dot{v}(t) &= \dfrac{1}{m} (T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \\\
+\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} (L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \\\
+%
+(x,h,v,\gamma)(0) &= (x_0,h_0,v_0,\gamma_0) \qquad \qquad \qquad \ \ \ \ \text{(Anfangsbedingungen)}\\\
+(h,\gamma)(t_f) &= (h_f,0) \qquad \qquad \qquad \qquad \qquad  \  \text{(Endbedingungen)}\\\
+%
+q(v(t),h(t)) &\leq q_{\max} \ \ \ \ \forall t \in [0,t_f] \qquad \qquad  \ \ \ \ \ \ \text{(Steuer- und Zustandsbedingungen)}\\\
+T(t) &\in [0,T_{\max}] \ \ \ \ \forall t \in [0,t_f] \\\
+C_L(t) &\in [C_{L, \max},C_{L, \max}] \ \ \ \ \forall t \in [0,t_f] \\\
+\end{split} \]
+
+Die Start- und Endbedingungen sind gegeben mit:
+\begin{equation}
+\begin{pmatrix}
+x_0 = 0 \\ 
+v_0 = 0 \\ 
+h_0 = 0 \\ 
+\gamma_0 = 0.27 \ [Grad]
+\end{pmatrix} \ \ \ \ \text{und} \ \ \ \ \begin{pmatrix}
+h_f = 10668 \ [m] \\ 
+\gamma_f = 0 \ [Grad]
+\end{pmatrix}  
+\end{equation}
