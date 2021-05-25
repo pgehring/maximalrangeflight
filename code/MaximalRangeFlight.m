@@ -37,7 +37,7 @@ beta = 0.000104;
 Z0 = [   0;         % x_0 in [m]
          0;         % h_0 in [m]
          0;         % v_0 in [m/s]
-      0.27];        % gamma_0 in [rad]
+      0.27];        % gamma_0 in [rad]  
 ZT = [10668;        % h_t in [m]
           0];       % gamma_t  in [rad]
 q_max = 44154;      % Maximaler Staudruck in [N/m^2]
