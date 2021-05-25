@@ -40,7 +40,7 @@ Z0 = [   0;         % x_0 in [m]
       0.27];        % gamma_0 in [rad]
 ZT = [10668;        % h_t in [m]
           0];       % gamma_t  in [rad]
-q_max = 60000;      % Maximaler Staudruck in [N/m^2]
+q_max = 44154;      % Maximaler Staudruck in [N/m^2]
 T_max = 1260000;    % Maximale Schubkraft in [N]
 T_span = [0,T_max]; % Bereich des Möglichen Schub
 C_L_min = 0.0;      % Minimaler Auftriebsbeiwert in []
