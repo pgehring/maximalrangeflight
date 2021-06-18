@@ -54,11 +54,11 @@ $C_{L, \max}$ & maximaler Auftriebsbeiwert & $1.48$ & $[]$ \\
 
 Es ergibt sich das Optimalsteuerungsproblem:
 \[\begin{split}
-\min_{T, C_L} X() &:= -(x(t_f) - x_0) \\\
+\min_{T, C_L} F(x,v,h,\gamma,T,C_L) &:= -(x(t_f) - x_0) \\\
 \text{unter}  \hspace{20mm} \dot{x}(t) &= v(t) \cos(\gamma(t)) \ \qquad \qquad \qquad  \ \ \text{(Dynamik)}\\\
 \dot{h}(t) &= v(t) \sin(\gamma(t)) \\\
-\dot{v}(t) &= \dfrac{1}{m} (T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \\\
-\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} (L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \\\
+\dot{v}(t) &= \dfrac{1}{m} \left( T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \right) \\\
+\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} \left( L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \right) \\\
 %
 (x,h,v,\gamma)(0) &= (x_0,h_0,v_0,\gamma_0) \qquad \qquad \qquad \ \ \ \ \text{(Anfangsbedingungen)}\\\
 (h,\gamma)(t_f) &= (h_f,0) \qquad \qquad \qquad \qquad \qquad  \  \text{(Endbedingungen)}\\\
@@ -80,3 +80,33 @@ h_f = 10668 \ [m] \\
 \gamma_f = 0 \ [Grad]
 \end{pmatrix}  
 \end{equation}
+
+
+
+
+
+
+
+
+
+\section{Aufstellen der Hamilton-Funktion}
+Sei nun $\dot{X}(t) = (\dot{x}(t), \dot{h}(t),\dot{v}(t),\dot{\gamma}(t))^T$, so ergibt sich das autonome Mayer-Problem mit \[\min_{T,C_L} F(X,T,C_L) := g(X(t_f)) =  -(x(t_f) - x_0)\] Für die Hamilton-Funktion gilt daher $f_0(t,X(t),T(t),C_L(t)) \equiv 0$ und $f(t,X(t),T(t),C_L(t)) = \dot{X}(t)$ mit
+\[\dot{X}(t) = \begin{pmatrix}
+v(t) \cos(\gamma(t)) \\ 
+v(t) \sin(\gamma(t)) \\ 
+\dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \\ 
+\dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)
+\end{pmatrix} \]
+Für die Hamilton-Funktion ergibt sich somit 
+\[\begin{split}
+H(t,X(t),T(t),C_L(t)) &= \lambda_0 f_0(t,X(t),T(t),C_L(t)) + \lambda^T f(t,X(t),T(t),C_L(t)) \\\
+&= \lambda^T f(t,X(t),T(t),C_L(t)) \\\
+&= \lambda_1 \dot{x}(t) + \lambda_2 \dot{h}(t) + \lambda_3 \dot{v}(t) + \lambda_4 \dot{\gamma}(t) \\\
+&= \lambda_1 v(t) \cos(\gamma(t)) \\\
+&\hspace{7mm} + \lambda_2 v(t) \sin(\gamma(t)) \\\
+&\hspace{7mm} + \dfrac{\lambda_3}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \\\
+&\hspace{7mm} + \dfrac{\lambda_4}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right) 
+\end{split}\]
+
+
+
