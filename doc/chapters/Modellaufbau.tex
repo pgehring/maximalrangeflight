@@ -89,7 +89,7 @@ h_f = 10668 \ [m] \\
 
 
 
-\section{Aufstellen der Hamilton-Funktion}
+\section{Anwendung Minimumpinzip von Pontryagin}
 Sei nun $\dot{X}(t) = (\dot{x}(t), \dot{h}(t),\dot{v}(t),\dot{\gamma}(t))^T$, so ergibt sich das autonome Mayer-Problem mit \[\min_{T,C_L} F(X,T,C_L) := g(X(t_f)) =  -(x(t_f) - x_0)\] Für die Hamilton-Funktion gilt daher $f_0(X(t),T(t),C_L(t)) \equiv 0$ und $f(X(t),T(t),C_L(t)) = \dot{X}(t)$ mit
 \[\dot{X}(t) = \begin{pmatrix}
 v(t) \cos(\gamma(t)) \\ 
@@ -121,8 +121,58 @@ Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),T^{\ast}(t
 wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
 \[\begin{split}
 \lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
-&= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f))
+&= \lambda_0 \begin{pmatrix}
+-1 & 0 & 0 & 0
+\end{pmatrix}  + \nu^T \begin{pmatrix}
+0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\ 
+0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 
+\end{pmatrix}  \\\
+&= \begin{pmatrix}
+-\lambda_{0,x} & \nu_2 & 0 & \nu_4 
+\end{pmatrix}
 \end{split}\]
+(ist $\lambda_{0} =1$ da $x(t_f)$ frei ist ???) Außerdem gilt für autonome Systeme \[H(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t), \lambda(t)) = const \ \in [0, T]\]
 
 
 
+
+
+\section{Aufstellen des Randwertproblems}
+Es ergibt sich somit das Randwertproblem, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht:
+\[\dot{Z}(t) = r(t,Z(t)) = \begin{pmatrix}
+\dot{x}(t) \\
+\dot{h}(t) \\
+\dot{v}(t) \\
+\dot{\gamma}(t) \\
+\dot{\lambda}_1(t) \\ 
+\dot{\lambda}_2(t) \\ 
+\dot{\lambda}_3(t) \\ 
+\dot{\lambda}_4(t)
+\end{pmatrix}  \ \ \ \ r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
+x(t_0) - x_0 \\ 
+v(t_0) - v_0 \\ 
+h(t_0) - h_0 \\ 
+\gamma(t_0) - \gamma_0 \\
+\lambda_1(t_f) + \lambda_{0,x} \\ 
+h(t_f) - h_f \\ 
+\lambda_3(t_f) - 0 \\ 
+\gamma(t_f) - \gamma_f
+\end{pmatrix}\]
+Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
+\[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
+
+\[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
+
+\[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
+
+\[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
+
+\[\dot{\lambda}_1(t) = 0\]
+
+\[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
+
+\[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
+
+\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v(t) - \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) + \lambda_3 g) \cos(\gamma(t)) \right)\]
