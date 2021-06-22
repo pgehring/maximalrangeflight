@@ -133,7 +133,7 @@ wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. Im Endzeitpunkt $t_f$ gilt die Transve
 -\lambda_{0,x} & \nu_2 & 0 & \nu_4 
 \end{pmatrix}
 \end{split}\]
-(ist $\lambda_{0,x} =1$ da $x(t_f)$ frei ist ???) Außerdem gilt für autonome Systeme \[H(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t), \lambda(t)) = const \ \in [0, T]\]
+(ist $\lambda_{0} =1$ da $x(t_f)$ frei ist ???) Außerdem gilt für autonome Systeme \[H(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t), \lambda(t)) = const \ \in [0, T]\]
 
 
 
@@ -160,3 +160,19 @@ h(t_f) - h_f \\
 \lambda_3(t_f) - 0 \\ 
 \gamma(t_f) - \gamma_f
 \end{pmatrix}\]
+Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
+\[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
+
+\[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
+
+\[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
+
+\[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
+
+\[\dot{\lambda}_1(t) = 0\]
+
+\[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
+
+\[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
+
+\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v(t) - \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) + \lambda_3 g) \cos(\gamma(t)) \right)\]
