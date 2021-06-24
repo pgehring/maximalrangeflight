@@ -50,8 +50,8 @@ t_f = 1800;         % Endzeitpunkt in [s]
 t_span = [0,t_f];   % Zeitraum
 
 %% Problemformulierung
-X = dyn_model(t_span, Z0, {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g})
+X = dyn_model(t_f, Z0, {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g})
 
-Z = bvp(t_span, [Z0; Z0], {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g})
+Z = bvp(t_f, [Z0; Z0], {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g})
 
 
