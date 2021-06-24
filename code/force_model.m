@@ -1,5 +1,11 @@
-function F_ret = force_model(v, h, C_L, F, C_D_0, alpha, beta, k, force)
+function F_ret = force_model(v, h, C_L, param, force)
 % force function F_ret(v, h, C_L)
+    
+    alpha = param.alpha;
+    beta = param.beta;
+    C_D_0 = param.C_D_0;
+    k = param.k;
+    F = param.F;
     
     rho = alpha * exp(- beta * h);
     q = 0.5 * rho * v^2;

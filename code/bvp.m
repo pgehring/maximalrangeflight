@@ -2,11 +2,17 @@ function Z_dot = bvp(t, Z, param)
 % DGL Modell des Flugzeugs
 
     % control
-    T = param{1};
-    C_L = param{2};
+    T = param.T;
+    C_L = param.C_L;
     
     % parameter
-    [F, C_D_0, alpha, beta, k, m, g] = param{[3:length(param)]};
+    F = param.F;
+    C_D_0 = param.C_D_0;
+    alpha = param.alpha; 
+    beta = param.beta;
+    k = param.k;
+    m = param.m;
+    g = param.g;
     
     % X_dot = f(t, X, ...)
     Z_dot([1:4], 1) = dyn_model(t, Z([1:4, 1]), param);
