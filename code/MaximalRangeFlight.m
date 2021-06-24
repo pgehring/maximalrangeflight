@@ -49,14 +49,9 @@ C_L_span = [C_L_min,C_L_max]; % Bereich des möglichen Auftriebsbeiwertes
 t_f = 1800;         % Endzeitpunkt in [s]
 t_span = [0,t_f];   % Zeitraum
 
-% Funktionen
-rho =@(h) alpha * exp(- beta * h);      % Luftdichte
-q =@(v,h) 0.5 * rho(h) * v^2;           % Staudruck
-C_D =@(C_L) C_D_0 + k * C_L^2;          % Luftwiderstandsbeiwert
-L =@(v,h,C_L) F * C_L * q(v,h);         % Auftriebskraft
-D =@(v,h,C_L) F * C_D(C_L) * q(v,h);    % Luftwiderstand
-
 %% Problemformulierung
-X_dot = dyn_model(t_span, Z0, {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g});
+X = dyn_model(t_span, Z0, {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g})
+
+Z = bvp(t_span, [Z0; Z0], {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g})
 
 
