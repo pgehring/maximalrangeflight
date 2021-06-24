@@ -57,10 +57,6 @@ L =@(v,h,C_L) F * C_L * q(v,h);         % Auftriebskraft
 D =@(v,h,C_L) F * C_D(C_L) * q(v,h);    % Luftwiderstand
 
 %% Problemformulierung
-Z_dot =@(t,Z,T,C_L) [                                 Z(1) * cos(Z(4)); % x_dot
-                                                      Z(1) * sin(Z(4)); % h_dot
-                        (1/m) * (T - D(Z(3),Z(2),C_L) - m*g*sin(Z(4))); % v_dot
-                     (1/(m*Z(3))) * (L(Z(3),Z(2),C_L) - m*g*cos(Z(4)))];% gamma_dot
+X_dot = dyn_model(t_span, Z0, {T_max, C_L_min, F, C_D_0, alpha, beta, k, m, g});
 
 
-newZ = Z_dot(1,Z0,T_max,C_L_max)
