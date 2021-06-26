@@ -110,13 +110,13 @@ H(X(t),T(t),C_L(t)) &= \lambda_0 f_0(t,X(t),T(t),C_L(t)) + \lambda^T f(t,X(t),T(
 Leitet man nun nach den Steuerfunktionen ab, so ergibt sich für die Minimumbedingung
 \[H_{T}(X^{\ast}(t),T^{\ast}(t),C_L(t),\lambda(t)) = \dfrac{\lambda_3}{m} \stackrel{!}{=} 0\]
 und 
-\[H_{C_L}(X^{\ast}(t),T(t),C_L^{\ast}(t),\lambda(t)) = - \dfrac{\lambda_3 k F v^2(t) \alpha e^{-\beta h(t)}}{2m} C_L(t)  + \dfrac{\lambda_4 F v(t) \alpha e^{-\beta h(t)}}{2m} \stackrel{!}{=} 0 \]
+\[H_{C_L}(X^{\ast}(t),T(t),C_L^{\ast}(t),\lambda(t)) = - \dfrac{\lambda_3 k F v^2(t) \alpha e^{-\beta h(t)}}{m} C_L(t)  + \dfrac{\lambda_4 F v(t) \alpha e^{-\beta h(t)}}{2m} \stackrel{!}{=} 0 \]
 Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t),\lambda(t))$ so erhält man 
 \[H_{X} = \begin{pmatrix}
 0 \\ 
 \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)}\\ 
 \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \\ 
-\dfrac{- \lambda_1 v(t) - \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) + \lambda_3 g) \cos(\gamma(t))
+\dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t))
 \end{pmatrix} \]
 wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
 \[\begin{split}
@@ -175,4 +175,4 @@ Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
 
 \[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
 
-\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v(t) - \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) + \lambda_3 g) \cos(\gamma(t)) \right)\]
+\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t)) \right)\]
