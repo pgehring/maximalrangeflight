@@ -38,13 +38,15 @@ Parameter & Bedeutung & Wert & Einheit \\
 $\alpha$ &  & $1.247015$ & $[]$ \\ 
 $\beta$ &  & $0.000104$ & $[]$ \\ 
 $g$ & Erdbeschleunigung & $9.81$ & $[m/s^2]$ \\ 
+$t_0$ & Anfangszeitpunkt & $0$ & $[s]$ \\ 
 $t_f$ & Endzeitpunkt & $1800$ & $[s]$ \\ 
 $C_{D_0}$ & Nullluftwiderstandsbeiwert & $0.032$ & $[]$ \\ 
 $AR$ & Streckung & $7.5$ & $[]$ \\ 
 $e$ & Oswaldfaktor & $0.8$ & $[]$ \\ 
 $F$ & wirksame Fläche & $845$ & $[m^2]$ \\ 
 $m$ & Masse & $276800$ & $[kg]$ \\ 
-$q_{\max}$ & maximaler Staudruck & $44154$ & $[N/m^2]$ \\ 
+$q_{\max}$ & maximaler Staudruck & $44154$ & $[N/m^2]$ \\
+$T_{\min}$ & minimale Schubkraft & $0$ & $[N]$ \\  
 $T_{\max}$ & maximale Schubkraft & $1260000$ & $[N]$ \\ 
 $C_{L, \min}$ & minimaler Auftriebsbeiwert & $0$ & $[]$ \\ 
 $C_{L, \max}$ & maximaler Auftriebsbeiwert & $1.48$ & $[]$ \\ 
@@ -63,11 +65,10 @@ Es ergibt sich das Optimalsteuerungsproblem:
 (x,h,v,\gamma)(0) &= (x_0,h_0,v_0,\gamma_0) \qquad \qquad \qquad \ \ \ \ \text{(Anfangsbedingungen)}\\\
 (h,\gamma)(t_f) &= (h_f,0) \qquad \qquad \qquad \qquad \qquad  \  \text{(Endbedingungen)}\\\
 %
-q(v(t),h(t)) &\leq q_{\max} \ \ \ \ \forall t \in [0,t_f] \qquad \qquad  \ \ \ \ \ \ \text{(Steuer- und Zustandsbedingungen)}\\\
-T(t) &\in [0,T_{\max}] \ \ \ \ \forall t \in [0,t_f] \\\
-C_L(t) &\in [C_{L, \max},C_{L, \max}] \ \ \ \ \forall t \in [0,t_f] \\\
+q(v(t),h(t)) &\leq q_{\max} \ \ \ \ \forall t \in [t_0,t_f] \qquad \qquad  \ \ \ \ \ \ \text{(Steuer- und Zustandsbedingungen)}\\\
+T(t) &\in [T_{\min},T_{\max}] \ \ \ \ \forall t \in [t_0,t_f] \\\
+C_L(t) &\in [C_{L, \min},C_{L, \max}] \ \ \ \ \forall t \in [t_0,t_f] \\\
 \end{split} \]
-
 Die Start- und Endbedingungen sind gegeben mit:
 \begin{equation}
 \begin{pmatrix}
@@ -89,90 +90,214 @@ h_f = 10668 \ [m] \\
 
 
 
+%\section{Anwendung Minimumpinzip von Pontryagin}
+%Sei nun $\dot{X}(t) = (\dot{x}(t), \dot{h}(t),\dot{v}(t),\dot{\gamma}(t))^T$, so ergibt sich das autonome Mayer-Problem mit \[\min_{T,C_L} F(X,T,C_L) := g(X(t_f)) =  -(x(t_f) - x_0)\] Für die Hamilton-Funktion gilt daher $f_0(X(t),T(t),C_L(t)) \equiv 0$ und $f(X(t),T(t),C_L(t)) = \dot{X}(t)$ mit
+%\[\dot{X}(t) = \begin{pmatrix}
+%v(t) \cos(\gamma(t)) \\ 
+%v(t) \sin(\gamma(t)) \\ 
+%\dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \\ 
+%\dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)
+%\end{pmatrix} \]
+%Für die Hamilton-Funktion ergibt sich somit 
+%\[\begin{split}
+%H(X(t),T(t),C_L(t)) &= \lambda_0 f_0(t,X(t),T(t),C_L(t)) + \lambda^T f(t,X(t),T(t),C_L(t)) \\\
+%&= \lambda^T f(t,X(t),T(t),C_L(t)) \\\
+%&= \lambda_1 \dot{x}(t) + \lambda_2 \dot{h}(t) + \lambda_3 \dot{v}(t) + \lambda_4 \dot{\gamma}(t) \\\
+%&= \lambda_1 v(t) \cos(\gamma(t)) \\\
+%&\hspace{7mm} + \lambda_2 v(t) \sin(\gamma(t)) \\\
+%&\hspace{7mm} + \dfrac{\lambda_3}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \\\
+%&\hspace{7mm} + \dfrac{\lambda_4}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right) 
+%\end{split}\]
+%Leitet man nun nach den Steuerfunktionen ab, so ergibt sich für die Minimumbedingung
+%\[H_{T}(X^{\ast}(t),T^{\ast}(t),C_L(t),\lambda(t)) = \dfrac{\lambda_3}{m} \stackrel{!}{=} 0\]
+%und 
+%\[H_{C_L}(X^{\ast}(t),T(t),C_L^{\ast}(t),\lambda(t)) = - \dfrac{\lambda_3 k F v^2(t) \alpha e^{-\beta h(t)}}{m} C_L(t)  + \dfrac{\lambda_4 F v(t) \alpha e^{-\beta h(t)}}{2m} \stackrel{!}{=} 0 \]
+%Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t),\lambda(t))$ so erhält man 
+%\[H_{X} = \begin{pmatrix}
+%0 \\ 
+%\dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)}\\ 
+%\lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \\ 
+%\dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t))
+%\end{pmatrix} \]
+%wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
+%\[\begin{split}
+%\lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
+%&= \lambda_0 \begin{pmatrix}
+%-1 & 0 & 0 & 0
+%\end{pmatrix}  + \nu^T \begin{pmatrix}
+%0 & 0 & 0 & 0 \\
+%0 & 1 & 0 & 0 \\ 
+%0 & 0 & 0 & 0 \\
+%0 & 0 & 0 & 1 
+%\end{pmatrix}  \\\
+%&= \begin{pmatrix}
+%-\lambda_{0,x} & \nu_2 & 0 & \nu_4 
+%\end{pmatrix}
+%\end{split}\]
+%(ist $\lambda_{0} =1$ da $x(t_f)$ frei ist ???) Außerdem gilt für autonome Systeme \[H(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t), \lambda(t)) = const \ \in [0, T]\]
+
+%\section{Aufstellen des Randwertproblems}
+%Es ergibt sich somit das Randwertproblem, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht:
+%\[\dot{Z}(t) = r(t,Z(t)) = \begin{pmatrix}
+%\dot{x}(t) \\
+%\dot{h}(t) \\
+%\dot{v}(t) \\
+%\dot{\gamma}(t) \\
+%\dot{\lambda}_1(t) \\ 
+%\dot{\lambda}_2(t) \\ 
+%\dot{\lambda}_3(t) \\ 
+%\dot{\lambda}_4(t)
+%\end{pmatrix}  \ \ \ \ r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
+%x(t_0) - x_0 \\ 
+%v(t_0) - v_0 \\ 
+%h(t_0) - h_0 \\ 
+%\gamma(t_0) - \gamma_0 \\
+%\lambda_1(t_f) + \lambda_{0,x} \\ 
+%h(t_f) - h_f \\ 
+%\lambda_3(t_f) - 0 \\ 
+%\gamma(t_f) - \gamma_f
+%\end{pmatrix}\]
+%Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
+%\[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
+%
+%\[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
+%
+%\[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
+%
+%\[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
+%
+%\[\dot{\lambda}_1(t) = 0\]
+%
+%\[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
+%
+%\[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
+%
+%\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t)) \right)\]
+
+
+
 \section{Anwendung Minimumpinzip von Pontryagin}
-Sei nun $\dot{X}(t) = (\dot{x}(t), \dot{h}(t),\dot{v}(t),\dot{\gamma}(t))^T$, so ergibt sich das autonome Mayer-Problem mit \[\min_{T,C_L} F(X,T,C_L) := g(X(t_f)) =  -(x(t_f) - x_0)\] Für die Hamilton-Funktion gilt daher $f_0(X(t),T(t),C_L(t)) \equiv 0$ und $f(X(t),T(t),C_L(t)) = \dot{X}(t)$ mit
-\[\dot{X}(t) = \begin{pmatrix}
-v(t) \cos(\gamma(t)) \\ 
-v(t) \sin(\gamma(t)) \\ 
-\dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \\ 
-\dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)
-\end{pmatrix} \]
-Für die Hamilton-Funktion ergibt sich somit 
+Aus dem Modellaufbau ergeben sich die Definitionen 
 \[\begin{split}
-H(X(t),T(t),C_L(t)) &= \lambda_0 f_0(t,X(t),T(t),C_L(t)) + \lambda^T f(t,X(t),T(t),C_L(t)) \\\
-&= \lambda^T f(t,X(t),T(t),C_L(t)) \\\
-&= \lambda_1 \dot{x}(t) + \lambda_2 \dot{h}(t) + \lambda_3 \dot{v}(t) + \lambda_4 \dot{\gamma}(t) \\\
-&= \lambda_1 v(t) \cos(\gamma(t)) \\\
-&\hspace{7mm} + \lambda_2 v(t) \sin(\gamma(t)) \\\
-&\hspace{7mm} + \dfrac{\lambda_3}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \\\
-&\hspace{7mm} + \dfrac{\lambda_4}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right) 
+g(X(t_f)) &=  -(x(t_f) - x_0) \hspace{34mm} (g : \R^n \to \R) \\\
+f_0(X(t),U(t)) &\equiv 0 \hspace{54mm} (f_0 : \R^n \times \R^m \to \R^n)\\\
+f(X(t),U(t)) &= \dot{X}(t) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T \hspace{10.5mm} (f : \R^n \times \R^m \to \R^n) \\\
+U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \subset \R^2 \hspace{19mm} (U : [t_0,t_f] \to \R^m)
 \end{split}\]
-Leitet man nun nach den Steuerfunktionen ab, so ergibt sich für die Minimumbedingung
-\[H_{T}(X^{\ast}(t),T^{\ast}(t),C_L(t),\lambda(t)) = \dfrac{\lambda_3}{m} \stackrel{!}{=} 0\]
-und 
-\[H_{C_L}(X^{\ast}(t),T(t),C_L^{\ast}(t),\lambda(t)) = - \dfrac{\lambda_3 k F v^2(t) \alpha e^{-\beta h(t)}}{m} C_L(t)  + \dfrac{\lambda_4 F v(t) \alpha e^{-\beta h(t)}}{2m} \stackrel{!}{=} 0 \]
-Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t),\lambda(t))$ so erhält man 
-\[H_{X} = \begin{pmatrix}
-0 \\ 
-\dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)}\\ 
-\lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \\ 
-\dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t))
+Des Weiteren sei $\psi : \R^4 \to \R^2$ eine $C^1$-Funktion (mit $0 \leq (r = 2) \leq (n = 4)$) \[\psi(X(t_f)) = \begin{pmatrix}
+h(t_f) - h_f \\ 
+\gamma(t_f) - \gamma_f
+\end{pmatrix} = 0\]
+So ergibt sich das autonome Mayer-Problem mit 
+\[\begin{split}
+\min F(X,U) &:= g(X(t_f)) =  -(x(t_f) - x_0) \\\
+\text{unter}  \hspace{20mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T \hspace{10mm} \forall t \in [t_0,t_f] \\\
+%
+X(t_0) &= X_0 = (h_0,\gamma_0,x_0,v_0)^T\\\
+\psi(X(t_f)) &= 0\\\
+%
+q(X(t)) &\leq q_{\max} \hspace{10mm} \forall t \in [t_0,t_f] \\\
+U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \left( = \left[\begin{matrix}
+[T_{\min},T_{\max}] \\ 
+[C_{L, \min},C_{L, \max}]
+\end{matrix} \right] \forall t \in [0,t_f] \right) \subset \R^2
+\end{split} \]
+Für die Funktion $f$ lässt sich konkret
+\[f(X(t),U(t)) = \dot{X}(t) = \begin{pmatrix}
+v(t) \sin(\gamma(t)) \\ 
+\dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right) \\ 
+v(t) \cos(\gamma(t)) \\ 
+\dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right)
 \end{pmatrix} \]
-wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
+Für die Hamilton-Funktion ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0$) und $\lambda : [t_0,t_f] \to \R^n$
+\[\begin{split}
+H(X(t),U(t),\lambda(t)) &= \lambda_0 f_0(X(t),U(t)) + \lambda(t)^T f(X(t),U(t)) \\\
+&= \lambda(t)^T f(X(t),U(t)) \\\
+&= \lambda_1 \dot{h}(t) + \lambda_2 \dot{\gamma}(t)  + \lambda_3 \dot{x}(t) + \lambda_4 \dot{v}(t) \\\
+&= \lambda_1 v(t) \sin(\gamma(t)) \\\
+&\hspace{7mm} + \dfrac{\lambda_2}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right) \\\
+&\hspace{7mm} + \lambda_3 v(t) \cos(\gamma(t)) \\\
+&\hspace{7mm} + \dfrac{\lambda_4}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) 
+\end{split}\]
+Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontryagin aufstellen:
+\begin{enumerate}
+\item \textbf{Minimumbedingung:} Es gilt an allen Stetigkeitsstellen $t \in [t_0,t_f]$ von $u^{\ast}(t)$ die Minimumbedingung \[H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \min_{U(t) \in \mathcal{U}} H(X^{\ast}(t),U(t),\lambda(t))\] Leitet man nun nach der Steuerfunktion $U(t)$ ab, so ergibt sich für die Minimumbedingung
+\[\dfrac{\partial}{\partial U} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
+\dfrac{\lambda_4}{m} \\ 
+- \dfrac{\lambda_4 k F v^2(t) \alpha e^{-\beta h(t)}}{m} C_L(t)  + \dfrac{\lambda_2 F v(t) \alpha e^{-\beta h(t)}}{2m}
+\end{pmatrix}^T \stackrel{!}{=} 0\]
+und 
+\[\dfrac{\partial^2}{\partial U^2} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
+0 & - \dfrac{\lambda_4 k F v^2(t) \alpha e^{-\beta h(t)}}{m} 
+\end{pmatrix} \stackrel{!}{\geq} 0\] wobei \[\sigma(x(t),\lambda(t)) := H_u(X^{\ast}(t),U^{\ast}(t),\lambda(t))\] Schaltfunktion genannt wird.
+%
+\item \textbf{Adjungierte DGL:} Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),U^{\ast}(t),\lambda(t))$ so erhält man 
+\[\dfrac{\partial}{\partial X} H = \begin{pmatrix}
+\dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_4 - C_L(t) v(t) \lambda_2}{2m} \alpha F \beta e^{-\beta h(t)}\\ 
+\dfrac{- \lambda_3 v^2(t) + \lambda_2 g}{v(t)} \sin(\gamma(t)) + (\lambda_1 v(t) - \lambda_4 g) \cos(\gamma(t)) \\
+0 \\ 
+\lambda_3 \cos(\gamma(t)) + \lambda_1 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_4 + C_L(t) \lambda_2}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_2}{v^2(t)} \\
+\end{pmatrix}^T \]
+wobei gilt $\dot{\lambda}(t)^T = -H_{X}$.
+%
+\item \textbf{Transversalitätsbedingung:} Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung mit dem Vektor $\nu \in \R^r$ mit $(\lambda_0,\lambda(t),\nu) \neq 0$ für alle $t \in [t_0,t_f]$
 \[\begin{split}
 \lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
 &= \lambda_0 \begin{pmatrix}
--1 & 0 & 0 & 0
+0 & 0 & -1 & 0
 \end{pmatrix}  + \nu^T \begin{pmatrix}
-0 & 0 & 0 & 0 \\
-0 & 1 & 0 & 0 \\ 
-0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 1 
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 
 \end{pmatrix}  \\\
 &= \begin{pmatrix}
--\lambda_{0,x} & \nu_2 & 0 & \nu_4 
+\nu_4 & \nu_2 & -\lambda_0 & 0 
 \end{pmatrix}
 \end{split}\]
-(ist $\lambda_{0} =1$ da $x(t_f)$ frei ist ???) Außerdem gilt für autonome Systeme \[H(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t), \lambda(t)) = const \ \in [0, T]\]
+(ist $\lambda_{0} =1$ da $x(t_f)$ frei ist und $\psi_X(X^{\ast}(t_f))$ hat vollen Zeilenrang???) 
+%
+\item \textbf{Konstanz:} Für autonome Systeme gilt \[H(X^{\ast}(t),U^{\ast}(t), \lambda(t)) = const \ \in [t_0,t_f]\]
+\end{enumerate}
+
+
+
+
+
+
+\section{Überprüfung der optimalen Steuerung}
+Die Steuerung $T(t)$ (Schub) geht linear in die Hamilton-Funktion ein. Um die Hamilton-Funktion zu minimieren gilt für diese Bang-Bang Verhalten.
+
+Die Steuerung $C_L(t)$ geht nichtlinear in die Hamilton-Funktion ein.
+
+
+
+
+
+
+\section{Überprüfung der Hinreichenden Optimalitätsbedingungen}
+
+
 
 
 
 
 
 \section{Aufstellen des Randwertproblems}
-Es ergibt sich somit das Randwertproblem, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht:
-\[\dot{Z}(t) = r(t,Z(t)) = \begin{pmatrix}
-\dot{x}(t) \\
-\dot{h}(t) \\
-\dot{v}(t) \\
-\dot{\gamma}(t) \\
-\dot{\lambda}_1(t) \\ 
-\dot{\lambda}_2(t) \\ 
-\dot{\lambda}_3(t) \\ 
-\dot{\lambda}_4(t)
-\end{pmatrix}  \ \ \ \ r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
-x(t_0) - x_0 \\ 
-v(t_0) - v_0 \\ 
+Muss also ein Mehrpunktrandwertproblem sein ???
+
+
+Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht. Für $r(t,Z(t))$ ergibt sich \[r(t,Z(t)) = \dot{Z}(t) = \begin{pmatrix}
+\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
+\end{pmatrix}^T\] Für $r_0(Z(t_0),Z(t_f)) = 0$ müssen zunächst die Endbedingungen mit gebildet aus 
+\[\begin{split}
+X_i(t_f) &= c_i \hspace{25mm} (i=1,...,r) \\\
+\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) \hspace{5mm} (i=r+1,...,n)
+\end{split}\] gebildet werden. Es ergibt sich dann \[r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
 h(t_0) - h_0 \\ 
 \gamma(t_0) - \gamma_0 \\
-\lambda_1(t_f) + \lambda_{0,x} \\ 
+x(t_0) - x_0 \\ 
+v(t_0) - v_0 \\ 
 h(t_f) - h_f \\ 
-\lambda_3(t_f) - 0 \\ 
-\gamma(t_f) - \gamma_f
+\gamma(t_f) - \gamma_f \\
+\lambda_3(t_f) + \lambda_0 \\ 
+\lambda_4(t_f) - 0
 \end{pmatrix}\]
-Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
-\[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
-
-\[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
-
-\[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
-
-\[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
-
-\[\dot{\lambda}_1(t) = 0\]
-
-\[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
-
-\[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
-
-\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t)) \right)\]
