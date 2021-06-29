@@ -114,11 +114,14 @@ und
 Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),T^{\ast}(t),C_L^{\ast}(t),\lambda(t))$ so erhält man 
 \[H_{X} = \begin{pmatrix}
 0 \\ 
-\dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)}\\ 
-\lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \\ 
-\dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t))
+\dfrac{\lambda_3}{2m} C_{DL}(t) v^2(t) F \beta \rho(h(t))   - \dfrac{\lambda_4}{2m} C_L(t) v(t) F \beta \rho(h(t))  \\ 
+\lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) - \dfrac{\lambda_3}{m} C_{DL}(t)  v(t) F \rho(h(t))   - \dfrac{\lambda_4}{2m} \left(C_L(t) v(t) F \rho(h(t))  + \dfrac{2mg}{v(t)^2}\cos(\gamma(t))\right) \\ 
+-\lambda_1 v(t) \sin(\gamma(t)) + \lambda_2 v(t) \cos(\gamma(t)) - \lambda_3 g \cos(\gamma(t)) + \lambda_4 \dfrac{g}{v(t)} \sin(\gamma(t)) 
 \end{pmatrix} \]
-wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
+mit \(C_{DL}(t) = C_{D_0}+k C_L^2(t)\) und \(\rho(h(t)) = \alpha e^{-\beta h(t)}\)
+wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. 
+
+Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
 \[\begin{split}
 \lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
 &= \lambda_0 \begin{pmatrix}
@@ -160,19 +163,23 @@ h(t_f) - h_f \\
 \lambda_3(t_f) - 0 \\ 
 \gamma(t_f) - \gamma_f
 \end{pmatrix}\]
-Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
-\[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
+% Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
+% \[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
 
-\[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
+% \[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
 
-\[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
+% \[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
 
-\[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
+% \[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
 
-\[\dot{\lambda}_1(t) = 0\]
+% \[\dot{\lambda}_1(t) = 0\]
 
-\[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
+% \[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
 
-\[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
+% \[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
 
+<<<<<<< HEAD
 \[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t)) \right)\]
+=======
+% \[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v(t) - \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) + \lambda_3 g) \cos(\gamma(t)) \right)\]
+>>>>>>> fixed bvp

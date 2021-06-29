@@ -280,4 +280,6 @@ TSWLatexianTemp*
 desktop.ini
 .DS_Store
 
+# MATLAB file types
+*.asv
 
