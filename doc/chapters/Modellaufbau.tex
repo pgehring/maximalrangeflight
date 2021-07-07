@@ -35,11 +35,21 @@ Für das Modell werden folgende Parameter verwendet:
 \hline
 Parameter & Bedeutung & Wert & Einheit \\ 
 \hline 
-$\alpha$ &  & $1.247015$ & $[]$ \\ 
-$\beta$ &  & $0.000104$ & $[]$ \\ 
-$g$ & Erdbeschleunigung & $9.81$ & $[m/s^2]$ \\ 
+\hline
 $t_0$ & Anfangszeitpunkt & $0$ & $[s]$ \\ 
 $t_f$ & Endzeitpunkt & $1800$ & $[s]$ \\ 
+\hline
+$x_0$ & Anfangskoordinate & $0$ & $[m]$ \\ 
+$v_0$ & Anfangsgeschwindigkeit & $100$ & $[m/s]$ \\ 
+$h_0$ & Anfangshöhe & $0$ & $[m]$ \\ 
+$\gamma_0$ & Anfangsanstellwinkel & $0.27$ & $[Grad]$ \\
+\hline
+$h_f$ & Endhöhe & $10668$ & $[m]$ \\ 
+$\gamma_f$ & Endanstellwinkel & $0$ & $[Grad]$ \\
+\hline
+$\alpha$ &  & $1.247015$ & $[]$ \\ 
+$\beta$ &  & $0.000104$ & $[]$ \\
+$g$ & Erdbeschleunigung & $9.81$ & $[m/s^2]$ \\ 
 $C_{D_0}$ & Nullluftwiderstandsbeiwert & $0.032$ & $[]$ \\ 
 $AR$ & Streckung & $7.5$ & $[]$ \\ 
 $e$ & Oswaldfaktor & $0.8$ & $[]$ \\ 
@@ -63,24 +73,24 @@ Es ergibt sich das Optimalsteuerungsproblem:
 \dot{\gamma}(t) &=  \dfrac{1}{mv(t)} \left( L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \right) \\\
 %
 (x,h,v,\gamma)(0) &= (x_0,h_0,v_0,\gamma_0) \qquad \qquad \qquad \ \ \ \ \text{(Anfangsbedingungen)}\\\
-(h,\gamma)(t_f) &= (h_f,0) \qquad \qquad \qquad \qquad \qquad  \  \text{(Endbedingungen)}\\\
+(h,\gamma)(t_f) &= (h_f,\gamma_f) \qquad \qquad \qquad \qquad \qquad  \  \text{(Endbedingungen)}\\\
 %
 q(v(t),h(t)) &\leq q_{\max} \ \ \ \ \forall t \in [t_0,t_f] \qquad \qquad  \ \ \ \ \ \ \text{(Steuer- und Zustandsbedingungen)}\\\
 T(t) &\in [T_{\min},T_{\max}] \ \ \ \ \forall t \in [t_0,t_f] \\\
 C_L(t) &\in [C_{L, \min},C_{L, \max}] \ \ \ \ \forall t \in [t_0,t_f] \\\
 \end{split} \]
-Die Start- und Endbedingungen sind gegeben mit:
-\begin{equation}
-\begin{pmatrix}
-x_0 = 0 \\ 
-v_0 = 0 \\ 
-h_0 = 0 \\ 
-\gamma_0 = 0.27 \ [Grad]
-\end{pmatrix} \ \ \ \ \text{und} \ \ \ \ \begin{pmatrix}
-h_f = 10668 \ [m] \\ 
-\gamma_f = 0 \ [Grad]
-\end{pmatrix}  
-\end{equation}
+%Die Start- und Endbedingungen sind gegeben mit:
+%\begin{equation}
+%\begin{pmatrix}
+%x_0 = 0 \\ 
+%v_0 = 0 \\ 
+%h_0 = 0 \\ 
+%\gamma_0 = 0.27 \ [Grad]
+%\end{pmatrix} \ \ \ \ \text{und} \ \ \ \ \begin{pmatrix}
+%h_f = 10668 \ [m] \\ 
+%\gamma_f = 0 \ [Grad]
+%\end{pmatrix}  
+%\end{equation}
 
 
 
@@ -175,7 +185,7 @@ h_f = 10668 \ [m] \\
 %\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t)) \right)\]
 
 
-
+\newpage
 \section{Anwendung Minimumpinzip von Pontryagin}
 Aus dem Modellaufbau ergeben sich die Definitionen 
 \[\begin{split}
