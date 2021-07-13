@@ -66,7 +66,7 @@ n_c = 0;
 n_s = 1;
 n_psi = 6;
 % Gitter
-N = 500; % Anzahl an Diskretisierungen
+N = 50; % Anzahl an Diskretisierungen
 t = linspace(t_0,t_f,N+1);
 % Anfangs- und Endbedingungen
 x_start = X0; % Anfangsgeschwindigkeit
@@ -74,12 +74,12 @@ x_end = XT;
 
 %% Optimierungsproblem
 % Startvektor
-x0 = [   13654;         % h_0 in [m]
-      36;         % gamma_0 in [rad]  
-         22365;         % x_0 in [m]
-      23];         % v_0 in [m/s]
-u0 = [60000;        % T
-      1.3];       % C_L
+x0 = [   1;         % h_0 in [m]
+      30;         % gamma_0 in [rad]  
+         1;         % x_0 in [m]
+      100];         % v_0 in [m/s]
+u0 = [T_max;        % T
+      C_L_max];       % C_L
 z0 = zeros(n_x+n_u*(N+1),1);
 z0(1:n_x) = x0;
 for i = 0:N
@@ -89,7 +89,7 @@ end
 lb = zeros(n_x+n_u*(N+1),1);
 ub = zeros(n_x+n_u*(N+1),1);
 lb(1:n_x) = [0;-90;0;0];% eventuelle Beschränkungen an h,gamma,x,v
-ub(1:n_x) = [15000;90;1e8;350];
+ub(1:n_x) = [15000;90;Inf;350];
 for i = 0:N
     lb((i*n_u)+n_x+1:(i+1)*n_u+n_x) = [T_min;C_L_min];
     ub((i*n_u)+n_x+1:(i+1)*n_u+n_x) = [T_max;C_L_max];
@@ -122,7 +122,7 @@ end
 f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
                                   (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
                                                                                                 X(4)*cosd(X(2));
-             (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+              (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
 X(:,1) = Sol(1:n_x);
 for i = 0:N-1
     X(:,2+i) = X(:,1+i) + (t(i+2)-t(i+1))*f(X,Sol,t(i+1),i);
@@ -159,45 +159,84 @@ legend('gamma_{sol}','C_{L_{sol}}');
 
 
 %% Funktionen für die Nebenbedingungen
+% Differentialgleichung
+% function X = f(t,x,z) 
+% X = [                                                                                 x(4)*sind(x(2));
+%                                   (1/(2*m*x(4))) * (F*z(2)*(x(4))^2*alpha*exp(-beta*x(1)) - 2*m*g*cosd(x(2)));
+%                                                                                               x(4)*cosd(x(2));
+%              (1/(2*m)) * (2*z(1) + (-C_D_0 - k*(z(2))^2)*F*(x(4))^2*alpha*exp(-beta*x(1)) - 2*m*g*sind(x(2)))];
+% end
 % Zielfunktional
 function T = Zielfunktional(z,t,N,x_start,x_end,n_x,n_u,n_c,n_s,n_psi,alpha,beta,g,C_D_0,e,F,AR,k,m,q_max,T_min,T_max,C_L_min,C_L_max)
+% % DGL
+% f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
+%                                   (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
+%                                                                                                 X(4)*cosd(X(2));
+%              (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+% X = z(1:n_x);
+% for i = 0:N-1
+%     X = X + (t(i+2)-t(i+1))*f(X,z,t(i+1),i);
+% end
+
 % DGL
-f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
-                                  (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
-                                                                                                X(4)*cosd(X(2));
-             (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
-X = z(1:n_x);
-for i = 0:N-1
-    X = X + (t(i+2)-t(i+1))*f(X,z,t(i+1),i);
-end
+f =@(t,X,z) [                                                                                 X(4)*sind(X(2));
+                                  (1/(2*m*X(4))) * (F*z(2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
+                                                                                              X(4)*cosd(X(2));
+             (1/(2*m)) * (2*z(1) + (-C_D_0 - k*(z(2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+x = irk(f,t,z,N,n_x,n_u)';
+X = x(:,end);
+
+
+%
 T = -(X(3)-z(3));
 end
 % Ungleichungsnebenbedingungen
 function g_array = Ungleichungsnebenbedingungen(z,t,N,x_start,x_end,n_x,n_u,n_c,n_s,n_psi,alpha,beta,g,C_D_0,e,F,AR,k,m,q_max,T_min,T_max,C_L_min,C_L_max)
-g_array = zeros((n_c+n_s)*(N+1),1);
-%
+% g_array = zeros((n_c+n_s)*(N+1),1);
+% %
+% % DGL
+% f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
+%                                   (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
+%                                                                                                 X(4)*cosd(X(2));
+%              (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+% X = z(1:n_x);
+% for i = 0:N-1
+%     g_array((i*n_s)+n_c*(N+1)+1) = 0.5 * alpha * exp(-beta*X(1)) * (X(4))^2 - q_max;
+%     X = X + (t(i+2)-t(i+1))*f(X,z,t(i+1),i);
+% end
+
 % DGL
-f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
-                                  (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
-                                                                                                X(4)*cosd(X(2));
-             (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
-X = z(1:n_x);
+f =@(t,X,z) [                                                                                 X(4)*sind(X(2));
+                                  (1/(2*m*X(4))) * (F*z(2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
+                                                                                              X(4)*cosd(X(2));
+             (1/(2*m)) * (2*z(1) + (-C_D_0 - k*(z(2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+x = irk(f,t,z,N,n_x,n_u)';
+%
+g_array = zeros((n_c+n_s)*(N+1),1);
 for i = 0:N-1
-    g_array((i*n_s)+n_c*(N+1)+1) = 0.5 * alpha * exp(-beta*X(1)) * (X(4))^2 - q_max;
-    X = X + (t(i+2)-t(i+1))*f(X,z,t(i+1),i);
+    g_array((i*n_s)+n_c*(N+1)+1) = 0.5 * alpha * exp(-beta*x(1,i+1)) * (x(4,i+1))^2 - q_max;
 end
 end
 % Gleichungsnebenbedingungen
 function h_array = Gleichungsnebenbedingungen(z,t,N,x_start,x_end,n_x,n_u,n_c,n_s,n_psi,alpha,beta,g,C_D_0,e,F,AR,k,m,q_max,T_min,T_max,C_L_min,C_L_max)
+% % DGL
+% f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
+%                                   (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
+%                                                                                                 X(4)*cosd(X(2));
+%              (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+% X = z(1:n_x);
+% for i = 0:N-1
+%     X = X + (t(i+2)-t(i+1))*f(X,z,t(i+1),i);
+% end
+
 % DGL
-f =@(X,z,t,i) [                                                                                   X(4)*sind(X(2));
-                                  (1/(2*m*X(4))) * (F*z((i*n_u)+n_x+2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
-                                                                                                X(4)*cosd(X(2));
-             (1/(2*m)) * (2*z((i*n_u)+n_x+1) + (-C_D_0 - k*(z((i*n_u)+n_x+2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
-X = z(1:n_x);
-for i = 0:N-1
-    X = X + (t(i+2)-t(i+1))*f(X,z,t(i+1),i);
-end
+f =@(t,X,z) [                                                                                 X(4)*sind(X(2));
+                                  (1/(2*m*X(4))) * (F*z(2)*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*cosd(X(2)));
+                                                                                              X(4)*cosd(X(2));
+             (1/(2*m)) * (2*z(1) + (-C_D_0 - k*(z(2))^2)*F*(X(4))^2*alpha*exp(-beta*X(1)) - 2*m*g*sind(X(2)))];
+x = irk(f,t,z,N,n_x,n_u)';
+X = x(:,end);
+%
 h_array = [z(1)-x_start(1);
            z(2)-x_start(2);
            z(3)-x_start(3);
