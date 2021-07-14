@@ -1,13 +1,20 @@
+% ode_method.m:
+
+% Klasse an verschiedenen Einschrittverfahren zur Lösung von ODE's
+
+% Date:         27.08.2021
+% Author:       Gehring, Philipp / Karus, Heiko / Götz, Felix
+
 classdef ode_methods
-    % Using a class for this provides a cleaner interface
     properties
+        %% Variablen für die Berechnung
         A;
         b;
         c;
         s;
     end
     methods
-        % Constructor
+        %% Constructor
         function obj = ode_methods()
             % RADAU-2A-Verfahren
             obj.A = [5/12, -1/12;
@@ -20,7 +27,7 @@ classdef ode_methods
         
         %% Explicit method
         function Z = explicit_euler(obj,f,t,z,N,n_x)
-            Z = zeros(N,length(z(1:n_x)));
+            Z = zeros(N,n_x);
             % Berechenen der Werte für jeden Zeitpunkt
             for n = 1:N-1
                 Z(n,:) = (t(n+1)-t(n))*f(t(n),z(n,:));
@@ -28,13 +35,13 @@ classdef ode_methods
         end
         
         %% Implicit methods
-        function y = irk(obj,f,t,z,N,n_x)
+        function Z = irk(obj,f,t,z,N,n_x)
             % K-Werte von Runge-Kutta
             K = zeros(obj.s,n_x);
             % Lösungsmatrix
-            y = zeros(N,n_x);
+            Z = zeros(N,n_x);
             % Parameter für fsolve
-            options = optimoptions('fsolve','Display','none','OptimalityTolerance',1e-10);
+            options = optimoptions('fsolve','Display','none','OptimalityTolerance',1e-8);
             % Berechenen der Werte für jeden Zeitpunkt
             for n = 1:N-1
                 % Schrittweite
@@ -43,7 +50,7 @@ classdef ode_methods
                 K_New =@(K) obj.stufenableitung(f,z(n,:),t(n),h,K,n_x);
                 K = fsolve(K_New,K,options);
                 % Runge-Kutta Schritt
-                y(n,:) = h*obj.b'*K;
+                Z(n,:) = h*obj.b'*K;
             end
         end
         
@@ -54,7 +61,6 @@ classdef ode_methods
                 K_new(i,:) = K(i,:) - f(t+obj.c(i)*h,y);
             end
         end
-        
         
     end
 end

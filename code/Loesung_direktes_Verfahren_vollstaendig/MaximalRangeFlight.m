@@ -1,51 +1,53 @@
+% MaximalRangeFlight.m:
+
+% Klasse des Optimalsteuerungsproblem für einen Airbus A380-800
+
+% Date:         27.08.2021
+% Author:       Gehring, Philipp / Karus, Heiko / Götz, Felix
+
 classdef MaximalRangeFlight
-    % Using a class for this provides a cleaner interface
     properties
-        %% Optimalsteuerungsproblem für einen Airbus A380-800
+        %% Parameter für das Optimalsteuerungsproblem
         t_0 = 0;            % Anfangszeitpunkt in [s]
         t_f = 1800;         % Endzeitpunkt in [s]
 
-        X_0 = [   0;         % h_0 in [m]
-              27;         % gamma_0 in [rad]  
-                 0;         % x_0 in [m]
-              100];         % v_0 in [m/s]
+        X_0 = [   0;        % h_0 in [m]
+               0.27;        % gamma_0 in [Grad]  
+                  0;        % x_0 in [m]
+                100];       % v_0 in [m/s]
 
-        X_T = [10668;        % h_t in [m]
-                  0];       % gamma_t  in [rad]
+        X_T = [10668;       % h_t in [m]
+                   0];      % gamma_t  in [Grad]
 
-        alpha = 1.247015;   % Parameter zur Berechung der Luftdichte
+        alpha = 1.247015;   % Parameter zur Berechung der Luftdichte in []
         beta = 0.000104;
-        g = 9.81;           % Erdbeschleunigung in [N/kg]
-        C_D_0 = 0.032;      % Nullluftwiderstandsbeiwert (Der Luftwiderstandsbeiwert ohne Auftrieb ist ein dimensionsloser Parameter, der die Luftwiderstandskraft eines Flugzeugs mit seiner Größe, Geschwindigkeit und Flughöhe in Beziehung setzt)
-        e = 0.8;            % Oswaldfaktor (Der Oswald-Wirkungsgrad ist ein Korrekturfaktor, der die Änderung des Luftwiderstands mit dem Auftrieb eines dreidimensionalen Flügels oder Flugzeugs im Vergleich zu einem idealen Flügel mit demselben Seitenverhältnis darstellt)
-        F = 845;            % Wirksame Fläche / von der Luft angeströmte Fläche in [m^2]
-        AR = 7.5;           % Flügelstreckung in [] (aspect ratio) (Das Seitenverhältnis eines Flügels ist definiert als das Verhältnis seiner Spannweite zu seiner mittleren Sehne) -> (Spannweite in [m])^2 / Tragflächeninhalt in [m^2] = b^2 / F
-        k, % = 1/(pi*e*AR);    % Faktor für Berechnung des Luftwiderstandsbeiwertes
+        g = 9.81;           % Erdbeschleunigung in [N/s^2]
+        C_D_0 = 0.032;      % Nullluftwiderstandsbeiwert in []             (Der Luftwiderstandsbeiwert ohne Auftrieb ist ein dimensionsloser Parameter, der die Luftwiderstandskraft eines Flugzeugs mit seiner Größe, Geschwindigkeit und Flughöhe in Beziehung setzt)
+        e = 0.8;            % Oswaldfaktor in []                           (Der Oswald-Wirkungsgrad ist ein Korrekturfaktor, der die Änderung des Luftwiderstands mit dem Auftrieb eines dreidimensionalen Flügels oder Flugzeugs im Vergleich zu einem idealen Flügel mit demselben Seitenverhältnis darstellt)
+        F = 845;            % Wirksame Fläche in [m^2]                     (von der Luft angeströmte Fläche) 
+        AR = 7.5;           % Flügelstreckung in []                        (aspect ratio) (Das Seitenverhältnis eines Flügels ist definiert als das Verhältnis seiner Spannweite zu seiner mittleren Sehne) -> (Spannweite in [m])^2 / Tragflächeninhalt in [m^2] = b^2 / F
+        k;                  % Faktor für Berechnung des Luftwiderstandsbeiwertes in []
         m = 276800;         % Gewicht des Flugzeugs in [kg]
         q_max = 44154;      % Maximaler Staudruck in [N/m^2]
         T_min = 0;          % Minimale Schubkraft in [N]
         T_max = 1260000;    % Maximale Schubkraft in [N]
         C_L_min = 0.0;      % Minimaler Auftriebsbeiwert in []
         C_L_max = 1.48;     % Maximaler Auftriebsbeiwert in []
-        %
+
         %% Problemgrößen
-        n_x = 4;
-        n_u = 2;
-        n_c = 0;
-        n_s = 1;
-        n_psi = 8;
-        %
-        %% Grid
-        N; % Anzahl an Diskretisierungen
-        t;
-        %
-        %% Implicit or explicit iterative methods to approximate the solution of a ODE
-        ode_method;
-        %
-        %%
-        z_0;
-        lb;
-        ub;
+        n_x = 4;            % Größe des Zustandsvektors
+        n_u = 2;            % Größe des Steuervektors
+        n_c = 0;            % Größe des gemischten Steuer- und Zustandsbeschränkungsvektors
+        n_s = 1;            % Größe des reinen Zustandsbeschränkungsvektors
+        n_psi = 8;          % Grüße des Randbedingungsvektors
+
+        %% Variablen für die Berechnung
+        N;                  % Variable für die anzahl an Diskretisierungen
+        t;                  % Variable für den Zeitenvektor
+        ode_method;         % Implicit or explicit iterative methods to approximate the solution of a ODE
+        z_0;                % Array für die Startwerte für fmincon
+        lb;                 % lower bounds for fmincon
+        ub;                 % upper bounds for fmincon
     end
     methods
         %% Constructor: Set initial conditions of the direct solver
@@ -55,7 +57,9 @@ classdef MaximalRangeFlight
             obj.ode_method = ode_method;
             % Start vector
             obj.z_0 = zeros(obj.N,obj.n_x+obj.n_u);
-            obj.z_0(1,:) = [h_0,gamma_0,x_0,v_0,T_0,C_L_0];
+            for i = 1:N
+                obj.z_0(i,:) = [h_0,gamma_0,x_0,v_0,T_0,C_L_0];
+            end
             % box conditions
             obj.lb = zeros(obj.N,obj.n_x+obj.n_u);
             obj.ub = zeros(obj.N,obj.n_x+obj.n_u);
@@ -77,10 +81,10 @@ classdef MaximalRangeFlight
                  (1/(2*obj.m)) * (2*z(5) + (-obj.C_D_0 - obj.k*(z(6))^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)))];
         end
         
-        % Funktionen für die Nebenbedingungen
+        %% Funktionen für die Nebenbedingungen
         % Zielfunktional
         function T = F_sol(obj,z)
-            T = -(z(end,3)-z(1,3));
+            T = -(z(end,3)-obj.X_0(3));
         end
         % Ungleichungsnebenbedingungen
         function g_array = G(obj,z)
@@ -96,8 +100,6 @@ classdef MaximalRangeFlight
             for i = 0:obj.N-2
                 h_array((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
             end
-            
-            
             %
             h_array((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
                                                                       z(1,2)-obj.X_0(2),...
