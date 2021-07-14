@@ -66,7 +66,7 @@ n_c = 0;
 n_s = 1;
 n_psi = 6;
 % Gitter
-N = 30; % Anzahl an Diskretisierungen
+N = 50; % Anzahl an Diskretisierungen
 t = linspace(t_0,t_f,N+1);
 % Anfangs- und Endbedingungen
 x_start = X0; % Anfangsgeschwindigkeit
@@ -95,13 +95,13 @@ for i = 0:N
     ub((i*n_u)+n_x*(N+1)+1:(i+1)*n_u+n_x*(N+1)) = [T_max;C_L_max];
 end
 % Zielfunktional minimieren
-F_sol =@(z) -(z(n_x*N+3)-z(3));
+F_sol =@(z) -(z(n_x*N+3)-X0(3));
 % Nichtlineare Beschränkungen
 nonlcon =@(z)my_nonlcon(z,t,N,x_start,x_end,n_x,n_u,n_c,n_s,n_psi,alpha,beta,g,C_D_0,e,F,AR,k,m,q_max,T_min,T_max,C_L_min,C_L_max);
 %
 % options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',60.000000e+03);
 % options = optimoptions('fmincon','Display','iter','Algorithm','active-set');
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',100.0e+03);
 %
 Sol = fmincon(F_sol,z0,[],[],[],[],lb,ub,nonlcon,options);
 

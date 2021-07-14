@@ -16,50 +16,67 @@ close  all
 clc
 
 %% Problembeschreibung: Optimalsteuerungsproblem für einen Airbus A380-800
-h_0 = 100;         %  in [m]
-gamma_0 = 0;         %  in [Grad]  
-x_0 = -36;         %  in [m]
-v_0 = -3;         %  in [m/s]
-T_0 = 1260000;        % T
-C_L_0 = 1.48;       % C_L
-N = 100; % Anzahl an Diskretisierungen
+h_0 = 2131;     % in [m]
+gamma_0 = 0.27; % in [Grad]  
+x_0 = 12312;    % in [m]
+v_0 = 100;      % in [m/s]
+T_0 = 1260000;  % in [N]
+C_L_0 = 1.48;   % in []
+
+N = 35;         % Anzahl an Diskretisierungen
 ode_methods = ode_methods();
 
-%%
-prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.irk);
+%% Objekt der Problemklasse erhalten
+% prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.irk);
+prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.explicit_euler);
 
 %% Fmincon
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',300.0e+03,'MaxIterations',4.0e+05);
+% options = optimset('Display','iter','MaxFunEvals' ,190000,'MaxIter',4.0e+05); % Innere Punkte Verfahren
 %
-% options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',60.000000e+03);
-% options = optimoptions('fmincon','Display','iter','Algorithm','active-set');
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp');
-%
+tic;
 prob_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+duration_time = toc
 
 %% Plot der Lösungen
-n_x = prob.n_x;
-n_u = prob.n_u;
+fig = figure(1);
+fig.WindowState = 'maximized'; % Vollbild
 t = linspace(prob.t_0,prob.t_f,prob.N);
-for i = 1:N+1
-    h_sol(i) = prob_solution(((i-1)*n_x)+1);
-    gamma_sol(i) = prob_solution(((i-1)*n_x)+2);
-    x_sol(i) = prob_solution(((i-1)*n_x)+3);
-    v_sol(i) = prob_solution(((i-1)*n_x)+4);
-    T_sol(i) = prob_solution(n_x*(N+1)+((i-1)*n_u)+1);
-    C_L_sol(i) = prob_solution(n_x*(N+1)+((i-1)*n_u)+2);
-end
-figure(1)
-plot(t,x_sol,'r-',t,T_sol,'k:');
-legend('x_{prob_solution}','T_{prob_solution}');
 
-figure(2)
-plot(t,h_sol);
-legend('h_{prob_solution}');
+subplot(2,3,1);
+plot(t,prob_solution(:,3),'b-');
+title('Zurückgelegte Streckte');
+ylabel('x_{sol} in [m]');
+xlabel('t in [s]');
 
-figure(3)
-plot(t,v_sol,'b-');
-legend('v_{prob_solution}');
+subplot(2,3,2);
+plot(t,prob_solution(:,1),'b-');
+title('Höhe');
+ylabel('h_{sol} in [m]');
+xlabel('t in [s]');
 
-figure(4)
-plot(t,gamma_sol,'r-',t,C_L_sol,'g*-');
-legend('gamma_{prob_solution}','C_{L_{prob_solution}}');
+T_plot = subplot(2,3,3);
+plot(t,prob_solution(:,5),'r-');
+title('Steuerung 1: Schub');
+ylabel('T_{sol} in [N]');
+xlabel('t in [s]');
+T_plot.LineWidth = 2;
+
+subplot(2,3,4);
+plot(t,prob_solution(:,2),'b-');
+title('Anstellwinkel');
+ylabel('gamma_{sol} in [Grad]');
+xlabel('t in [s]');
+
+subplot(2,3,5);
+plot(t,prob_solution(:,4),'b-');
+title('Geschwindigkeit');
+ylabel('v_{sol} in [m/s]');
+xlabel('t in [s]');
+
+C_L_plot = subplot(2,3,6);
+plot(t,prob_solution(:,6),'r-');
+title('Steuerung 2: Auftriebsbeiwert');
+ylabel('C_{L_{sol}} in []');
+xlabel('t in [s]');
+C_L_plot.LineWidth = 2;
