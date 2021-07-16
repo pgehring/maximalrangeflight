@@ -39,44 +39,15 @@ prob_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.n
 duration_time = toc
 
 %% Plot der Lösungen
-fig = figure(1);
-fig.WindowState = 'maximized'; % Vollbild
 t = linspace(prob.t_0,prob.t_f,prob.N);
+titles = [  "Flughoehe", "Anstellwinkel", ...
+            "Zurueckgelegte Streckte", "Geschwindigkeit" , ...
+            "Steuerung 1: Schub", "Steuerung 2: Auftriebsbeiwert"];
+labels = [  "$h_{sol}\,in\,[m]$", "$\gamma_{sol}\,in\,[^{\circ}]$", ...
+            "$x_{sol}\,in\,[m]$", "$v_{sol}\,in\,[\frac{m}{s}]$", ...
+            "$T_{sol}\,in\,[N]$", "$C_{L_{sol}}\,in\,[1]$"];
+plotter = Plotter();
+plotter.plot_fmincon(t, prob_solution, titles, labels, [3, 1, 5, 2, 4, 6])
 
-subplot(2,3,1);
-plot(t,prob_solution(:,3),'b-');
-title('Zurückgelegte Streckte');
-ylabel('x_{sol} in [m]');
-xlabel('t in [s]');
-
-subplot(2,3,2);
-plot(t,prob_solution(:,1),'b-');
-title('Höhe');
-ylabel('h_{sol} in [m]');
-xlabel('t in [s]');
-
-T_plot = subplot(2,3,3);
-plot(t,prob_solution(:,5),'r-');
-title('Steuerung 1: Schub');
-ylabel('T_{sol} in [N]');
-xlabel('t in [s]');
-T_plot.LineWidth = 2;
-
-subplot(2,3,4);
-plot(t,prob_solution(:,2),'b-');
-title('Anstellwinkel');
-ylabel('gamma_{sol} in [Grad]');
-xlabel('t in [s]');
-
-subplot(2,3,5);
-plot(t,prob_solution(:,4),'b-');
-title('Geschwindigkeit');
-ylabel('v_{sol} in [m/s]');
-xlabel('t in [s]');
-
-C_L_plot = subplot(2,3,6);
-plot(t,prob_solution(:,6),'r-');
-title('Steuerung 2: Auftriebsbeiwert');
-ylabel('C_{L_{sol}} in []');
-xlabel('t in [s]');
-C_L_plot.LineWidth = 2;
+% plotter.axes(5).LineWidth = 2;
+% plotter.axes(6).LineWidth = 2;
