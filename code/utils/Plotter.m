@@ -23,8 +23,8 @@ classdef Plotter
                 sol_id = order(i);
                 obj = create_subplot(obj, t, sol(:,sol_id), [2, 3], i);
                 title(titles(sol_id))
-                ylabel('t in [s]')
-                xlabel(labels(sol_id))
+                xlabel('t in [s]')
+                ylabel(labels(sol_id))
             end
         end
         
