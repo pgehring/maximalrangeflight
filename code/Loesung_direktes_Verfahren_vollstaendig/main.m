@@ -15,6 +15,7 @@ clear  variables
 close  all
 clc
 
+addpath('../utils')
 %% Problembeschreibung: Optimalsteuerungsproblem für einen Airbus A380-800
 h_0 = 2131;     % in [m]
 gamma_0 = 0.27; % in [Grad]  

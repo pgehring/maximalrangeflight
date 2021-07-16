@@ -35,7 +35,7 @@ classdef Plotter
         end
         
         function obj = create_subplot(obj, t, y, pos, ax_id, line_style)
-            ax = subplot(pos(1), pos(2), ax_id)
+            ax = subplot(pos(1), pos(2), ax_id);
             obj.axes(ax_id) = ax;
             
             if (nargin <= 5)

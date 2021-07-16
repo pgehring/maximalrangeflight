@@ -21,6 +21,8 @@ clear  variables
 close  all
 clc
 
+addpath('utils')
+addpath('model')
 %% Optimalsteuerungsproblem für einen Airbus A380-800
 % Parameter:
 C_D_0 = 0.032;      % Nullluftwiderstandsbeiwert (Der Luftwiderstandsbeiwert ohne Auftrieb ist ein dimensionsloser Parameter, der die Luftwiderstandskraft eines Flugzeugs mit seiner Größe, Geschwindigkeit und Flughöhe in Beziehung setzt)
