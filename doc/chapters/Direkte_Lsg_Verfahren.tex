@@ -1,0 +1,152 @@
+\chapter{Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren}
+Gedanken wie der Verlauf aussehen könnte:\\
+Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
+
+
+Zusätzliche Schranken:
+\begin{itemize}
+\item \textbf{Startgeschwindigkeit:} Gewöhnliche Flugzeuge starten von einer Startbahn und benötigen zum Starten eine Mindestgeschwindigkeit relativ zur umgebenden Luft. Diese beträgt bei Verkehrsflugzeugen zwischen 250 (69,44 m/s) und 345 km/h (95,83 m/s). (Quelle: \url{https://de.wikipedia.org/wiki/Start_(Luftfahrt)})
+%
+\item \textbf{Steigflug:} Aus Lärmschutzgründen und aus Gründen des „Freimachens“ von Luftraum starten Verkehrsflugzeuge von großen Flughäfen oft mit steilem Neigungswinkel, etwa um 20° (abhängig von den Vorgaben des Herstellers, der Beladung, der Windverhältnisse und des Lotsen). Der Steigwinkel wird in der Regel verringert, sobald die Flughafenumgebung verlassen wurde. (Quelle: \url{https://de.wikipedia.org/wiki/Steigflug})
+%
+\item \textbf{Flugzeugmassen:} Die Maximale Startmasse eines A380-800 beträgt max. 569 t. Die Leermasse 275 t. (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
+%
+\item \textbf{Höchstgeschwindigkeit:} 961 km/h (266,94 m/s). (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
+%
+\item \textbf{Maximale Flughöhe:} 13100 m. (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
+%
+\item \textbf{Maximale Reichweite:} 15200000 m (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
+\end{itemize}
+Verändertes Optimalsteuerungsproblem:
+\[\begin{split}
+\min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) \\\
+\text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} \text{(Dynamik)} \\\
+\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} \left( L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \right) \\\
+\dot{x}(t) &= v(t) \cos(\gamma(t))\\\
+\dot{v}(t) &= \dfrac{1}{m} \left( T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \right) \\\
+%
+(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) \hspace{26mm} \text{(Anfangsbedingungen)}\\\
+(h,\gamma,x,v)(t_f) &= (h_f,\gamma_f) \hspace{36mm} \text{(Endbedingungen)}\\\
+%
+q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Zustandsbedingungen)}\\\
+h(t) &\in [0,13100] \hspace{9.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Boxbeschränkungen)}\\\
+\gamma(t) &\in [-90,90] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
+x(t) &\in [0,15200000] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
+v(t) &\in [0,266] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
+T(t) &\in [T_{\min},T_{\max}] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
+C_L(t) &\in [C_{L, \min},C_{L, \max}] \hspace{3mm} \forall t \in [t_0,t_f]
+\end{split} \]
+
+Versuche:
+\begin{itemize}
+\item Ich denke auch nicht unbedingt, dass die Stabilität des ODE-Solvers oder
+die Steifheit der ODE das (Haupt-)Problem ist.
+Wahrscheinlich könnt ihr ein explizites Verfahren verwenden.
+%
+\item Ja, das kann ich mir auch vorstellen. Die Endzeit ist hier auch nicht in
+Stein gemeißelt. Verkürzt die gerne (auch deutlich) und schaut, ob ihr
+sinnvollere Ergebnisse bekommt. Evtl. bietet es sich an in dem Zug dann
+aber auch an die Starthöhe zu erhöhen. 
+Auch die anderen Parameter und Schranken könnt ihr ggf. hinterfragen.
+Dokumentiert eure Schwierigkeiten und Änderungen am besten.
+%
+\item Müsste man vielleicht noch zusätzliche Beschränkungen für h, gamma, x, v angeben? Ich bin mir nicht sicher, ob das nötig ist. Ich würde erst mal den
+Zeithorizont verkürzen.
+%
+\item Testet doch mal, ob ihr bei vorgegebener Steuerung
+einen deutlichen Unterschied zwischen expl. und impl. Verfahren
+feststellt. Falls nicht ist das schon mal ein deutliches Indiz dafür,
+dass ihr euch den Rechenaufwand eines impl. Verfahrens auch in der
+Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei eurem Projekt, da es wahrscheinlich viele lokale Minima gibt. Deswegen wäre es wahrscheinlich auch sinnvoll unterschiedliche Algorithmen (z.B. SQP) auszuprobieren. Dafür müsst ihr nur die entsprechende Option für fmincon setzen und müsst auch nicht unbedingt den Algorithmus im Detail verstehen. Sowas könnt ihr dann natürlich auch gerne in die Präsentation/Ausarbeitung aufnehmen.
+\end{itemize}
+
+
+
+Nächster Schritt also:
+\begin{itemize}
+\item Problem auf ein Mehrfachschiesverfahren anwenden?
+\end{itemize}
+
+
+\section{Versuch 1}
+Verwendet werden:
+\begin{itemize}
+\item SQP-Verfahren zur Optimierung 
+\item Startmatrix für die Optimierung ist \[X_0 = \begin{pmatrix}
+[20,9,6000,90,1259999,1.47] \\ 
+\vdots \\ 
+\vdots
+\end{pmatrix}\]
+\item Reduzierte Endzeit $t_f = 1400$
+\item Keine weiteren Box-Beschränkungen, aber das neue Gewicht 500 Tonnen
+\end{itemize}
+
+\subsection{Ergebnis 1}
+Ergebnis mit $N=100$ Anzahl an Diskretisierungen 
+
+
+\subsection{Ergebnis 2}
+Ergebnis mit $N=400$ Anzahl an Diskretisierungen 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\newpage
+%\section{Überprüfung der optimalen Steuerung}
+%Die Steuerung $T(t)$ (Schub) geht linear in die Hamilton-Funktion ein. Um die Hamilton-Funktion zu minimieren gilt für diese Bang-Bang Verhalten.
+%
+%Die Steuerung $C_L(t)$ geht nichtlinear in die Hamilton-Funktion ein.
+%
+%
+%
+%
+%
+%
+%\section{Überprüfung der Hinreichenden Optimalitätsbedingungen}
+%
+%
+%
+%
+%
+%
+%
+%\section{Aufstellen des Randwertproblems}
+%Muss also ein Mehrpunktrandwertproblem sein ???
+%
+%
+%Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht. Für $r(t,Z(t))$ ergibt sich \[r(t,Z(t)) = \dot{Z}(t) = \begin{pmatrix}
+%\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
+%\end{pmatrix}^T\] Für $r_0(Z(t_0),Z(t_f)) = 0$ müssen zunächst die Endbedingungen mit gebildet aus 
+%\[\begin{split}
+%X_i(t_f) &= c_i \hspace{25mm} (i=1,...,r) \\\
+%\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) \hspace{5mm} (i=r+1,...,n)
+%\end{split}\] gebildet werden. Es ergibt sich dann \[r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
+%h(t_0) - h_0 \\ 
+%\gamma(t_0) - \gamma_0 \\
+%x(t_0) - x_0 \\ 
+%v(t_0) - v_0 \\ 
+%h(t_f) - h_f \\ 
+%\gamma(t_f) - \gamma_f \\
+%\lambda_3(t_f) + \lambda_0 \\ 
+%\lambda_4(t_f) - 0
+%\end{pmatrix}\]

@@ -19,7 +19,7 @@ Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden fo
 %
 \item Staudruck: \[q(v(t), h(t)) := \dfrac{1}{2} \cdot \rho(h(t)) \cdot v^2(t)\]
 %
-\item Luftdichte: \[\rho(h(t)) := \alpha e^{-\beta h(t)}\]
+\item Luftdichte: \[\rho(h(t)) := \alpha e^{-\beta h(t)}\] %https://wind-data.ch/tools/luftdichte.php
 \end{itemize}
 Die Kräfte lassen sich dann berechnen mit:
 \begin{itemize}
@@ -28,18 +28,42 @@ Die Kräfte lassen sich dann berechnen mit:
 \item Luftwiderstand: \[D(v(t), h(t), C_L(t)) := F \cdot C_D(C_L(t)) \cdot q(v(t), h(t))\]
 \item Erdanziehungskraft: \[W = mg\]
 \end{itemize}
-
+Es ergibt sich das Optimalsteuerungsproblem:
+\[\begin{split}
+\min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) \\\
+\text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} \text{(Dynamik)} \\\
+\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} \left( L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \right) \\\
+\dot{x}(t) &= v(t) \cos(\gamma(t))\\\
+\dot{v}(t) &= \dfrac{1}{m} \left( T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \right) \\\
+%
+(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) \hspace{26mm} \text{(Anfangsbedingungen)}\\\
+(h,\gamma)(t_f) &= (h_f,\gamma_f) \hspace{36mm} \text{(Endbedingungen)}\\\
+%
+q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Zustandsbedingungen)}\\\
+T(t) &\in [T_{\min},T_{\max}] \hspace{9.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Boxbeschränkungen)}\\\
+C_L(t) &\in [C_{L, \min},C_{L, \max}] \hspace{3mm} \forall t \in [t_0,t_f]
+\end{split} \]
 Für das Modell werden folgende Parameter verwendet:
 \begin{center}
 \begin{tabular}{|l|l|r|l|}
 \hline
 Parameter & Bedeutung & Wert & Einheit \\ 
 \hline 
-$\alpha$ &  & $1.247015$ & $[]$ \\ 
-$\beta$ &  & $0.000104$ & $[]$ \\ 
-$g$ & Erdbeschleunigung & $9.81$ & $[m/s^2]$ \\ 
+\hline
 $t_0$ & Anfangszeitpunkt & $0$ & $[s]$ \\ 
 $t_f$ & Endzeitpunkt & $1800$ & $[s]$ \\ 
+\hline
+$h_0$ & Anfangshöhe & $0$ & $[m]$ \\ 
+$\gamma_0$ & Anfangsanstellwinkel & $0.27$ & $[Grad]$ \\
+$x_0$ & Anfangskoordinate & $0$ & $[m]$ \\ 
+$v_0$ & Anfangsgeschwindigkeit & $100$ & $[m/s]$ \\ 
+\hline
+$h_f$ & Endhöhe & $10668$ & $[m]$ \\ 
+$\gamma_f$ & Endanstellwinkel & $0$ & $[Grad]$ \\
+\hline
+$\alpha$ &  & $1.247015$ & $[]$ \\ 
+$\beta$ &  & $0.000104$ & $[]$ \\
+$g$ & Erdbeschleunigung & $9.81$ & $[m/s^2]$ \\ 
 $C_{D_0}$ & Nullluftwiderstandsbeiwert & $0.032$ & $[]$ \\ 
 $AR$ & Streckung & $7.5$ & $[]$ \\ 
 $e$ & Oswaldfaktor & $0.8$ & $[]$ \\ 
@@ -54,33 +78,22 @@ $C_{L, \max}$ & maximaler Auftriebsbeiwert & $1.48$ & $[]$ \\
 \end{tabular} 
 \end{center}
 
-Es ergibt sich das Optimalsteuerungsproblem:
-\[\begin{split}
-\min_{T, C_L} F(x,v,h,\gamma,T,C_L) &:= -(x(t_f) - x_0) \\\
-\text{unter}  \hspace{20mm} \dot{x}(t) &= v(t) \cos(\gamma(t)) \ \qquad \qquad \qquad  \ \ \text{(Dynamik)}\\\
-\dot{h}(t) &= v(t) \sin(\gamma(t)) \\\
-\dot{v}(t) &= \dfrac{1}{m} \left( T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \right) \\\
-\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} \left( L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \right) \\\
-%
-(x,h,v,\gamma)(0) &= (x_0,h_0,v_0,\gamma_0) \qquad \qquad \qquad \ \ \ \ \text{(Anfangsbedingungen)}\\\
-(h,\gamma)(t_f) &= (h_f,0) \qquad \qquad \qquad \qquad \qquad  \  \text{(Endbedingungen)}\\\
-%
-q(v(t),h(t)) &\leq q_{\max} \ \ \ \ \forall t \in [t_0,t_f] \qquad \qquad  \ \ \ \ \ \ \text{(Steuer- und Zustandsbedingungen)}\\\
-T(t) &\in [T_{\min},T_{\max}] \ \ \ \ \forall t \in [t_0,t_f] \\\
-C_L(t) &\in [C_{L, \min},C_{L, \max}] \ \ \ \ \forall t \in [t_0,t_f] \\\
-\end{split} \]
-Die Start- und Endbedingungen sind gegeben mit:
-\begin{equation}
-\begin{pmatrix}
-x_0 = 0 \\ 
-v_0 = 0 \\ 
-h_0 = 0 \\ 
-\gamma_0 = 0.27 \ [Grad]
-\end{pmatrix} \ \ \ \ \text{und} \ \ \ \ \begin{pmatrix}
-h_f = 10668 \ [m] \\ 
-\gamma_f = 0 \ [Grad]
-\end{pmatrix}  
-\end{equation}
+
+
+
+
+%Die Start- und Endbedingungen sind gegeben mit:
+%\begin{equation}
+%\begin{pmatrix}
+%x_0 = 0 \\ 
+%v_0 = 0 \\ 
+%h_0 = 0 \\ 
+%\gamma_0 = 0.27 \ [Grad]
+%\end{pmatrix} \ \ \ \ \text{und} \ \ \ \ \begin{pmatrix}
+%h_f = 10668 \ [m] \\ 
+%\gamma_f = 0 \ [Grad]
+%\end{pmatrix}  
+%\end{equation}
 
 
 
@@ -175,7 +188,7 @@ h_f = 10668 \ [m] \\
 %\[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v^2(t) + \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) - \lambda_3 g) \cos(\gamma(t)) \right)\]
 
 
-
+\newpage
 \section{Anwendung Minimumpinzip von Pontryagin}
 Aus dem Modellaufbau ergeben sich die Definitionen 
 \[\begin{split}
@@ -236,14 +249,11 @@ und
 \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_4 - C_L(t) v(t) \lambda_2}{2m} \alpha F \beta e^{-\beta h(t)}\\ 
 \dfrac{- \lambda_3 v^2(t) + \lambda_2 g}{v(t)} \sin(\gamma(t)) + (\lambda_1 v(t) - \lambda_4 g) \cos(\gamma(t)) \\
 0 \\ 
-\dfrac{\lambda_3}{2m} C_{DL}(t) v^2(t) F \beta \rho(h(t))   - \dfrac{\lambda_4}{2m} C_L(t) v(t) F \beta \rho(h(t))  \\ 
-\lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) - \dfrac{\lambda_3}{m} C_{DL}(t)  v(t) F \rho(h(t))   - \dfrac{\lambda_4}{2m} \left(C_L(t) v(t) F \rho(h(t))  + \dfrac{2mg}{v(t)^2}\cos(\gamma(t))\right) \\ 
--\lambda_1 v(t) \sin(\gamma(t)) + \lambda_2 v(t) \cos(\gamma(t)) - \lambda_3 g \cos(\gamma(t)) + \lambda_4 \dfrac{g}{v(t)} \sin(\gamma(t)) 
-\end{pmatrix} \]
-mit \(C_{DL}(t) = C_{D_0}+k C_L^2(t)\) und \(\rho(h(t)) = \alpha e^{-\beta h(t)}\)
-wobei gilt $\dot{\lambda}(t)^T = -H_{X}$. 
-
-Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung 
+\lambda_3 \cos(\gamma(t)) + \lambda_1 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_4 + C_L(t) \lambda_2}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_2}{v^2(t)} \\
+\end{pmatrix}^T \]
+wobei gilt $\dot{\lambda}(t)^T = -H_{X}$.
+%
+\item \textbf{Transversalitätsbedingung:} Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung mit dem Vektor $\nu \in \R^r$ mit $(\lambda_0,\lambda(t),\nu) \neq 0$ für alle $t \in [t_0,t_f]$
 \[\begin{split}
 \lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
 &= \lambda_0 \begin{pmatrix}
@@ -262,49 +272,73 @@ Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung
 \end{enumerate}
 
 
-\section{Aufstellen des Randwertproblems}
-Es ergibt sich somit das Randwertproblem, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht:
-\[\dot{Z}(t) = r(t,Z(t)) = \begin{pmatrix}
-\dot{x}(t) \\
-\dot{h}(t) \\
-\dot{v}(t) \\
-\dot{\gamma}(t) \\
-\dot{\lambda}_1(t) \\ 
-\dot{\lambda}_2(t) \\ 
-\dot{\lambda}_3(t) \\ 
-\dot{\lambda}_4(t)
-\end{pmatrix}  \ \ \ \ r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
-x(t_0) - x_0 \\ 
-v(t_0) - v_0 \\ 
-h(t_0) - h_0 \\ 
-\gamma(t_0) - \gamma_0 \\
-\lambda_1(t_f) + \lambda_{0,x} \\ 
-h(t_f) - h_f \\ 
-\lambda_3(t_f) - 0 \\ 
-\gamma(t_f) - \gamma_f
-\end{pmatrix}\]
-% Für die einzelnen Einträge des Vektors $\dot{Z}(t)$ ergibt sich demnach:
-% \[\dot{x}(t) = v(t) \cos(\gamma(t)) \]
-
-% \[\dot{h}(t) = v(t) \sin(\gamma(t)) \]
-
-% \[\dot{v}(t) = \dfrac{1}{2m} \left(2T(t) + (-C_{D_0}-k C_L^2(t)) F  v^2(t) \alpha e^{-\beta h(t)} - 2 m g \sin(\gamma(t)) \right) \]
-
-% \[\dot{\gamma}(t) = \dfrac{1}{2mv(t)} \left(F C_L(t)v^2(t) \alpha e^{-\beta h(t)} - 2 m g \cos(\gamma(t)) \right)\]
-
-% \[\dot{\lambda}_1(t) = 0\]
-
-% \[\dot{\lambda}_2(t) = - \left( \dfrac{(C_{D_0}+k C_L^2(t)) v^2(t) \lambda_3 - C_L(t) v(t) \lambda_4}{2m} \alpha F \beta e^{-\beta h(t)} \right)\]
-
-% \[\dot{\lambda}_3(t) = - \left( \lambda_1 \cos(\gamma(t)) + \lambda_2 \sin(\gamma(t)) + \dfrac{(-C_{D_0}-k C_L^2(t)) 2 v(t) \lambda_3 + C_L(t) \lambda_4}{2m}   F \alpha e^{-\beta h(t)} + \dfrac{g \cos(\gamma(t)) \lambda_4}{v^2(t)} \right)\]
-
-% \[\dot{\lambda}_4(t) = - \left( \dfrac{- \lambda_1 v(t) - \lambda_4 g}{v(t)} \sin(\gamma(t)) + (\lambda_2 v(t) + \lambda_3 g) \cos(\gamma(t)) \right)\]
-
-\section{Überprüfung der optimalen Steuerung}
-Die Steuerung $T(t)$ (Schub) geht linear in die Hamilton-Funktion ein. Um die Hamilton-Funktion zu minimieren gilt für diese Bang-Bang Verhalten.
-
-Die Steuerung $C_L(t)$ geht nichtlinear in die Hamilton-Funktion ein.
 
 
-\section{Überprüfung der Hinreichenden Optimalitätsbedingungen}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\newpage
+%\section{Überprüfung der optimalen Steuerung}
+%Die Steuerung $T(t)$ (Schub) geht linear in die Hamilton-Funktion ein. Um die Hamilton-Funktion zu minimieren gilt für diese Bang-Bang Verhalten.
+%
+%Die Steuerung $C_L(t)$ geht nichtlinear in die Hamilton-Funktion ein.
+%
+%
+%
+%
+%
+%
+%\section{Überprüfung der Hinreichenden Optimalitätsbedingungen}
+%
+%
+%
+%
+%
+%
+%
+%\section{Aufstellen des Randwertproblems}
+%Muss also ein Mehrpunktrandwertproblem sein ???
+%
+%
+%Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht. Für $r(t,Z(t))$ ergibt sich \[r(t,Z(t)) = \dot{Z}(t) = \begin{pmatrix}
+%\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
+%\end{pmatrix}^T\] Für $r_0(Z(t_0),Z(t_f)) = 0$ müssen zunächst die Endbedingungen mit gebildet aus 
+%\[\begin{split}
+%X_i(t_f) &= c_i \hspace{25mm} (i=1,...,r) \\\
+%\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) \hspace{5mm} (i=r+1,...,n)
+%\end{split}\] gebildet werden. Es ergibt sich dann \[r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
+%h(t_0) - h_0 \\ 
+%\gamma(t_0) - \gamma_0 \\
+%x(t_0) - x_0 \\ 
+%v(t_0) - v_0 \\ 
+%h(t_f) - h_f \\ 
+%\gamma(t_f) - \gamma_f \\
+%\lambda_3(t_f) + \lambda_0 \\ 
+%\lambda_4(t_f) - 0
+%\end{pmatrix}\]
