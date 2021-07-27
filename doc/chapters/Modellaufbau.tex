@@ -19,7 +19,7 @@ Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden fo
 %
 \item Staudruck: \[q(v(t), h(t)) := \dfrac{1}{2} \cdot \rho(h(t)) \cdot v^2(t)\]
 %
-\item Luftdichte: \[\rho(h(t)) := \alpha e^{-\beta h(t)}\]
+\item Luftdichte: \[\rho(h(t)) := \alpha e^{-\beta h(t)}\] %https://wind-data.ch/tools/luftdichte.php
 \end{itemize}
 Die Kräfte lassen sich dann berechnen mit:
 \begin{itemize}
@@ -270,26 +270,6 @@ wobei gilt $\dot{\lambda}(t)^T = -H_{X}$.
 %
 \item \textbf{Konstanz:} Für autonome Systeme gilt \[H(X^{\ast}(t),U^{\ast}(t), \lambda(t)) = const \ \in [t_0,t_f]\]
 \end{enumerate}
-
-
-
-
-
-\newpage
-\section{Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren}
-
-
-Gedanken wie der Verlauf aussehen könnte:\\
-Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
-
-
-
-
-
-
-
-
-
 
 
 
