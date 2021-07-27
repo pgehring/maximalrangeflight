@@ -1,7 +1,102 @@
 \chapter{Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren}
+
+
+
+\section{Algorithmen}
+\floatname{algorithm}{Klasse}
+\begin{algorithm}[H]
+\caption{MaximalRangeFlight}\label{algo:SISPF}
+\textbf{[$\lbrace s^i_t, w^i_t \rbrace^{N_s}_{i=1}$] = PFSIR [$\lbrace s^i_{t-1}, w^i_{t-1} \rbrace^{N_s}_{i=1}$]}
+\begin{algorithmic}
+\FOR {$i = 1,...,N_s$}
+\STATE $s^i_t \sim q(x_t \mid s^i_{i-1})$
+\STATE $w^i_t = p(z_t \mid s^i_t)$
+\ENDFOR
+\STATE $t = \sum_{i=1}^{N_s} w^i_t$
+\FOR {$i = 1,...,N_s$}
+\STATE $w^i_t = t^{-1} w^i_{t-1}$ (Normalisieren)
+\ENDFOR
+\STATE [$\lbrace s^{\ast j}_t, w^{j}_t, i^{j} \rbrace^{N_s}_{j=1}$] = RESAMPLE [$\lbrace s^i_t, w^{j}_t \rbrace^{N_s}_{j=1}$]
+\end{algorithmic}
+
+\begin{lstlisting}
+classdef MaximalRangeFlight
+    properties
+        
+end
+\end{lstlisting}
+
+\end{algorithm}
+
+\begin{lstlisting}
+function 
+end
+\end{lstlisting}
+
+
+
 Gedanken wie der Verlauf aussehen könnte:\\
 Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
+
+\section{Versuch 1}
+Alles wie vorher nur mit verkürzter Zeit 
+
+
+
+
+\section{Versuch 2}
+Verkürzte Zeit mit angepasster Starthöhe
+
+
+\section{Versuch 3}
+Verkürzte Zeit mit angepasstem Gewicht
+Verwendet werden:
+\begin{itemize}
+\item SQP-Verfahren zur Optimierung 
+\item Startmatrix für die Optimierung ist \[X_0 = \begin{pmatrix}
+[20,9,6000,90,1259999,1.47] \\ 
+\vdots \\ 
+\vdots
+\end{pmatrix}\]
+\item Reduzierte Endzeit $t_f = 1400$
+\item Keine weiteren Box-Beschränkungen, aber das neue Gewicht 500 Tonnen
+\end{itemize}
+
+\subsection{Ergebnis 1}
+Ergebnis mit $N=100$ Anzahl an Diskretisierungen
+ 
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
+%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
+%\end{center}
+%\end{figure}
+
+\subsection{Ergebnis 2}
+Ergebnis mit $N=400$ Anzahl an Diskretisierungen 
+
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E2}
+%\caption{Versuch 3 - Ergebnis 2}\label{img:V1E2}
+%\end{center}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Versuch 4}
+Verkürzte Zeit mit weiteren Box-Schranken und angepasstem Gewicht
 
 Zusätzliche Schranken:
 \begin{itemize}
@@ -62,31 +157,9 @@ Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei e
 
 
 
-Nächster Schritt also:
-\begin{itemize}
-\item Problem auf ein Mehrfachschiesverfahren anwenden?
-\end{itemize}
 
 
-\section{Versuch 1}
-Verwendet werden:
-\begin{itemize}
-\item SQP-Verfahren zur Optimierung 
-\item Startmatrix für die Optimierung ist \[X_0 = \begin{pmatrix}
-[20,9,6000,90,1259999,1.47] \\ 
-\vdots \\ 
-\vdots
-\end{pmatrix}\]
-\item Reduzierte Endzeit $t_f = 1400$
-\item Keine weiteren Box-Beschränkungen, aber das neue Gewicht 500 Tonnen
-\end{itemize}
 
-\subsection{Ergebnis 1}
-Ergebnis mit $N=100$ Anzahl an Diskretisierungen 
-
-
-\subsection{Ergebnis 2}
-Ergebnis mit $N=400$ Anzahl an Diskretisierungen 
 
 
 
