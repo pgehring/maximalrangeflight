@@ -2,6 +2,8 @@
 
 % Klasse an verschiedenen Einschrittverfahren zur Lösung von ODE's
 
+% Alle ODE Solver von Matlab: https://de.mathworks.com/help/matlab/math/choose-an-ode-solver.html
+
 % Date:         27.08.2021
 % Author:       Gehring, Philipp / Karus, Heiko / Götz, Felix
 
