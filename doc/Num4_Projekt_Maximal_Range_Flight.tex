@@ -4,7 +4,7 @@
 %------------------------------------------------------------------------------
 % Bemerkungen:
 % 	- Kompilieren mit PDFLaTeX
-%	- Römische Seitenzahlen im Anhang manuell anpassen !!!
+%	- 
 
 % Notizen:
 %	- 
@@ -25,7 +25,7 @@
 \NeedsTeXFormat{LaTeX2e}
 \documentclass[
 a4paper,
-10pt, %12pt,
+10pt,
 headsepline,           % Linie zw. Kopfzeile und Text
 oneside,               % einseitig
 numbers=noenddot,	   % keine Punkte nach den letzten Ziffern in Überschriften
@@ -61,6 +61,8 @@ bibliography=totoc,    % LV in IV
 \usepackage{geometry}
 \usepackage{layout}
 
+\newcounter{SeitenzahlSpeicher}
+
 %------------------------------------------------------------------------------
 % Grafiken
 %------------------------------------------------------------------------------
@@ -87,6 +89,7 @@ bibliography=totoc,    % LV in IV
 %------------------------------------------------------------------------------
 \usepackage{url}              % \url{http://...} in Schreibmaschinenschrift
 \usepackage{color}            % zum Setzen farbigen Textes
+\usepackage[dvipsnames]{xcolor}
 
 %------------------------------------------------------------------------------
 % Pakete für Mathe-Umgebungen, -Symbole und Neudefinition von Kommandos
@@ -126,12 +129,29 @@ bibliography=totoc,    % LV in IV
 %https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
 % Beispiele für Quellcode
 \usepackage{listings}
-\lstset{language=Java,
-  showstringspaces=false,
-  frame=single,
-  numbers=left,
-  basicstyle=\ttfamily,
-  numberstyle=\tiny}
+\lstdefinestyle{num_octave}{
+  basicstyle=\scriptsize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{ForestGreen},    % comment style
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,	                   % adds a frame around the code
+  %keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny, % the style that is used for the line-numbers
+  numberbychapter=true
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  stringstyle=\color{black},     % string literal style
+  tabsize=4,	                   % sets default tabsize to 2 spaces
+}
+\renewcommand{\lstlistingname}{Programmcode}% Listing -> Programmcode
+\renewcommand{\lstlistlistingname}{\lstlistingname s Verzeichnis}% List of Listings -> Programmcodes
+
   
 %https://www.zaik.uni-koeln.de/AFS/teachings/ws0708/ORSeminar/latex/seminar.pdf
 %https://en.wikibooks.org/wiki/LaTeX/Algorithms
@@ -301,7 +321,7 @@ pdfborder=0 0 0	% keine Box um die Links!
 %------------------------------------------------------------------------------
 \tableofcontents
 \addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
-
+\setcounter{SeitenzahlSpeicher}{\value{page}}
 %------------------------------------------------------------------------------
 % Hauptteil
 %------------------------------------------------------------------------------
@@ -316,23 +336,30 @@ pdfborder=0 0 0	% keine Box um die Links!
 %------------------------------------------------------------------------------
 % Anhang
 %------------------------------------------------------------------------------
-\backmatter
-\pagenumbering{roman}
-\setcounter{page}{5} % ACHTUNG MANUELL ANPASSEN !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+\clearpage
 \appendix
+\pagenumbering{roman}
+\stepcounter{SeitenzahlSpeicher}
+\setcounter{page}{\theSeitenzahlSpeicher}
 % hier Anhänge einbinden
-%\input{Anhang.tex}
-%\input{chapters/sources}
+\input{chapters/Anhang_A}
 
-\backmatter
+
 
 %------------------------------------------------------------------------------
 % Literatur-, Abbildungs-, Tabellen-, Formel- und Abkuerzungsverzeichnis
 %------------------------------------------------------------------------------
+\backmatter
+
 % Literaturverzeichnis
 \clearpage
 \printbibliography
+
+% Auflistung aller verwendeter Progammcodes
+\clearpage
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{Programmcodes Verzeichnis}
+
 
 % Abbildungsverzeichnis
 %\clearpage
