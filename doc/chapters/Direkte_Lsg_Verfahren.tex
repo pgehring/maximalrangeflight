@@ -3,68 +3,90 @@
 
 
 \section{Algorithmen}
-\floatname{algorithm}{Klasse}
-\begin{algorithm}[H]
-\caption{MaximalRangeFlight}\label{algo:SISPF}
-\textbf{[$\lbrace s^i_t, w^i_t \rbrace^{N_s}_{i=1}$] = PFSIR [$\lbrace s^i_{t-1}, w^i_{t-1} \rbrace^{N_s}_{i=1}$]}
-\begin{algorithmic}
-\FOR {$i = 1,...,N_s$}
-\STATE $s^i_t \sim q(x_t \mid s^i_{i-1})$
-\STATE $w^i_t = p(z_t \mid s^i_t)$
-\ENDFOR
-\STATE $t = \sum_{i=1}^{N_s} w^i_t$
-\FOR {$i = 1,...,N_s$}
-\STATE $w^i_t = t^{-1} w^i_{t-1}$ (Normalisieren)
-\ENDFOR
-\STATE [$\lbrace s^{\ast j}_t, w^{j}_t, i^{j} \rbrace^{N_s}_{j=1}$] = RESAMPLE [$\lbrace s^i_t, w^{j}_t \rbrace^{N_s}_{j=1}$]
-\end{algorithmic}
+%\floatname{algorithm}{Klasse}
+%\begin{algorithm}[H]
+%\caption{MaximalRangeFlight}\label{algo:SISPF}
+%\textbf{[$\lbrace s^i_t, w^i_t \rbrace^{N_s}_{i=1}$] = PFSIR [$\lbrace s^i_{t-1}, w^i_{t-1} \rbrace^{N_s}_{i=1}$]}
+%\begin{algorithmic}
+%\FOR {$i = 1,...,N_s$}
+%\STATE $s^i_t \sim q(x_t \mid s^i_{i-1})$
+%\STATE $w^i_t = p(z_t \mid s^i_t)$
+%\ENDFOR
+%\STATE $t = \sum_{i=1}^{N_s} w^i_t$
+%\FOR {$i = 1,...,N_s$}
+%\STATE $w^i_t = t^{-1} w^i_{t-1}$ (Normalisieren)
+%\ENDFOR
+%\STATE [$\lbrace s^{\ast j}_t, w^{j}_t, i^{j} \rbrace^{N_s}_{j=1}$] = RESAMPLE [$\lbrace s^i_t, w^{j}_t \rbrace^{N_s}_{j=1}$]
+%\end{algorithmic}
 
-\begin{lstlisting}
-classdef MaximalRangeFlight
-    properties
-        
-end
-\end{lstlisting}
-
-\end{algorithm}
-
-\begin{lstlisting}
-function 
-end
-\end{lstlisting}
-
+%\floatname{algorithm}{Algorithmus}
+%\begin{algorithm}[H]
+%\caption{Vollständige Euler-Diskretisierung}\label{algo:SISPF}
+%\textbf{[$\lbrace s^i_t, w^i_t \rbrace^{N_s}_{i=1}$] = PFSIR [$\lbrace s^i_{t-1}, w^i_{t-1} \rbrace^{N_s}_{i=1}$]}
+%\begin{algorithmic}
+%\FOR {$i = 1,...,N_s$}
+%\STATE $s^i_t \sim q(x_t \mid s^i_{i-1})$
+%\STATE $w^i_t = p(z_t \mid s^i_t)$
+%\ENDFOR
+%\STATE $t = \sum_{i=1}^{N_s} w^i_t$
+%\FOR {$i = 1,...,N_s$}
+%\STATE $w^i_t = t^{-1} w^i_{t-1}$ (Normalisieren)
+%\ENDFOR
+%\STATE [$\lbrace s^{\ast j}_t, w^{j}_t, i^{j} \rbrace^{N_s}_{j=1}$] = RESAMPLE [$\lbrace s^i_t, w^{j}_t \rbrace^{N_s}_{j=1}$]
+%\end{algorithmic}
 
 
 Gedanken wie der Verlauf aussehen könnte:\\
 Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
 
-\section{Versuch 1}
-Alles wie vorher nur mit verkürzter Zeit 
-
-
-
-
-\section{Versuch 2}
-Verkürzte Zeit mit angepasster Starthöhe
-
-
-\section{Versuch 3}
-Verkürzte Zeit mit angepasstem Gewicht
-Verwendet werden:
-\begin{itemize}
-\item SQP-Verfahren zur Optimierung 
-\item Startmatrix für die Optimierung ist \[X_0 = \begin{pmatrix}
+Allgemein wird für die Matlab Funktion \verb|fmincon| die Startmatrix  \verb|prob.z_0| 
+\[\begin{pmatrix}
 [20,9,6000,90,1259999,1.47] \\ 
 \vdots \\ 
 \vdots
 \end{pmatrix}\]
-\item Reduzierte Endzeit $t_f = 1400$
-\item Keine weiteren Box-Beschränkungen, aber das neue Gewicht 500 Tonnen
-\end{itemize}
+für die Optimierung verwendet. Es sind also alle Zustandsvektoren für jeden Diskretisierungspunkt identisch.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Versuch 1}\label{kap:Versuch1}
+Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält.
 
 \subsection{Ergebnis 1}
-Ergebnis mit $N=100$ Anzahl an Diskretisierungen
+Verwendet wird:
+\begin{itemize}
+\item Reduzierte Endzeit: $t_f = 1400$
+\end{itemize}
+Umgesetzt in Matlab mit dem Programmcode \ref{code:v1.1}
+\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 1.}, label=code:v1.1]
+N = 400;                     % Anzahl an Diskretisierungen
+ode_methods = ode_methods(); % Methoden zum Loesen der ODE
+
+%% Objekt der Problemklasse erhalten
+prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
+
+%% Loesen mit fmincon
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
+
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
+v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+\end{lstlisting}
+
+Es folgt das Ergebnis
  
 %\begin{figure}[H]
 %\begin{center}
@@ -73,13 +95,83 @@ Ergebnis mit $N=100$ Anzahl an Diskretisierungen
 %\end{center}
 %\end{figure}
 
-\subsection{Ergebnis 2}
-Ergebnis mit $N=400$ Anzahl an Diskretisierungen 
 
+
+
+
+
+
+
+\newpage
+\section{Versuch 2}
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich die Starthöhe des Flugzeuges angepasst.
+
+\subsection{Ergebnis 1}
+Verwendet werden:
+\begin{itemize}
+\item Reduzierte Endzeit: $t_f = 1400$
+\item Angepasste Starthöhe: $h_0 = $
+\end{itemize}
+Umgesetzt in Matlab mit dem Programmcode \ref{code:v2.1}
+\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 2.}, label=code:v2.1]
+N = 400;                     % Anzahl an Diskretisierungen
+ode_methods = ode_methods(); % Methoden zum Loesen der ODE
+
+%% Objekt der Problemklasse erhalten
+prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
+
+%% Loesen mit fmincon
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
+
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
+v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+\end{lstlisting}
+
+Es folgt das Ergebnis
+ 
 %\begin{figure}[H]
 %\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E2}
-%\caption{Versuch 3 - Ergebnis 2}\label{img:V1E2}
+%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
+%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
+%\end{center}
+%\end{figure}
+
+
+
+
+
+
+
+
+\newpage
+\section{Versuch 3}
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst.
+
+\subsection{Ergebnis 1}
+Verwendet werden:
+\begin{itemize}
+\item Reduzierte Endzeit: $t_f = 1400$
+\item Neues Startgewicht: $m = 500000$
+\end{itemize}
+Umgesetzt in Matlab mit dem Programmcode \ref{code:v3.1}
+\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 3.}, label=code:v3.1]
+N = 400;                     % Anzahl an Diskretisierungen
+ode_methods = ode_methods(); % Methoden zum Loesen der ODE
+
+%% Objekt der Problemklasse erhalten
+prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
+
+%% Loesen mit fmincon
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
+
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
+v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+\end{lstlisting}
+ 
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
+%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
 %\end{center}
 %\end{figure}
 
@@ -92,13 +184,9 @@ Ergebnis mit $N=400$ Anzahl an Diskretisierungen
 
 
 
-
-
-
+\newpage
 \section{Versuch 4}
-Verkürzte Zeit mit weiteren Box-Schranken und angepasstem Gewicht
-
-Zusätzliche Schranken:
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst, sowie Box-Beschränkungen für die Zustände gesetzt. Diese zusätzlichen Box-Beschränkungen spiegeln die realen Bedingungen des Flugzeuges A380-800 der Firma Airbus wieder. Es werden folgende Schranken gesetzt:
 \begin{itemize}
 \item \textbf{Startgeschwindigkeit:} Gewöhnliche Flugzeuge starten von einer Startbahn und benötigen zum Starten eine Mindestgeschwindigkeit relativ zur umgebenden Luft. Diese beträgt bei Verkehrsflugzeugen zwischen 250 (69,44 m/s) und 345 km/h (95,83 m/s). (Quelle: \url{https://de.wikipedia.org/wiki/Start_(Luftfahrt)})
 %
@@ -111,8 +199,10 @@ Zusätzliche Schranken:
 \item \textbf{Maximale Flughöhe:} 13100 m. (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
 %
 \item \textbf{Maximale Reichweite:} 15200000 m (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
+%
+\item \textbf{Anstellwinkel:} -90 - 90
 \end{itemize}
-Verändertes Optimalsteuerungsproblem:
+Damit ergibt sich das veränderte Optimalsteuerungsproblem:
 \[\begin{split}
 \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) \\\
 \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} \text{(Dynamik)} \\\
@@ -132,28 +222,33 @@ T(t) &\in [T_{\min},T_{\max}] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
 C_L(t) &\in [C_{L, \min},C_{L, \max}] \hspace{3mm} \forall t \in [t_0,t_f]
 \end{split} \]
 
-Versuche:
+\subsection{Ergebnis 1}
+Verwendet werden:
 \begin{itemize}
-\item Ich denke auch nicht unbedingt, dass die Stabilität des ODE-Solvers oder
-die Steifheit der ODE das (Haupt-)Problem ist.
-Wahrscheinlich könnt ihr ein explizites Verfahren verwenden.
-%
-\item Ja, das kann ich mir auch vorstellen. Die Endzeit ist hier auch nicht in
-Stein gemeißelt. Verkürzt die gerne (auch deutlich) und schaut, ob ihr
-sinnvollere Ergebnisse bekommt. Evtl. bietet es sich an in dem Zug dann
-aber auch an die Starthöhe zu erhöhen. 
-Auch die anderen Parameter und Schranken könnt ihr ggf. hinterfragen.
-Dokumentiert eure Schwierigkeiten und Änderungen am besten.
-%
-\item Müsste man vielleicht noch zusätzliche Beschränkungen für h, gamma, x, v angeben? Ich bin mir nicht sicher, ob das nötig ist. Ich würde erst mal den
-Zeithorizont verkürzen.
-%
-\item Testet doch mal, ob ihr bei vorgegebener Steuerung
-einen deutlichen Unterschied zwischen expl. und impl. Verfahren
-feststellt. Falls nicht ist das schon mal ein deutliches Indiz dafür,
-dass ihr euch den Rechenaufwand eines impl. Verfahrens auch in der
-Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei eurem Projekt, da es wahrscheinlich viele lokale Minima gibt. Deswegen wäre es wahrscheinlich auch sinnvoll unterschiedliche Algorithmen (z.B. SQP) auszuprobieren. Dafür müsst ihr nur die entsprechende Option für fmincon setzen und müsst auch nicht unbedingt den Algorithmus im Detail verstehen. Sowas könnt ihr dann natürlich auch gerne in die Präsentation/Ausarbeitung aufnehmen.
+\item Reduzierte Endzeit: $t_f = 1400$
+\item Neues Startgewicht: $m = 500000$
 \end{itemize}
+Umgesetzt in Matlab mit dem Programmcode \ref{code:v4.1}
+\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 3.}, label=code:v4.1]
+N = 400;                     % Anzahl an Diskretisierungen
+ode_methods = ode_methods(); % Methoden zum Loesen der ODE
+
+%% Objekt der Problemklasse erhalten
+prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
+
+%% Loesen mit fmincon
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
+
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
+v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+\end{lstlisting}
+ 
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
+%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
+%\end{center}
+%\end{figure}
 
 
 
@@ -165,6 +260,9 @@ Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei e
 
 
 
+\newpage
+\section{Versuch 5}
+Testet doch mal, ob ihr bei vorgegebener Steuerung einen deutlichen Unterschied zwischen expl. und impl. Verfahren feststellt. Falls nicht ist das schon mal ein deutliches Indiz dafür, dass ihr euch den Rechenaufwand eines impl. Verfahrens auch in der Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei eurem Projekt, da es wahrscheinlich viele lokale Minima gibt. Deswegen wäre es wahrscheinlich auch sinnvoll unterschiedliche Algorithmen (z.B. SQP) auszuprobieren. Dafür müsst ihr nur die entsprechende Option für fmincon setzen und müsst auch nicht unbedingt den Algorithmus im Detail verstehen. Sowas könnt ihr dann natürlich auch gerne in die Präsentation/Ausarbeitung aufnehmen.
 
 
 
@@ -172,7 +270,11 @@ Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei e
 
 
 
+\newpage
+\section{Versuch 6}
+Von Explizit auf implizites Verfahren
 
+Ich denke auch nicht unbedingt, dass die Stabilität des ODE-Solvers oder die Steifheit der ODE das (Haupt-)Problem ist. Wahrscheinlich könnt ihr ein explizites Verfahren verwenden.
 
 
 

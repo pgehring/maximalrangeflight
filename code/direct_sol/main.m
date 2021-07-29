@@ -118,10 +118,14 @@ ode_methods = ode_methods();
 % prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.irk);
 prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.explicit_euler);
 
+%Versuch1
+
 %% Fmincon
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
 % options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-9,'StepTolerance',1e-15);
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1000.0e+03,'MaxIterations',4.0e+05);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',5000e+03,'MaxIterations',4.0e+05);
+
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1e+03,'MaxIterations',4.0e+05);
 
 % options = optimset('Display','iter','MaxFunEvals' ,10000000,'MaxIter',4.0e+05); % Innere Punkte Verfahren
 % options = optimoptions('fmincon','Display','iter','Algorithm','active-set');
@@ -135,11 +139,14 @@ t = linspace(prob.t_0,prob.t_f,prob.N);
 titles = [  "Flughoehe", "Anstellwinkel", ...
             "Zurueckgelegte Streckte", "Geschwindigkeit" , ...
             "Steuerung 1: Schub", "Steuerung 2: Auftriebsbeiwert"];
-labels = [  "$h_{sol}\,in\,[m]$", "$\gamma_{sol}\,in\,[^{\circ}]$", ...
-            "$x_{sol}\,in\,[m]$", "$v_{sol}\,in\,[\frac{m}{s}]$", ...
-            "$T_{sol}\,in\,[N]$", "$C_{L_{sol}}\,in\,[1]$"];
+labels = [  "$h_{sol}$ in $[m]$", "$\gamma_{sol}$ in $[^{\circ}]$", ...
+            "$x_{sol}$ in $[m]$", "$v_{sol}$ in $[\frac{m}{s}]$", ...
+            "$T_{sol}$ in $[N]$", "$C_{L_{sol}}$ in $[1]$"];
+frame_prop = [0.5,0.5,0.5,0.5,2,2];
+line_style = ["b-","b-","b-","b-","r-","r-"];
 plotter = Plotter();
-plotter.plot_fmincon(t, prob_solution, titles, labels, [3, 1, 5, 2, 4, 6])
+plotter.plot_fmincon(t, prob_solution, titles, labels, [3, 1, 5, 2, 4, 6], frame_prop, line_style)
 
-% plotter.axes(5).LineWidth = 2;
-% plotter.axes(6).LineWidth = 2;
+%% Automatisches Abpeichern der Daten und der Grafik
+
+
