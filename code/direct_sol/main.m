@@ -35,6 +35,7 @@ test_1_1
 
 % test_6_1
 
+
 %% Solving the control problem with fmincon
 tic;
 prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
