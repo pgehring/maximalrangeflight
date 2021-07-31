@@ -30,7 +30,7 @@ classdef ode_methods
         %% Explicit method
         function Z = explicit_euler(obj,f,t,z,N,n_x)
             Z = zeros(N,n_x);
-            % Berechenen der Werte für jeden Zeitpunkt
+            
             for n = 1:N-1
                 Z(n,:) = (t(n+1)-t(n))*f(t(n),z(n,:));
             end
