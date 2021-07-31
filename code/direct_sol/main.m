@@ -1,13 +1,11 @@
 % main.m:
-
-% Aufgabenstellung:
-%   Modell eines 2-dimensionalen Fluges eines Flugzeugs in der x-h-Ebene,
-%   bei dem der Auftriebsbeiwert und der Schub gesteuert werden kann. 
-%   Dabei darf ein maximaler Staudruck nicht überschritten werden.
-%   Das Ziel ist den Flug eines Flugzeuges von einer gegebenen 
-%   Anfangsposition so zu steuern, dass eine vorgegebene Reisehöhe erreicht 
-%   wird, der Anstellwinkel dort 0 Grad und die Reichweite maximal ist.
-
+% Task:
+%   Model of a 2-dimensional flight of an aircraft in the x-h plane, where 
+%   the lift coefficient C_L and the thrust T can be controlled. A maximum 
+%   dynamic pressure q must not be exceeded. The objective is to control 
+%   the flight of an aircraft from a given initial position in such a way 
+%   that a given cruise altitude of 10668 m is reached, the angle of attack 
+%   there is 0 degrees and the range is maximum.
 % Date:         27.08.2021
 % Author:       Gehring, Philipp / Karus, Heiko / Götz, Felix
 
@@ -15,138 +13,53 @@ clear  variables
 close  all
 clc
 
+%% Memory paths
 addpath('../utils')
-%% Problembeschreibung: Optimalsteuerungsproblem für einen Airbus A380-800
-% h_0 = 2131;     % in [m]
-% gamma_0 = 0.27; % in [Grad]  
-% x_0 = 12312;    % in [m]
-% v_0 = 100;      % in [m/s]
-% T_0 = 1260000;  % in [N]
-% C_L_0 = 1.48;   % in []
+addpath('./config')
+addpath('./results')
 
-% h_0 = 423;     % in [m]
-% gamma_0 = 45; % in [Grad]  
-% x_0 = 123;    % in [m]
-% v_0 = 204;      % in [m/s]
-% T_0 = 0;  % in [N]
-% C_L_0 = 0;   % in []
+%% Loading the corresponding configuration file
+% test_1_1
+test_1_2
 
-% h_0 = 5000;     % in [m]
-% gamma_0 = 45; % in [Grad]  
-% x_0 = 50000;    % in [m]
-% v_0 = 204;      % in [m/s]
-% T_0 = 0;  % in [N]
-% C_L_0 = 0;   % in []
+% test_2
 
-% h_0 = 6000;     % in [m]
-% gamma_0 = 45; % in [Grad]  
-% x_0 = 60000;    % in [m]
-% v_0 = 250;      % in [m/s]
-% T_0 = 0;  % in [N]
-% C_L_0 = 0;   % in []
+% test_3
 
-% % möglicher startpunkt für active Set 
-% h_0 = 0;     % in [m] 
-% gamma_0 = 0.27; % in [Grad]  
-% x_0 = 0;    % in [m]
-% v_0 = 10;      % in [m/s]
-% T_0 = 1561;  % in [N]
-% C_L_0 = 0.5;   % in []
+% test_4
 
-% % mit t_0 = 1200 N = 100
-% h_0 = 9000;%6000;%3000;     % in [m]
-% gamma_0 = 5;%45; % in [Grad]  
-% x_0 = 800000;%60000;    % in [m]
-% v_0 = 250;      % in [m/s]
-% T_0 = 1259999;  % in [N]
-% C_L_0 = 1.4;%0.1;   % in []
+% test_5
 
-% % mit t_0 = 1200 N = 100 gamma_lb = -90
-% h_0 = 20;     % in [m]
-% gamma_0 = 9; % in [Grad]  
-% x_0 = 6000;    % in [m]
-% v_0 = 90;      % in [m/s]
-% T_0 = 1259999;  % in [N]
-% C_L_0 = 1.47;   % in []
+% test_6
 
-% % mit t_0 = 1400 N=100
-% h_0 = 3000;%6000;%3000;     % in [m]
-% gamma_0 = -2;%45; % in [Grad]  
-% x_0 = 600000;%60000;    % in [m]
-% v_0 = 250;      % in [m/s]
-% T_0 = 1259999;  % in [N]
-% C_L_0 = 1.4;%0.1;   % in []
-
-
-% % mit t_0 = 1400 N = 100 IMPLIZIT
-% h_0 = 9000;%6000;%3000;     % in [m]
-% gamma_0 = 5;%45; % in [Grad]  
-% x_0 = 800000;%60000;    % in [m]
-% v_0 = 250;      % in [m/s]
-% T_0 = 1259999;  % in [N]
-% C_L_0 = 1.4;%0.1;   % in []
-
-% % mit t_0 = 1400 N = 250 gamma_lb = -90
-% h_0 = 20;     % in [m]
-% gamma_0 = 9; % in [Grad]  
-% x_0 = 6000;    % in [m]
-% v_0 = 90;      % in [m/s]
-% T_0 = 1259999;  % in [N]
-% C_L_0 = 1.47;   % in []
-
-% % mit t_0 = 1400 N = 300 gamma_lb = -90
-% h_0 = 20;     % in [m]
-% gamma_0 = 9; % in [Grad]  
-% x_0 = 6000;    % in [m]
-% v_0 = 90;      % in [m/s]
-% T_0 = 1259999;  % in [N]
-% C_L_0 = 1.47;   % in []
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1000.0e+03);
-
-% mit t_0 = 1400 N = 400
-h_0 = 20;     % in [m]
-gamma_0 = 9; % in [Grad]  
-x_0 = 6000;    % in [m]
-v_0 = 90;      % in [m/s]
-T_0 = 1259999;  % in [N]
-C_L_0 = 1.47;   % in []
-
-N = 400;%40;         % Anzahl an Diskretisierungen
-ode_methods = ode_methods();
-
-%% Objekt der Problemklasse erhalten
-% prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.irk);
-prob = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,@ode_methods.explicit_euler);
-
-%Versuch1
-
-%% Fmincon
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-9,'StepTolerance',1e-15);
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',5000e+03,'MaxIterations',4.0e+05);
-
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1e+03,'MaxIterations',4.0e+05);
-
-% options = optimset('Display','iter','MaxFunEvals' ,10000000,'MaxIter',4.0e+05); % Innere Punkte Verfahren
-% options = optimoptions('fmincon','Display','iter','Algorithm','active-set');
-%
+%% Solving the control problem with fmincon
 tic;
-prob_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-duration_time = toc
+prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+duration_time = toc;
+fprintf('Duration time for solving the Problem: %4.2f [min]\n', duration_time/60);
 
-%% Plot der Lösungen
+%% Plot the solution and saving the results
 t = linspace(prob.t_0,prob.t_f,prob.N);
-titles = [  "Flughoehe", "Anstellwinkel", ...
-            "Zurueckgelegte Streckte", "Geschwindigkeit" , ...
-            "Steuerung 1: Schub", "Steuerung 2: Auftriebsbeiwert"];
-labels = [  "$h_{sol}$ in $[m]$", "$\gamma_{sol}$ in $[^{\circ}]$", ...
-            "$x_{sol}$ in $[m]$", "$v_{sol}$ in $[\frac{m}{s}]$", ...
-            "$T_{sol}$ in $[N]$", "$C_{L_{sol}}$ in $[1]$"];
+titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
+          "Geschwindigkeit","Steuerung 1: Schub",...
+          "Steuerung 2: Auftriebsbeiwert"];
+labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
+          "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$",...
+          "$T_{sol}$ in $[N]$","$C_{L_{sol}}$ in $[1]$"];
 frame_prop = [0.5,0.5,0.5,0.5,2,2];
 line_style = ["b-","b-","b-","b-","r-","r-"];
+order = [3,1,5,2,4,6];
 plotter = Plotter();
-plotter.plot_fmincon(t, prob_solution, titles, labels, [3, 1, 5, 2, 4, 6], frame_prop, line_style)
+fig = plotter.plot_fmincon(t,prob_sol,titles,labels,order,frame_prop,line_style);
 
-%% Automatisches Abpeichern der Daten und der Grafik
+% Save the graphics
+fprintf('Saving the graphics ...\n');
+savefig(fig,strcat('./results/',results_name,'.fig'))
+saveas(fig,strcat('./results/',results_name,'.png'))
+saveas(fig,strcat('./results/',results_name,'.svg'))
 
+% Save the data
+fprintf('Saving the data ...\n');
+writematrix(prob_sol,strcat('./results/',results_name,'.txt'))
 
+fprintf('All done!\n');

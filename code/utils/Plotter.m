@@ -21,9 +21,9 @@ classdef Plotter
         end
         
         %%
-        function obj = plot_fmincon(obj, t, sol, titles, labels, order, frame_prop, line_style)
+        function fig = plot_fmincon(obj, t, sol, titles, labels, order, frame_prop, line_style)
             obj.nfigures = obj.nfigures +1;
-            obj = create_fig(obj, obj.nfigures);
+            fig = create_fig(obj, obj.nfigures);
             [r, c] = size(sol);
             for i = [1:c]
                 sol_id = order(i);
@@ -34,7 +34,7 @@ classdef Plotter
             end
         end
         
-        function obj = create_fig(obj, fig_id)
+        function fig = create_fig(obj, fig_id)
             fig = figure('WindowState', 'maximized');
             obj.figures(fig_id) = fig;            
         end
