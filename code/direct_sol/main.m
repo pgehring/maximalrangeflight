@@ -19,7 +19,7 @@ addpath('./config')
 addpath('./results')
 
 %% Loading the corresponding configuration file
-test_1_1
+% test_1_1
 % test_1_2
 
 % test_2_1
@@ -28,12 +28,13 @@ test_1_1
 % test_3_1
 % test_3_2
 
-% test_4_1
+test_4_1
 % test_4_2
 
 % test_5_1
 
 % test_6_1
+
 
 %% Solving the control problem with fmincon
 tic;

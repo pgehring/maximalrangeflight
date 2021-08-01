@@ -24,7 +24,7 @@ ode_methods = ode_methods();
 prob = MaximalRangeFlight(h_sp,gamma_sp,x_sp,v_sp,T_sp,C_L_sp,N,@ode_methods.explicit_euler);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',200.0e+03,'MaxIterations',4.0e+05);
 
 %% Speicher Parameter
 results_name = 'test_4_1';
