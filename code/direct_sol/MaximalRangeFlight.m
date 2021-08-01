@@ -80,39 +80,26 @@ classdef MaximalRangeFlight
                  (1/(2*obj.m)) * (2*z(5) + (-obj.C_D_0 - obj.k*(z(6))^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)))];
         end
         
-        %% Funktionen für die Nebenbedingungen
-        % Zielfunktional
+        % objective function
         function T = F_sol(obj,z)
             T = -(z(end,3)-obj.X_0(3));
         end
-        % Ungleichungsnebenbedingungen
-        function g_array = G(obj,z)
-            g_array = zeros(1,obj.n_s*(obj.N+1));
-            for i = 0:obj.N-1
-                g_array((i*obj.n_s)+1) = 0.5 * obj.alpha * exp(-obj.beta*z(i+1,1)) * (z(i+1,4))^2 - obj.q_max;
-            end  
-        end
-        % Gleichungsnebenbedingungen
-        function h_array = H(obj,z)
-            h_array = zeros(1,obj.n_x*obj.N+obj.n_psi);
+        
+        %% constraint functions
+        % nonlinear constraints
+        function [c,ceq] = nonlcon(obj,z)
+            % equality constraints
+            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
+            
+            % inequality constraints
             x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
+            
+            ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
             for i = 0:obj.N-2
-                h_array((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
+                ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
             end
-            
-%             % Test mit ode von Matlab
-%             y = z(1,1:obj.n_x);
-%             for i = 0:obj.N-2
-%                 func =@(t,x) obj.f(t,[x',z(i+1,obj.n_x:end)])';
-%                 dt = abs((obj.t(i+1)-obj.t(i+2))/10);
-%                 tspan = [obj.t(i+1):dt:obj.t(i+2)];
-%                 sol = ode23s(func,tspan,y);
-%                 y = sol.y(:,end)';
-%                 h_array((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = y - z(i+2,1:obj.n_x);
-%             end
-            
-            %
-            h_array((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
+
+            ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
                                                                       z(1,2)-obj.X_0(2),...
                                                                       z(1,3)-obj.X_0(3),...
                                                                       z(1,4)-obj.X_0(4),...
@@ -120,13 +107,6 @@ classdef MaximalRangeFlight
                                                                     z(end,2)-obj.X_T(2),...
                                                                                       0,...
                                                                                       0];
-        end
-
-        %% Funtion für fmincon
-        % Nichtlineare Beschränkungen
-        function [c,ceq] = nonlcon(obj,z)
-            c = obj.G(z); 
-            ceq = obj.H(z);
         end
     end
 end
