@@ -1,8 +1,26 @@
 \chapter{Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren}
 
+Direkte Lösungsverfahren basieren auf einer Diskretisierung des Optimalsteuerungsproblems. Dadurch wird das Optimalsteuerungsproblem auf ein endlichdimensionales Optimierungsproblem transformiert, welches mit einem numerischen Optimierungsverfahren gelöst werden kann.
+
+Das gegebene Optimalsteuerungsroblem (Mayer-Problem mit Boxschranken) lässt sich also in ein Optimierungsproblem der folgenden Form umstellen. Finde für feste Zeitpunkte $t_0 < t_f$ einen Zustand $x \in W^{1, \infty} ([t_0,t_f], \R^{n_x})$ und eine Steuerung $u \in L^{\infty} ([t_0,t_f], \R^{n_u})$, sodass:
+\begin{itemize}
+\item \textbf{Zielfunktion:} Die Zielfunktion \[\varphi\]
+\end{itemize}
 
 
-\section{Algorithmen}
+
+
+
+
+
+
+
+
+
+
+\section{Algorithmus vollständige Diskretisierung}
+Vollständige Diskretisierung mit explizit aber auch impliziten Verfahren
+
 %\floatname{algorithm}{Klasse}
 %\begin{algorithm}[H]
 %\caption{MaximalRangeFlight}\label{algo:SISPF}
@@ -36,8 +54,7 @@
 %\end{algorithmic}
 
 
-Gedanken wie der Verlauf aussehen könnte:\\
-Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
+
 
 
 Allgemein wird für die Matlab Funktion \verb|fmincon| die Startmatrix  \verb|prob.z_0| 
@@ -56,44 +73,21 @@ für die Optimierung verwendet. Es sind also alle Zustandsvektoren für jeden Di
 
 
 
+\section{Beschränkte nichtlineare Optimierungsverfahren}
 
 
 
 
 
 
-\newpage
-\section{Versuch 1}\label{kap:Versuch1}
-Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält.
 
-\subsection{Ergebnis 1}
-Verwendet wird:
-\begin{itemize}
-\item Reduzierte Endzeit: $t_f = 1400$
-\end{itemize}
-Umgesetzt in Matlab mit dem Programmcode \ref{code:v1.1}
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 1.}, label=code:v1.1]
-N = 400;                     % Anzahl an Diskretisierungen
-ode_methods = ode_methods(); % Methoden zum Loesen der ODE
 
-%% Objekt der Problemklasse erhalten
-prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
+\section{Versuchsdurchführungen und Ergebnisse}
+Gedanken wie der Verlauf aussehen könnte:\\
+Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
-%% Loesen mit fmincon
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
 
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
-v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-\end{lstlisting}
 
-Es folgt das Ergebnis
- 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
 
 
 
@@ -102,226 +96,4 @@ Es folgt das Ergebnis
 
 
 
-\newpage
-\section{Versuch 2}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich die Starthöhe des Flugzeuges angepasst.
 
-\subsection{Ergebnis 1}
-Verwendet werden:
-\begin{itemize}
-\item Reduzierte Endzeit: $t_f = 1400$
-\item Angepasste Starthöhe: $h_0 = $
-\end{itemize}
-Umgesetzt in Matlab mit dem Programmcode \ref{code:v2.1}
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 2.}, label=code:v2.1]
-N = 400;                     % Anzahl an Diskretisierungen
-ode_methods = ode_methods(); % Methoden zum Loesen der ODE
-
-%% Objekt der Problemklasse erhalten
-prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
-
-%% Loesen mit fmincon
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
-
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
-v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-\end{lstlisting}
-
-Es folgt das Ergebnis
- 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
-
-
-
-
-
-
-
-
-\newpage
-\section{Versuch 3}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst.
-
-\subsection{Ergebnis 1}
-Verwendet werden:
-\begin{itemize}
-\item Reduzierte Endzeit: $t_f = 1400$
-\item Neues Startgewicht: $m = 500000$
-\end{itemize}
-Umgesetzt in Matlab mit dem Programmcode \ref{code:v3.1}
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 3.}, label=code:v3.1]
-N = 400;                     % Anzahl an Diskretisierungen
-ode_methods = ode_methods(); % Methoden zum Loesen der ODE
-
-%% Objekt der Problemklasse erhalten
-prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
-
-%% Loesen mit fmincon
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
-
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
-v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-\end{lstlisting}
- 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
-
-
-
-
-
-
-
-
-
-
-\newpage
-\section{Versuch 4}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst, sowie Box-Beschränkungen für die Zustände gesetzt. Diese zusätzlichen Box-Beschränkungen spiegeln die realen Bedingungen des Flugzeuges A380-800 der Firma Airbus wieder. Es werden folgende Schranken gesetzt:
-\begin{itemize}
-\item \textbf{Startgeschwindigkeit:} Gewöhnliche Flugzeuge starten von einer Startbahn und benötigen zum Starten eine Mindestgeschwindigkeit relativ zur umgebenden Luft. Diese beträgt bei Verkehrsflugzeugen zwischen 250 (69,44 m/s) und 345 km/h (95,83 m/s). (Quelle: \url{https://de.wikipedia.org/wiki/Start_(Luftfahrt)})
-%
-\item \textbf{Steigflug:} Aus Lärmschutzgründen und aus Gründen des „Freimachens“ von Luftraum starten Verkehrsflugzeuge von großen Flughäfen oft mit steilem Neigungswinkel, etwa um 20° (abhängig von den Vorgaben des Herstellers, der Beladung, der Windverhältnisse und des Lotsen). Der Steigwinkel wird in der Regel verringert, sobald die Flughafenumgebung verlassen wurde. (Quelle: \url{https://de.wikipedia.org/wiki/Steigflug})
-%
-\item \textbf{Flugzeugmassen:} Die Maximale Startmasse eines A380-800 beträgt max. 569 t. Die Leermasse 275 t. (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
-%
-\item \textbf{Höchstgeschwindigkeit:} 961 km/h (266,94 m/s). (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
-%
-\item \textbf{Maximale Flughöhe:} 13100 m. (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
-%
-\item \textbf{Maximale Reichweite:} 15200000 m (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
-%
-\item \textbf{Anstellwinkel:} -90 - 90
-\end{itemize}
-Damit ergibt sich das veränderte Optimalsteuerungsproblem:
-\[\begin{split}
-\min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) \\\
-\text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} \text{(Dynamik)} \\\
-\dot{\gamma}(t) &=  \dfrac{1}{mv(t)} \left( L(v(t),h(t),C_L(t)) - mg \cos(\gamma(t)) \right) \\\
-\dot{x}(t) &= v(t) \cos(\gamma(t))\\\
-\dot{v}(t) &= \dfrac{1}{m} \left( T(t) - D(v(t),h(t),C_L(t)) - mg \sin(\gamma(t)) \right) \\\
-%
-(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) \hspace{26mm} \text{(Anfangsbedingungen)}\\\
-(h,\gamma,x,v)(t_f) &= (h_f,\gamma_f) \hspace{36mm} \text{(Endbedingungen)}\\\
-%
-q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Zustandsbedingungen)}\\\
-h(t) &\in [0,13100] \hspace{9.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Boxbeschränkungen)}\\\
-\gamma(t) &\in [-90,90] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
-x(t) &\in [0,15200000] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
-v(t) &\in [0,266] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
-T(t) &\in [T_{\min},T_{\max}] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
-C_L(t) &\in [C_{L, \min},C_{L, \max}] \hspace{3mm} \forall t \in [t_0,t_f]
-\end{split} \]
-
-\subsection{Ergebnis 1}
-Verwendet werden:
-\begin{itemize}
-\item Reduzierte Endzeit: $t_f = 1400$
-\item Neues Startgewicht: $m = 500000$
-\end{itemize}
-Umgesetzt in Matlab mit dem Programmcode \ref{code:v4.1}
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode für Versuch 3.}, label=code:v4.1]
-N = 400;                     % Anzahl an Diskretisierungen
-ode_methods = ode_methods(); % Methoden zum Loesen der ODE
-
-%% Objekt der Problemklasse erhalten
-prob = MaximalRangeFlight(20,9,6000,90,1259999,1.47,N,@ode_methods.explicit_euler);
-
-%% Loesen mit fmincon
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',4000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-14);
-
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.000e+03,'MaxIterations',4.0e+05);
-v1_solution = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-\end{lstlisting}
- 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
-
-
-
-
-
-
-
-
-
-
-
-\newpage
-\section{Versuch 5}
-Testet doch mal, ob ihr bei vorgegebener Steuerung einen deutlichen Unterschied zwischen expl. und impl. Verfahren feststellt. Falls nicht ist das schon mal ein deutliches Indiz dafür, dass ihr euch den Rechenaufwand eines impl. Verfahrens auch in der Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei eurem Projekt, da es wahrscheinlich viele lokale Minima gibt. Deswegen wäre es wahrscheinlich auch sinnvoll unterschiedliche Algorithmen (z.B. SQP) auszuprobieren. Dafür müsst ihr nur die entsprechende Option für fmincon setzen und müsst auch nicht unbedingt den Algorithmus im Detail verstehen. Sowas könnt ihr dann natürlich auch gerne in die Präsentation/Ausarbeitung aufnehmen.
-
-
-
-
-
-
-
-\newpage
-\section{Versuch 6}
-Von Explizit auf implizites Verfahren
-
-Ich denke auch nicht unbedingt, dass die Stabilität des ODE-Solvers oder die Steifheit der ODE das (Haupt-)Problem ist. Wahrscheinlich könnt ihr ein explizites Verfahren verwenden.
-
-
-
-
-
-
-
-
-
-
-
-%\newpage
-%\section{Überprüfung der optimalen Steuerung}
-%Die Steuerung $T(t)$ (Schub) geht linear in die Hamilton-Funktion ein. Um die Hamilton-Funktion zu minimieren gilt für diese Bang-Bang Verhalten.
-%
-%Die Steuerung $C_L(t)$ geht nichtlinear in die Hamilton-Funktion ein.
-%
-%
-%
-%
-%
-%
-%\section{Überprüfung der Hinreichenden Optimalitätsbedingungen}
-%
-%
-%
-%
-%
-%
-%
-%\section{Aufstellen des Randwertproblems}
-%Muss also ein Mehrpunktrandwertproblem sein ???
-%
-%
-%Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht. Für $r(t,Z(t))$ ergibt sich \[r(t,Z(t)) = \dot{Z}(t) = \begin{pmatrix}
-%\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
-%\end{pmatrix}^T\] Für $r_0(Z(t_0),Z(t_f)) = 0$ müssen zunächst die Endbedingungen mit gebildet aus 
-%\[\begin{split}
-%X_i(t_f) &= c_i \hspace{25mm} (i=1,...,r) \\\
-%\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) \hspace{5mm} (i=r+1,...,n)
-%\end{split}\] gebildet werden. Es ergibt sich dann \[r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
-%h(t_0) - h_0 \\ 
-%\gamma(t_0) - \gamma_0 \\
-%x(t_0) - x_0 \\ 
-%v(t_0) - v_0 \\ 
-%h(t_f) - h_f \\ 
-%\gamma(t_f) - \gamma_f \\
-%\lambda_3(t_f) + \lambda_0 \\ 
-%\lambda_4(t_f) - 0
-%\end{pmatrix}\]
