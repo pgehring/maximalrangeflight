@@ -1,11 +1,10 @@
-% test_2_2.m
+% test_0_1.m
 
 % Versuchsaufbau:
-%   - Veränderte Endzeit
-%   - Verändertes Starthöhe
+
 
 %% Speicher Parameter
-results_name = 'test_2_2';
+results_name = 'test_0_1';
 
 %% Testparameter
 N = 100;               % Anzahl an Diskretisierungen
@@ -18,7 +17,7 @@ z_0 = [   9000,...     % h_start in [m]
            1.4];       % C_L_start in []
 % z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
 
-X_0 = [ 100;           % h_0 in [m]
+X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
           0;           % x_0 in [m]
         100];          % v_0 in [m/s] (Benötigte Startgeschwindigkeit zum Abheben)
@@ -27,7 +26,7 @@ X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-              1200,... % t_f:   Endzeitpunkt in [s]
+              1800,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -58,4 +57,4 @@ ode_methods = ode_methods();
 prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,@ode_methods.explicit_euler);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-9,'StepTolerance',1e-15);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);

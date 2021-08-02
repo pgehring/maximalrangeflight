@@ -16,21 +16,22 @@ classdef Plotter
     methods
         %% Konstruktor
         function obj = Plotter()
-            close("all")
-            set(0,'defaulttextinterpreter','latex')
+            close("all");
+            set(0,'defaulttextinterpreter','latex');
+            set(0,'defaultAxesTickLabelInterpreter','latex');  
         end
         
         %%
-        function fig = plot_fmincon(obj, t, sol, titles, labels, order, frame_prop, line_style)
+        function fig = plot_fmincon(obj,t,sol,results_name,titles,labels,order,frame_prop,line_style)
             obj.nfigures = obj.nfigures +1;
             fig = create_fig(obj, obj.nfigures);
-            [r, c] = size(sol);
+            fig_title_str = strcat('Versuch: \, ','\verb|',results_name,'|');
+            fig_title = sgtitle(fig,fig_title_str,'FontSize',20);
+            fig_title.Interpreter = 'latex';
+            [r,c] = size(sol);
             for i = [1:c]
                 sol_id = order(i);
-                obj = create_subplot(obj, t, sol(:,sol_id), [2, 3], i, frame_prop(sol_id), line_style(sol_id));
-                title(titles(sol_id))
-                xlabel('$t$ in $[s]$')
-                ylabel(labels(sol_id))
+                sp = create_subplot(obj,t,sol(:,sol_id),[2, 3],i,titles(sol_id),labels(sol_id),frame_prop(sol_id),line_style(sol_id));
             end
         end
         
@@ -39,7 +40,7 @@ classdef Plotter
             obj.figures(fig_id) = fig;            
         end
         
-        function obj = create_subplot(obj, t, y, pos, ax_id, frame_prop, line_style)
+        function ax = create_subplot(obj,t,y,pos,ax_id,fig_title,fig_label,frame_prop,line_style)
             ax = subplot(pos(1), pos(2), ax_id);
             obj.axes(ax_id) = ax;
             if (nargin <= 6)
@@ -48,6 +49,9 @@ classdef Plotter
                 plot(t, y, line_style)
             end
             ax.LineWidth = frame_prop;
+            title(fig_title)
+            xlabel('$t$ in $[s]$')
+            ylabel(fig_label)
         end
     end 
 end

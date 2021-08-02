@@ -1,75 +1,94 @@
 % MaximalRangeFlight.m:
-
-% Klasse des Optimalsteuerungsproblem für einen Airbus A380-800
-
+% Description:
+%   Class of the optimal control problem for an Airbus A380-800, and 
+%   functions for the Matlab function fmincon.
 % Date:         27.08.2021
-% Author:       Gehring, Philipp / Karus, Heiko / Götz, Felix
+% Author:       Gehring, Philipp / Karus, Heiko / Goetz, Felix
 
 classdef MaximalRangeFlight
     properties
-        %% Parameter für das Optimalsteuerungsproblem
-        t_0 = 0;            % Anfangszeitpunkt in [s]
-        t_f = 1400;         % Endzeitpunkt in [s]
+        %% Parameters for the optimal control problem
+        t_0 = 0;            % Starting time in [s]
+        t_f = 1800;         % End time in [s]
 
         X_0 = [   0;        % h_0 in [m]
-               0.27;        % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
+               0.27;        % gamma_0 in [rad]
                   0;        % x_0 in [m]
-                100];       % v_0 in [m/s] (Benötigte Startgeschwindigkeit zum Abheben)
+                100];       % v_0 in [m/s]
 
         X_T = [10668;       % h_t in [m]
-                   0];      % gamma_t  in [Grad]
+                   0];      % gamma_t in [Grad]
 
-        alpha = 1.247015;   % Parameter zur Berechung der Luftdichte in []
-        beta = 0.000104;
-        g = 9.81;           % Erdbeschleunigung in [N/s^2]
-        C_D_0 = 0.032;      % Nullluftwiderstandsbeiwert in []             (Der Luftwiderstandsbeiwert ohne Auftrieb ist ein dimensionsloser Parameter, der die Luftwiderstandskraft eines Flugzeugs mit seiner Größe, Geschwindigkeit und Flughöhe in Beziehung setzt)
-        e = 0.8;            % Oswaldfaktor in []                           (Der Oswald-Wirkungsgrad ist ein Korrekturfaktor, der die Änderung des Luftwiderstands mit dem Auftrieb eines dreidimensionalen Flügels oder Flugzeugs im Vergleich zu einem idealen Flügel mit demselben Seitenverhältnis darstellt)
-        F = 845;            % Wirksame Fläche in [m^2]                     (von der Luft angeströmte Fläche) 
-        AR = 7.5;           % Flügelstreckung in []                        (aspect ratio) (Das Seitenverhältnis eines Flügels ist definiert als das Verhältnis seiner Spannweite zu seiner mittleren Sehne) -> (Spannweite in [m])^2 / Tragflächeninhalt in [m^2] = b^2 / F
-        k;                  % Faktor für Berechnung des Luftwiderstandsbeiwertes in []
-        m = 500000;%570000;% Startgewicht normal 276800;         % Leergewicht des A380 in [kg]
-        q_max = 44154;      % Maximaler Staudruck in [N/m^2]
-        T_min = 0;          % Minimale Schubkraft in [N]
-        T_max = 1260000;    % Maximale Schubkraft in [N]
-        C_L_min = 0.0;      % Minimaler Auftriebsbeiwert in []
-        C_L_max = 1.48;     % Maximaler Auftriebsbeiwert in []
+        alpha = 1.247015;   % Parameters for calculating the air density in []
+        beta = 0.000104;    % Parameters for calculating the air density in []
+        g = 9.81;           % Gravitational acceleration in [N/s^2]
+        C_D_0 = 0.032;      % Zero air resistance coefficient in []             
+        e = 0.8;            % Oswaldfactor in []
+        F = 845;            % Effective area in [m^2]
+        AR = 7.5;           % Aspect ratio in []
+        k;                  % Factor for calculation of the drag coefficient in []
+        m = 276800;         % Empty weight of the A380 in [kg]
+        q_max = 44154;      % Maximum dynamic pressure in [N/m^2]
+        T_min = 0;          % Minimum thrust in [N]
+        T_max = 1260000;    % Maximum thrust in [N]
+        C_L_min = 0.0;      % Minimum lift coefficient in []
+        C_L_max = 1.48;     % Maximum lift coefficient in []
 
-        %% Problemgrößen
-        n_x = 4;            % Größe des Zustandsvektors
-        n_u = 2;            % Größe des Steuervektors
-        n_c = 0;            % Größe des gemischten Steuer- und Zustandsbeschränkungsvektors
-        n_s = 1;            % Größe des reinen Zustandsbeschränkungsvektors
-        n_psi = 8;          % Grüße des Randbedingungsvektors
+        %% Problem sizes
+        n_x = 4;            % Size of the state vector
+        n_u = 2;            % Control vector size
+        n_s = 1;            % Size of the pure state constraint vector
+        n_psi = 8;          % Size of the boundary condition vector
 
-        %% Variablen für die Berechnung
-        N;                  % Variable für die anzahl an Diskretisierungen
-        t;                  % Variable für den Zeitenvektor
+        %% Variables for the calculation
+        N;                  % Number of discretisations
+        t;                  % Variable for the time vector
         ode_method;         % Implicit or explicit iterative methods to approximate the solution of a ODE
-        z_0;                % Array für die Startwerte für fmincon
+        z_0;                % Array for the start values for fmincon
         lb;                 % lower bounds for fmincon
         ub;                 % upper bounds for fmincon
+        
+%         %% Memory for calculations
+%         x;
+%         c;
+%         ceq;
     end
     methods
         %% Constructor: Set initial conditions of the direct solver
-        function obj = MaximalRangeFlight(h_0,gamma_0,x_0,v_0,T_0,C_L_0,N,ode_method, z_0)
-            % grid size
+        function obj = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method)
+            % Grid size
             obj.N = N;
             obj.t = linspace(obj.t_0,obj.t_f,obj.N);
-            
+            % Method for solving the ODE
             obj.ode_method = ode_method;
-            
-            % start vector
-            if nargin > 8
+            % Start vector fmincon
+            if obj.N == size(z_0,1)
                 obj.z_0 = z_0;
             else
-                obj.z_0 = [h_0,gamma_0,x_0,v_0,T_0,C_L_0].*ones(obj.N,obj.n_x+obj.n_u);
+                obj.z_0 = z_0 .* ones(obj.N,obj.n_x+obj.n_u);
             end
-            
-            % box conditions
-            obj.lb = [-inf, -inf, -inf, -inf, obj.T_min, obj.C_L_min].*ones(obj.N,obj.n_x+obj.n_u);
-            obj.ub = [inf, inf, inf, inf, obj.T_max, obj.C_L_max].*ones(obj.N,obj.n_x+obj.n_u);
-
+            % Box conditions
+            obj.lb = lb .* ones(obj.N,obj.n_x+obj.n_u);
+            obj.ub = ub .* ones(obj.N,obj.n_x+obj.n_u);
+            % Parameters
+            obj.t_0 = params(1);
+            obj.t_f = params(2);
+            obj.X_0 = X_0;
+            obj.X_T = X_T;
+            obj.alpha = params(3);
+            obj.beta = params(4);
+            obj.g = params(5);
+            obj.C_D_0 = params(6);
+            obj.e = params(7);
+            obj.F = params(8);
+            obj.AR = params(9);
             obj.k = 1/(pi*obj.e*obj.AR);
+            obj.m = params(10);
+            obj.q_max = params(11);
+%             % Allocate memory
+%             obj.x = zeros(obj.N,obj.n_x);
+%             obj.c = zeros(1,obj.N);
+%             obj.ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
         end
         
         %% Differential equation
@@ -80,25 +99,21 @@ classdef MaximalRangeFlight
                  (1/(2*obj.m)) * (2*z(5) + (-obj.C_D_0 - obj.k*(z(6))^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)))];
         end
         
-        % objective function
+        %% Objective function
         function T = F_sol(obj,z)
             T = -(z(end,3)-obj.X_0(3));
         end
         
-        %% constraint functions
-        % nonlinear constraints
+        %% Nonlinear constraint functions
         function [c,ceq] = nonlcon(obj,z)
-            % equality constraints
+            % Equality constraints
             c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
-            
-            % inequality constraints
+            % Inequality constraints
             x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-            
             ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
             for i = 0:obj.N-2
                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
             end
-
             ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
                                                                       z(1,2)-obj.X_0(2),...
                                                                       z(1,3)-obj.X_0(3),...
@@ -107,6 +122,64 @@ classdef MaximalRangeFlight
                                                                     z(end,2)-obj.X_T(2),...
                                                                                       0,...
                                                                                       0];
+
+            %% Versuch übergabe mit Referenzen
+%             % Equality constraints
+%             obj.c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
+%             % Inequality constraints
+%             obj.x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
+%             for i = 0:obj.N-2
+%                 obj.ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + obj.x(i+1,:) - z(i+2,1:obj.n_x);
+%             end
+%             obj.ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
+%                                                                       z(1,2)-obj.X_0(2),...
+%                                                                       z(1,3)-obj.X_0(3),...
+%                                                                       z(1,4)-obj.X_0(4),...
+%                                                                     z(end,1)-obj.X_T(1),...
+%                                                                     z(end,2)-obj.X_T(2),...
+%                                                                                       0,...
+%                                                                                       0];
+%             % Return values
+%             c = obj.c;
+%             ceq = obj.ceq;
+         
+%             % Equality constraints
+%             c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
+%             % Inequality constraints
+%             obj.x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
+%             ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
+%             for i = 0:obj.N-2
+%                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + obj.x(i+1,:) - z(i+2,1:obj.n_x);
+%             end
+%             ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
+%                                                                       z(1,2)-obj.X_0(2),...
+%                                                                       z(1,3)-obj.X_0(3),...
+%                                                                       z(1,4)-obj.X_0(4),...
+%                                                                     z(end,1)-obj.X_T(1),...
+%                                                                     z(end,2)-obj.X_T(2),...
+%                                                                                       0,...
+%                                                                                       0];
+        
+            %% Implizite Lösung mit ode23 für steife Probleme
+%             % Equality constraints
+%             c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
+%             % Inequality constraints
+%             ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
+%             for i = 0:obj.N-2
+%                 func =@(t,x) obj.f(t,[x',z(i+1,obj.n_x:end)])'; % Zusammenschluss aus Zustand und Steuerung
+%                 dt = abs((obj.t(i+1)-obj.t(i+2))/5);
+%                 tspan = [obj.t(i+1):dt:obj.t(i+2)];
+%                 sol = ode23s(func,tspan,z(i+1,1:obj.n_x));
+%                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = sol.y(:,end)' - z(i+2,1:obj.n_x);
+%             end
+%             ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
+%                                                                       z(1,2)-obj.X_0(2),...
+%                                                                       z(1,3)-obj.X_0(3),...
+%                                                                       z(1,4)-obj.X_0(4),...
+%                                                                     z(end,1)-obj.X_T(1),...
+%                                                                     z(end,2)-obj.X_T(2),...
+%                                                                                       0,...
+%                                                                                       0];
         end
     end
 end
