@@ -73,6 +73,7 @@ saveas(fig,strcat('./results/',results_name,'.png'));
 fprintf('Saving the data ...\n');
 writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
 
-movefile("console.log", sprintf("./results/%s_console.log", results_name))
+
 fprintf('All done!\n');
 diary off
+movefile("console.log", sprintf("./results/%s_console.log", results_name))
