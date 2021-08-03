@@ -13,14 +13,14 @@ clear  variables;
 close  all;
 clc;
 
-%% Memory paths
+%% Setup workspace
 addpath('../utils');
 addpath('./config');
 addpath('./results');
 
 %% Loading the corresponding configuration file
 % test_0_1
-test_0_2;
+% test_0_2;
 
 % test_1_1
 % test_1_2
@@ -32,8 +32,9 @@ test_0_2;
 % test_3_1
 % test_3_2
 
-% test_4_1
+test_4_1
 % test_4_2
+% test_4_3
 
 % test_5_1
 
@@ -41,6 +42,9 @@ test_0_2;
 
 
 %% Solving the control problem with fmincon
+diary console.log
+fprintf('started script at %s\n', datestr(datetime))
+
 tic;
 prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
 duration_time = toc;
@@ -69,4 +73,6 @@ saveas(fig,strcat('./results/',results_name,'.png'));
 fprintf('Saving the data ...\n');
 writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
 
+movefile("console.log", sprintf("./results/%s_console.log", results_name))
 fprintf('All done!\n');
+diary off
