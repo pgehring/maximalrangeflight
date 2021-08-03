@@ -59,7 +59,6 @@ classdef MaximalRangeFlight
             % Grid size
             obj.N = N;
             obj.t = linspace(params(1),params(2),obj.N);
-            
             % Method for solving the ODE
             obj.ode_method = ode_method;
             % Start vector fmincon
@@ -111,11 +110,11 @@ classdef MaximalRangeFlight
             c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
             % Inequality constraints
             x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-            ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
+            ceq = zeros(1,obj.n_x*(obj.N-1)+obj.n_psi);
             for i = 0:obj.N-2
                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
             end
-            ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
+            ceq((obj.n_x*(obj.N-1)+1):(obj.n_x*(obj.N-1)+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
                                                                       z(1,2)-obj.X_0(2),...
                                                                       z(1,3)-obj.X_0(3),...
                                                                       z(1,4)-obj.X_0(4),...

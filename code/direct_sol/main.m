@@ -21,9 +21,11 @@ addpath('./results');
 %% Loading the corresponding configuration file
 % test_0_1
 % test_0_2;
+% test_0_3;
+
 
 % test_1_1
-% test_1_2
+test_1_2
 % test_1_3
 
 % test_2_1
@@ -40,15 +42,16 @@ test_4_1
 
 % test_6_1
 
-
 %% Solving the control problem with fmincon
 diary console.log
 fprintf('started script at %s\n', datestr(datetime))
 
 tic;
-prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+[prob_sol,fval,exitflag,output] = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
 duration_time = toc;
-fprintf('Duration time for solving the Problem: %4.2f [min]\n', duration_time/60);
+fprintf('Duration time for solving the Problem: %4.2f [min]\n',duration_time/60);
+fprintf('Required iterations: %4.2f \n',output.iterations);
+fprintf('Required function evaluations: %4.2f \n',output.funcCount);
 
 %% Plot the solution and saving the results
 plotter = Plotter();
