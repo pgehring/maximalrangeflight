@@ -18,28 +18,12 @@ addpath('../utils');
 addpath('./config');
 addpath('./results');
 
+diary off
+if exist('console.log', 'file')
+    delete('console.log')
+end
 %% Loading the corresponding configuration file
-% test_0_1
-% test_0_2;
-% test_0_3;
-
-test_1_1
-% test_1_2
-% test_1_3
-
-% test_2_1
-% test_2_2
-
-% test_3_1
-% test_3_2
-
-% test_4_1
-% test_4_2
-% test_4_3
-
-% test_5_1
-
-% test_6_1
+test_4_1
 
 %% Solving the control problem with fmincon
 diary console.log
