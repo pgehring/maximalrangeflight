@@ -7,7 +7,7 @@
 results_name = 'test_1_3';
 
 %% Testparameter
-N = 200;               % Anzahl an Diskretisierungen
+N = 100;               % Anzahl an Diskretisierungen
 
 z_0 = [   9000,...     % h_start in [m]
              5,...     % gamma_start in [Grad]  
@@ -54,7 +54,9 @@ ub = [    inf,...
 
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
-prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,@ode_methods.explicit_euler);
+% ode_method = @ode_methods.explicit_euler;
+ode_method = @ode_methods.explicit_rk3;
+prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',20.0e+03,'MaxIterations',4.0e+05);

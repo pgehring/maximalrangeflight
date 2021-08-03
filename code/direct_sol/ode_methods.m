@@ -24,20 +24,45 @@ classdef ode_methods
             obj.b = [3/4; 1/4];
             obj.c = [1/3; 1];
             % s-stufiges Runge-Kutta Verfahren
-            obj.s = length(obj.c); 
+            obj.s = length(obj.c);
         end
         
         %% Explicit method
         function Z = explicit_euler(obj,f,t,z,N,n_x)
-            Z = zeros(N,n_x);
+            Z = zeros(N-1,n_x);
             % Berechenen der Werte für jeden Zeitpunkt
             for n = 1:N-1
                 Z(n,:) = (t(n+1)-t(n))*f(t(n),z(n,:));
             end
         end
+
+        function Z = explicit_rk3(obj,f,t,z,N,n_x)
+            Z = zeros(N-1,n_x);
+            % Berechenen der Werte für jeden Zeitpunkt
+            for i = 1:N-1
+                h = t(i+1)-t(i);
+                k1 = f(t(i),z(i,:))';
+                k2 = f(t(i)+1/3*h,z(i,:)+1/3*h*k1)';
+                k3 = f(t(i)+2/3*h,z(i,:)+2/3*h*k2)';
+                Z(i+1,:) = h/4 * (k1 + 3*k3)';
+            end
+        end
+
+        function Z = explicit_rk4(obj,f,t,z,N,n_x)
+            Z = zeros(N,n_x);
+            % Berechenen der Werte für jeden Zeitpunkt
+            for i = 1:N-1
+                h = t(i+1)-t(i);
+                k1 = f(t(i),z(i,:))';
+                k2 = f(t(i)+0.5*h,z(i,:)+0.5*h*k1)';
+                k3 = f(t(i)+0.5*h,z(i,:)+0.5*h*k2)';
+                k4 = f(t(i)+h,z(i,:)+h*k3)';
+                Z(i+1,:) = h/6 * (k1 + 2*k2 + 2*k3 + k4)';
+            end
+        end
         
         %% Implicit methods
-        function Z = irk(obj,f,t,z,N,n_x)
+        function Z = implicit_rk_radau2A(obj,f,t,z,N,n_x)
             % K-Werte von Runge-Kutta
             K = zeros(obj.s,n_x);
             % Lösungsmatrix
