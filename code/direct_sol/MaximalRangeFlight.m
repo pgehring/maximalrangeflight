@@ -8,8 +8,8 @@
 classdef MaximalRangeFlight
     properties
         %% Parameters for the optimal control problem
-        t_0 = 0;            % Starting time in [s]
-        t_f = 1800;         % End time in [s]
+        t_0                 % Starting time in [s]
+        t_f                 % End time in [s]
 
         X_0 = [   0;        % h_0 in [m]
                0.27;        % gamma_0 in [rad]
@@ -58,7 +58,8 @@ classdef MaximalRangeFlight
         function obj = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method)
             % Grid size
             obj.N = N;
-            obj.t = linspace(obj.t_0,obj.t_f,obj.N);
+            obj.t = linspace(params(1),params(2),obj.N);
+            
             % Method for solving the ODE
             obj.ode_method = ode_method;
             % Start vector fmincon
