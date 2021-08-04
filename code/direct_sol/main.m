@@ -83,4 +83,4 @@ end
 
 fprintf('All done!\n');
 diary off
-movefile("console.log", fprintf("./results/%s_console.log", datestr(datetime, 30)))
+movefile("console.log", sprintf("./results/%s_console.log", datestr(datetime, 30)))
