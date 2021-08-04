@@ -26,7 +26,7 @@ X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-              1200,... % t_f:   Endzeitpunkt in [s]
+               900,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -60,4 +60,5 @@ prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
 % options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
-options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-11);
+% options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);

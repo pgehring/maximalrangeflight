@@ -59,4 +59,4 @@ ode_method = @ode_methods.explicit_rk4;
 prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',20.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',50.0e+03,'MaxIterations',4.0e+05);

@@ -31,8 +31,8 @@ classdef ode_methods
         function Z = explicit_euler(obj,f,t,z,N,n_x)
             Z = zeros(N-1,n_x);
             % Berechenen der Werte für jeden Zeitpunkt
-            for n = 1:N-1
-                Z(n,:) = (t(n+1)-t(n))*f(t(n),z(n,:));
+            for i = 1:N-1
+                Z(i,:) = (t(i+1)-t(i))*f(t(i),z(i,:));
             end
         end
 
@@ -42,14 +42,14 @@ classdef ode_methods
             for i = 1:N-1
                 h = t(i+1)-t(i);
                 k1 = f(t(i),z(i,:))';
-                k2 = f(t(i)+1/3*h,z(i,:)+1/3*h*k1)';
-                k3 = f(t(i)+2/3*h,z(i,:)+2/3*h*k2)';
-                Z(i+1,:) = h/4 * (k1 + 3*k3)';
+                k2 = f(t(i)+0.5*h,z(i,:)+0.5*h*k1)';
+                k3 = f(t(i)+h,z(i,:)+h*(-k1+2*k2))';
+                Z(i,:) = h/6 * (k1 + 4*k2 + k3)';
             end
         end
 
         function Z = explicit_rk4(obj,f,t,z,N,n_x)
-            Z = zeros(N,n_x);
+            Z = zeros(N-1,n_x);
             % Berechenen der Werte für jeden Zeitpunkt
             for i = 1:N-1
                 h = t(i+1)-t(i);
@@ -57,30 +57,28 @@ classdef ode_methods
                 k2 = f(t(i)+0.5*h,z(i,:)+0.5*h*k1)';
                 k3 = f(t(i)+0.5*h,z(i,:)+0.5*h*k2)';
                 k4 = f(t(i)+h,z(i,:)+h*k3)';
-                Z(i+1,:) = h/6 * (k1 + 2*k2 + 2*k3 + k4)';
+                Z(i,:) = h/6 * (k1 + 2*k2 + 2*k3 + k4)';
             end
         end
         
         %% Implicit methods
         function Z = implicit_rk_radau2A(obj,f,t,z,N,n_x)
+            Z = zeros(N-1,n_x);
             % K-Werte von Runge-Kutta
             K = zeros(obj.s,n_x);
-            % Lösungsmatrix
-            Z = zeros(N,n_x);
             % Parameter für fsolve
             options = optimoptions('fsolve','Display','none','OptimalityTolerance',1e-8);
             % Berechenen der Werte für jeden Zeitpunkt
-            for n = 1:N-1
+            for i = 1:N-1
                 % Schrittweite
-                h = (t(n+1)-t(n));
+                h = (t(i+1)-t(i));
                 % Berechnen der Vektoren k_i für i = 1,..,s
-                K_New =@(K) obj.stufenableitung(f,z(n,:),t(n),h,K,n_x);
+                K_New =@(K) obj.stufenableitung(f,z(i,:),t(i),h,K,n_x);
                 K = fsolve(K_New,K,options);
                 % Runge-Kutta Schritt
-                Z(n,:) = h*obj.b'*K;
+                Z(i,:) = h*obj.b'*K;
             end
         end
-        
         function K_new = stufenableitung(obj,f,y,t,h,K,n_x)
             K_new = K;
             for i = 1:obj.s
@@ -88,6 +86,5 @@ classdef ode_methods
                 K_new(i,:) = K(i,:) - f(t+obj.c(i)*h,y);
             end
         end
-        
     end
 end
