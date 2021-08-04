@@ -47,11 +47,6 @@ classdef MaximalRangeFlight
         z_0;                % Array for the start values for fmincon
         lb;                 % lower bounds for fmincon
         ub;                 % upper bounds for fmincon
-        
-%         %% Memory for calculations
-%         x;
-%         c;
-%         ceq;
     end
     methods
         %% Constructor: Set initial conditions of the direct solver
@@ -85,10 +80,6 @@ classdef MaximalRangeFlight
             obj.k = 1/(pi*obj.e*obj.AR);
             obj.m = params(10);
             obj.q_max = params(11);
-%             % Allocate memory
-%             obj.x = zeros(obj.N,obj.n_x);
-%             obj.c = zeros(1,obj.N);
-%             obj.ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
         end
         
         %% Differential equation
@@ -107,79 +98,22 @@ classdef MaximalRangeFlight
         %% Nonlinear constraint functions
         function [c,ceq] = nonlcon(obj,z)
             % Equality constraints
-            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
+            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; % (n_c+n_s)*(N+1)=(0+1)*((100-1)+1)=100
             % Inequality constraints
             x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-            ceq = zeros(1,obj.n_x*(obj.N-1)+obj.n_psi);
-            for i = 0:obj.N-2
-                ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
-            end
+            ceq = zeros(1,obj.n_x*(obj.N-1)+obj.n_psi); % (n_x*N)+n_psi=(4*(100-1))+8=404
+%             for i = 0:obj.N-2
+%                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
+%             end
+            ceq(1:obj.n_x*(obj.N-1)) = (z(1:end-1,1:obj.n_x) + x - z(2:end,1:obj.n_x))';
             ceq((obj.n_x*(obj.N-1)+1):(obj.n_x*(obj.N-1)+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
-                                                                      z(1,2)-obj.X_0(2),...
-                                                                      z(1,3)-obj.X_0(3),...
-                                                                      z(1,4)-obj.X_0(4),...
-                                                                    z(end,1)-obj.X_T(1),...
-                                                                    z(end,2)-obj.X_T(2),...
-                                                                                      0,...
-                                                                                      0];
-
-            %% Versuch übergabe mit Referenzen
-%             % Equality constraints
-%             obj.c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
-%             % Inequality constraints
-%             obj.x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-%             for i = 0:obj.N-2
-%                 obj.ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + obj.x(i+1,:) - z(i+2,1:obj.n_x);
-%             end
-%             obj.ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
-%                                                                       z(1,2)-obj.X_0(2),...
-%                                                                       z(1,3)-obj.X_0(3),...
-%                                                                       z(1,4)-obj.X_0(4),...
-%                                                                     z(end,1)-obj.X_T(1),...
-%                                                                     z(end,2)-obj.X_T(2),...
-%                                                                                       0,...
-%                                                                                       0];
-%             % Return values
-%             c = obj.c;
-%             ceq = obj.ceq;
-         
-%             % Equality constraints
-%             c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
-%             % Inequality constraints
-%             obj.x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-%             ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
-%             for i = 0:obj.N-2
-%                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + obj.x(i+1,:) - z(i+2,1:obj.n_x);
-%             end
-%             ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
-%                                                                       z(1,2)-obj.X_0(2),...
-%                                                                       z(1,3)-obj.X_0(3),...
-%                                                                       z(1,4)-obj.X_0(4),...
-%                                                                     z(end,1)-obj.X_T(1),...
-%                                                                     z(end,2)-obj.X_T(2),...
-%                                                                                       0,...
-%                                                                                       0];
-        
-            %% Implizite Lösung mit ode23 für steife Probleme
-%             % Equality constraints
-%             c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
-%             % Inequality constraints
-%             ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
-%             for i = 0:obj.N-2
-%                 func =@(t,x) obj.f(t,[x',z(i+1,obj.n_x:end)])'; % Zusammenschluss aus Zustand und Steuerung
-%                 dt = abs((obj.t(i+1)-obj.t(i+2))/5);
-%                 tspan = [obj.t(i+1):dt:obj.t(i+2)];
-%                 sol = ode23s(func,tspan,z(i+1,1:obj.n_x));
-%                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = sol.y(:,end)' - z(i+2,1:obj.n_x);
-%             end
-%             ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
-%                                                                       z(1,2)-obj.X_0(2),...
-%                                                                       z(1,3)-obj.X_0(3),...
-%                                                                       z(1,4)-obj.X_0(4),...
-%                                                                     z(end,1)-obj.X_T(1),...
-%                                                                     z(end,2)-obj.X_T(2),...
-%                                                                                       0,...
-%                                                                                       0];
+                                                                          z(1,2)-obj.X_0(2),...
+                                                                          z(1,3)-obj.X_0(3),...
+                                                                          z(1,4)-obj.X_0(4),...
+                                                                        z(end,1)-obj.X_T(1),...
+                                                                        z(end,2)-obj.X_T(2),...
+                                                                                          0,...
+                                                                                          0];
         end
     end
 end

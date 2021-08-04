@@ -2,11 +2,19 @@
 
 Direkte Lösungsverfahren basieren auf einer Diskretisierung des Optimalsteuerungsproblems. Dadurch wird das Optimalsteuerungsproblem auf ein endlichdimensionales Optimierungsproblem transformiert, welches mit einem numerischen Optimierungsverfahren gelöst werden kann.
 
-Das gegebene Optimalsteuerungsroblem (Mayer-Problem mit Boxschranken) lässt sich also in ein Optimierungsproblem der folgenden Form umstellen. Finde für feste Zeitpunkte $t_0 < t_f$ einen Zustand $x \in W^{1, \infty} ([t_0,t_f], \R^{n_x})$ und eine Steuerung $u \in L^{\infty} ([t_0,t_f], \R^{n_u})$, sodass:
+Betrachtet wird das Optimalsteuerungsroblem (Mayer-Problem mit Boxschranken) der folgenden Form. Finde für feste Zeitpunkte $t_0 < t_f$ einen Zustand $X \in W^{1, \infty} ([t_0,t_f], \R^{n_X})$ und eine Steuerung $U \in L^{\infty} ([t_0,t_f], \R^{n_U})$, sodass die Zielfunktion unter der Betrachtung der gegebenen Bedingungen minimal wird:
 \begin{itemize}
-\item \textbf{Zielfunktion:} Die Zielfunktion \[\varphi\]
+\item \textbf{Zielfunktion:} $\varphi(X(t_0),X(t_f)) = -(x(t_f) - x_0)$
+%
+\item \textbf{Differentialgleichung:} $\dot{X}(t) = f(t,X(T),U(t)) \ \ \ \ \forall [t_0,t_f]$
+%
+\item \textbf{Randbedingungen:} $\psi(X(t_0),X(t_f)) = 0_{n_{\psi}}$
+%
+\item \textbf{Reine Zustandsbeschränkungen:} $s(t,X(t)) \leq 0_{n_s} \ \ \ \ \forall t \in [t_0,t_f]$
+%
+\item \textbf{Mengenbeschränkungen:} $U(t) \in \mathcal{U} = \lbrace U \in \R^{n_U} \mid U_{\min} \leq U \leq U_{\max} \rbrace \ \ \ \ \forall t \in [t_0, t_f]$
 \end{itemize}
-
+Die Mengenbeschränkungen werden auch als Boxbeschränkungen bezeichnet. 
 
 
 
@@ -19,7 +27,51 @@ Das gegebene Optimalsteuerungsroblem (Mayer-Problem mit Boxschranken) lässt sic
 
 
 \section{Algorithmus vollständige Diskretisierung}
-Vollständige Diskretisierung mit explizit aber auch impliziten Verfahren
+Dieses gegebene Optimalsteuerungsproblem wird mit verschiedenen Techniken und Verfahren auf ein nichtlineares Optimierungsproblem umgeformt. Zunächst wird dabei ein Gitter erzeugt, welches das Problem diskretisiert. Dieses Gitter
+\begin{equation}
+\mathbb{G}_h := \lbrace t_0 < t_1 < ... < t_{N-1} = t_f \rbrace
+\end{equation}
+mit den Schrittweiten 
+\begin{equation}
+h_i = t_{i+1} - t_i \ \ \ \ \forall i = 0,...,N-2
+\end{equation}
+muss dabei nicht notwendig äquidistant unterteilt sein. Dieses Gitter stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
+\begin{itemize}
+\item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
+%
+\item \textbf{Diskretisierungsverfahren für die Differentialgleichung:} Die Differentialgleichung des Problems wird mit Hilfe eines Diskretisierungsverfahren diskretisiert, um die Lösung im Optimierungsproblem verarbeiten zu können. Hierfür eignen sich zum Beispiel allgemeine oder spezielle Einschrittverfahren wie das explizite Eulerverfahren oder das implizite Runge-Kutta Verfahren.
+\end{itemize}
+Somit ergibt sich das diskretisierte Optimalsteuerungsproblem:
+
+Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\] sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
+
+Dieses endlichdimensionale, nichtlineare Optimierungsproblem lässt sich dann mit einem geeigneten Optimierungsverfahren lösen. Mögliche Optimierungsverfahren sind das SQP-Verfahren, das Innere-Punkte-Verfahren oder die Strategie der aktiven Menge. Hierfür muss das Optimierungsproblem in die Form:
+\[\begin{split}
+\min_{z \in S} F(z) &:= \varphi(X_0,X_{N-1}) \\\
+\text{unter} \hspace{10mm} G(z) &\leq 0_{n_s \cdot N} \hspace{43mm} \text{(Ungleichungsnebenbedingungen)} \\\
+H(z) &= 0_{n_X \cdot (N-1) + n_{\psi}} \hspace{32mm} \text{(Gleichungsnebenbedingungen)}\\\
+z &\in S := \R^{n_x \cdot N} \times [U_{\min},U_{\max}]^{N} \hspace{10mm} \text{(Zulässigemenge)}
+\end{split} \]
+gebracht werden mit der Optimierungsvariablen 
+\begin{equation}
+z := (X_0,X_1,...,X_{N-1},U_0,U_1,...,U_{N-1})^T
+\end{equation}
+und den Funktionen 
+\begin{equation}
+G(z) := \begin{pmatrix}
+c(t_0,X_0,U_0) \\ 
+\vdots \\ 
+c(t_{N-1},X_{N-1},U_{U-1})
+\end{pmatrix} 
+\end{equation}
+\begin{equation}
+H(z) := \begin{pmatrix}
+X_0 + h_0 f(t_0,X_0,U_0) - X_1 \\ 
+\vdots \\ 
+X_{N-2} + h_{N-2} f(t_{N-2},X_{N-2},U_{U-2}) - X_{N-1} \\
+\psi(X_0,X_N)
+\end{pmatrix} 
+\end{equation}
 
 %\floatname{algorithm}{Klasse}
 %\begin{algorithm}[H]
@@ -57,13 +109,7 @@ Vollständige Diskretisierung mit explizit aber auch impliziten Verfahren
 
 
 
-Allgemein wird für die Matlab Funktion \verb|fmincon| die Startmatrix  \verb|prob.z_0| 
-\[\begin{pmatrix}
-[20,9,6000,90,1259999,1.47] \\ 
-\vdots \\ 
-\vdots
-\end{pmatrix}\]
-für die Optimierung verwendet. Es sind also alle Zustandsvektoren für jeden Diskretisierungspunkt identisch.
+
 
 
 
@@ -74,6 +120,14 @@ für die Optimierung verwendet. Es sind also alle Zustandsvektoren für jeden Di
 
 
 \section{Beschränkte nichtlineare Optimierungsverfahren}
+SQP Verfahren \\
+Innere Punkte Verfahren \\
+Strategie der aktiven Menge
+
+
+
+
+
 
 
 
@@ -87,9 +141,21 @@ Gedanken wie der Verlauf aussehen könnte:\\
 Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
 
-
-
-
+%Hallo Jörn,
+%
+%vorweg noch vielen Dank für die Hinweise bezüglich der Mehrschiessverfahren und dem Raketenwagen Beispiel.
+%
+%Folgende Punkte haben wir nun bei den direkten Verfahren umgesetzt bzw. getestet:
+% - Performance und Fehler Verbesserung des Codes: Wir haben den Code nun so angepasst, sodass wir test files haben in denen wir alle Parameter, Startwerte etc. anpassen können. Welcher File welchen Versuch darstellt ist aktuell im Anhang der Doku festgehalten. Des Weiteren ist uns gestern noch ein Fehler in der nonlcon(obj,z) Funktion aufgefallen. Dabei haben wir unseren Vektor ceq  immer zu lang gewählt mit (n_x*N)+n_psi anstatt mit (n_x*(N-1))+n_psi so wie in der Lösung des Raketenwagen Beispiels. Diese Verbesserung wurde auch nochmal in der Doku festgehalten. Im Zuge dessen haben wir auch die darin enthaltene for Schleife vektorisiert.
+% - Mit dieser Verbesserung/Korrektur laufen nun auch mal das Innere Punkte Verfahren. Das Verfahren der Strategie der aktiven Mengen jedoch noch nicht.
+% - Du hast ja geschrieben wir sollen mal die impliziten und expliziten Verfahren mit vorgegebener Steuerung untersuchen. Leider war uns nicht ganz klar was du damit gemeint hast? Meinst du von unserem Startwert X_0 aus und einer vorgegebener Steuerung T(t) und C_L(t) die Lösung von h,gamma,x,v mit einem Impliziten und expliziten Verfahren berechnen?
+% - Deine Hinweise bezüglich der Veränderung von Parametern wie der Endzeit wurden in den verschiedenen Versuchen ausprobiert. Leider kommen für uns nicht wirkliche aussagekräftige Ergebnisse raus, weshalb wir jetzt nicht genau wissen wie wir weiter vorgehen sollen?
+%
+%Wäre sehr nett von dir, wenn du dir die Zeit für ein Gespräch mit uns nehmen könntest?
+%
+%Mit freundlichen Grüßen
+%
+%Philipp, Heiko, Felix
 
 
 

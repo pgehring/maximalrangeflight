@@ -23,9 +23,8 @@ addpath('./results');
 % test_0_2;
 % test_0_3;
 
-
-% test_1_1
-test_1_2
+test_1_1
+% test_1_2
 % test_1_3
 
 % test_2_1
@@ -34,7 +33,7 @@ test_1_2
 % test_3_1
 % test_3_2
 
-test_4_1
+% test_4_1
 % test_4_2
 % test_4_3
 
@@ -68,14 +67,13 @@ fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,fram
 
 % Save the graphics
 fprintf('Saving the graphics ...\n');
-% savefig(fig,strcat('./results/',results_name,'.fig'));
+savefig(fig,strcat('./results/',results_name,'.fig'));
 saveas(fig,strcat('./results/',results_name,'.png'));
 % saveas(fig,strcat('./results/',results_name,'.svg'));
 
 % Save the data
 fprintf('Saving the data ...\n');
 writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
-
 
 fprintf('All done!\n');
 diary off

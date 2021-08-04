@@ -9,12 +9,12 @@ results_name = 'test_1_3';
 %% Testparameter
 N = 100;               % Anzahl an Diskretisierungen
 
-z_0 = [   9000,...     % h_start in [m]
+z_0 = [   12356,...     % h_start in [m]
              5,...     % gamma_start in [Grad]  
-        800000,...     % x_start in [m]
-           250,...     % v_start in [m/s]
-       1259999,...     % T_start in [N]
-           1.4];       % C_L_start in []
+        865265,...     % x_start in [m]
+           365,...     % v_start in [m/s]
+       125,...     % T_start in [N]
+           0.1];       % C_L_start in []
 % z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
 
 X_0 = [   0;           % h_0 in [m]
@@ -54,9 +54,10 @@ ub = [    inf,...
 
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
-% ode_method = @ode_methods.explicit_euler;
-ode_method = @ode_methods.explicit_rk3;
+ode_method = @ode_methods.explicit_euler;
+% ode_method = @ode_methods.explicit_rk3;
 prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',20.0e+03,'MaxIterations',4.0e+05);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',3.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',20.0e+03,'MaxIterations',4.0e+05);
