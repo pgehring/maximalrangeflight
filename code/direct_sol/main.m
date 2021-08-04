@@ -24,7 +24,7 @@ if exist('console.log', 'file')
 end
 
 %% Loading the corresponding configuration file
-configs = ["test_4_1", "test_4_2"];
+configs = ["test_4_1", "test_4_2", "test_4_3"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
@@ -72,7 +72,7 @@ for j=1:length(solutions)
 
     % Save the graphics
     fprintf('Saving the graphics ...\n');
-    % savefig(fig,strcat('./results/',results_name,'.fig'));
+    savefig(fig,strcat('./results/',results_name,'.fig'));
     saveas(fig,strcat('./results/',results_name,'.png'));
     % saveas(fig,strcat('./results/',results_name,'.svg'));
 
@@ -83,4 +83,4 @@ end
 
 fprintf('All done!\n');
 diary off
-movefile("console.log", "./results/console.log")
+movefile("console.log", fprintf("./results/%s_console.log", datestr(datetime, 30)))
