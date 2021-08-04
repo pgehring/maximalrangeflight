@@ -18,41 +18,39 @@ addpath('../utils');
 addpath('./config');
 addpath('./results');
 
+diary off
+if exist('console.log', 'file')
+    delete('console.log')
+end
+
 %% Loading the corresponding configuration file
-% test_0_1
-% test_0_2;
-% test_0_3;
+configs = ["test_4_1", "test_4_2", "test_4_3"];
+solutions = {};
+for i = 1:length(configs)
+    % Load configuration file
+    run(configs(i))
+    
+    % Initialize logging
+    diary console.log
+    fprintf('started script %s (%d of %d) at %s\n', configs(i), i, length(configs), datestr(datetime))
+    
+    try
+        % Solving the control problem with fmincon
+        tic;
+        [prob_sol,fval,exitflag,output] = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+        duration_time = toc;
+        fprintf('Duration time for solving the Problem: %4.2f [min]\n',duration_time/60);
+        fprintf('Required iterations: %4.2f \n',output.iterations);
+        fprintf('Required function evaluations: %4.2f \n',output.funcCount);
 
-test_1_1
-% test_1_2
-% test_1_3
-
-% test_2_1
-% test_2_2
-
-% test_3_1
-% test_3_2
-
-% test_4_1
-% test_4_2
-% test_4_3
-
-% test_5_1
-
-% test_6_1
-
-%% Solving the control problem with fmincon
-diary console.log
-fprintf('started script at %s\n', datestr(datetime))
-
-tic;
-[prob_sol,fval,exitflag,output] = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-duration_time = toc;
-fprintf('Duration time for solving the Problem: %4.2f [min]\n',duration_time/60);
-fprintf('Required iterations: %4.2f \n',output.iterations);
-fprintf('Required function evaluations: %4.2f \n',output.funcCount);
-
+        solutions{i} = {results_name, prob, prob_sol, options};
+    catch ME
+        fprintf('Error occured while solving control problem with config %s\nContinuing with next file..\n', configs(i))
+        continue % with next config
+    end
+end
 %% Plot the solution and saving the results
+
 plotter = Plotter();
 titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
           "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
@@ -63,18 +61,26 @@ labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
 frame_prop = [0.5,0.5,0.5,0.5,2,2];
 line_style = ["b-","b-","b-","b-","r-","r-"];
 order = [3,1,5,2,4,6];
-fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
 
-% Save the graphics
-fprintf('Saving the graphics ...\n');
-savefig(fig,strcat('./results/',results_name,'.fig'));
-saveas(fig,strcat('./results/',results_name,'.png'));
-% saveas(fig,strcat('./results/',results_name,'.svg'));
+for j=1:length(solutions)
+    
+    solution = solutions{j};
+    [results_name, prob, prob_sol, options] = solution{:};
+    
+    % Plot solution
+    fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
 
-% Save the data
-fprintf('Saving the data ...\n');
-writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
+    % Save the graphics
+    fprintf('Saving the graphics ...\n');
+    savefig(fig,strcat('./results/',results_name,'.fig'));
+    saveas(fig,strcat('./results/',results_name,'.png'));
+    % saveas(fig,strcat('./results/',results_name,'.svg'));
+
+    % Save the data
+    fprintf('Saving the data ...\n');
+    writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
+end
 
 fprintf('All done!\n');
 diary off
-movefile("console.log", sprintf("./results/%s_console.log", results_name))
+movefile("console.log", fprintf("./results/%s_console.log", datestr(datetime, 30)))
