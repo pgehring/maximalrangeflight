@@ -50,10 +50,10 @@ classdef MaximalRangeFlight
     end
     methods
         %% Constructor: Set initial conditions of the direct solver
-        function obj = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method)
+        function obj = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method)
             % Grid size
             obj.N = N;
-            obj.t = linspace(params(1),params(2),obj.N);
+            obj.t = t;
             % Method for solving the ODE
             obj.ode_method = ode_method;
             % Start vector fmincon
