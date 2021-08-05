@@ -37,6 +37,8 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
             276800,... % m:     Leergewicht des A380 in [kg]
              44154];   % q_max: Maximaler Staudruck in [N/m^2]  
 
+t = linspace(params(1),params(2),N);
+
 %% Boxbeschränkungen
 lb = [   -inf,...
          -inf,...
@@ -56,7 +58,7 @@ ub = [    inf,...
 ode_methods = ode_methods();
 % ode_method = @ode_methods.explicit_rk4;
 ode_method = @ode_methods.explicit_euler;
-prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method);
+prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
 options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);

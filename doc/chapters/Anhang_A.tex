@@ -12,265 +12,274 @@ Für das Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren wurd
 %
 \item \texttt{ode\_methods}: Diese Klasse (Programmcode \ref{code:direct_odemethods}) stellt explizite und implizite Algorithmen zum lösen von gewöhnlichen Differentialgleichungen zur Verfügung. Diese werden in der Problemklasse \texttt{maximalrangeflight.m} benötigt.
 \end{itemize}
+
+Allgemein wird für die Matlab Funktion \verb|fmincon| die Startmatrix  \verb|prob.z_0| 
+\[\begin{pmatrix}
+[20,9,6000,90,1259999,1.47] \\ 
+\vdots \\ 
+\vdots
+\end{pmatrix}\]
+für die Optimierung verwendet. Es sind also alle Zustandsvektoren für jeden Diskretisierungspunkt identisch.
+
 Nachfolgend sind die Programmcodes für das direkte Lösungsverfahren aufgelistet:
 
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von Versuchsskript \texttt{test\_0\_1.m}.}, label=code:direct_test_0_1]
-%% Speicher Parameter
-results_name = 'test_0_1';
-
-%% Testparameter
-N = 100;               % Anzahl an Diskretisierungen
-
-z_0 = [   9000,...     % h_start in [m]
-             5,...     % gamma_start in [Grad]  
-        800000,...     % x_start in [m]
-           250,...     % v_start in [m/s]
-       1259999,...     % T_start in [N]
-           1.4];       % C_L_start in []
-% z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden moechten     
-
-X_0 = [   0;           % h_0 in [m]
-       0.27;           % gamma_0 in [rad]
-          0;           % x_0 in [m]
-        100];          % v_0 in [m/s]
-
-X_T = [10668;          % h_t in [m]
-           0];         % gamma_t  in [Grad]
-
-params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-              1800,... % t_f:   Endzeitpunkt in [s]
-          1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
-          0.000104,... % beta: 
-              9.81,... % g:     Erdbeschleunigung in [N/s^2]
-             0.032,... % C_D_0: Nullluftwiderstandsbeiwert in []
-               0.8,... % e:     Oswaldfaktor in []
-               845,... % F:     Wirksame Flaeche in [m^2]
-               7.5,... % AR:    Fluegelstreckung in []
-            276800,... % m:     Leergewicht des A380 in [kg]
-             44154];   % q_max: Maximaler Staudruck in [N/m^2]  
-
-%% Boxbeschraenkungen
-lb = [   -inf,...
-         -inf,...
-         -inf,...
-         -inf,...
-          0.0,...      % T_min:   Minimale Schubkraft in [N]
-          0.0];        % C_L_min: Minimaler Auftriebsbeiwert in []
-      
-ub = [    inf,...
-          inf,...
-          inf,...
-          inf,...
-      1260000,...      % T_max:   Maximale Schubkraft in [N]
-         1.48];        % C_L_max: Maximaler Auftriebsbeiwert in []
-
-%% Loesungsmethode der ODE und Objekt der Problemklasse erhalten
-ode_methods = ode_methods();
-prob = maximalrangeflight(N,z_0,X_0,X_T,params,lb,ub,@ode_methods.explicit_euler);
-
-%% Optionen fuer fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
-\end{lstlisting}
-
-
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{main.m}.}, label=code:direct_main]
-clear  variables; close  all; clc;
-
-%% Memory paths
-addpath('../utils');
-addpath('./config');
-addpath('./results');
-
-%% Loading the corresponding configuration file
-test_0_1;
-
-%% Solving the control problem with fmincon
-prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-
-%% Plot the solution
-plotter = Plotter();
-titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-          "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
-          "\textbf{Steuerung 2: Auftriebsbeiwert}"];
-labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
-          "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$",...
-          "$T_{sol}$ in $[N]$","$C_{L_{sol}}$ in $[1]$"];
-frame_prop = [0.5,0.5,0.5,0.5,2,2];
-line_style = ["b-","b-","b-","b-","r-","r-"];
-order = [3,1,5,2,4,6];
-fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
-
-%% Save the graphics and the data
-saveas(fig,strcat('./results/',results_name,'.png'));
-writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
-\end{lstlisting}
-
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{maximalrangeflight.m}.}, label=code:direct_maximalrangeflight]
-classdef maximalrangellight
-    properties
-        %% Parameters for the optimal control problem
-        t_0 = 0;            % Starting time in [s]
-        t_f = 1800;         % End time in [s]
-        X_0 = [   0;        % h_0 in [m]
-               0.27;        % gamma_0 in [rad]
-                  0;        % x_0 in [m]
-                100];       % v_0 in [m/s]
-
-        X_T = [10668;       % h_t in [m]
-                   0];      % gamma_t in [Grad]
-        alpha = 1.247015;   % Parameters for calculating the air density in []
-        beta = 0.000104;    % Parameters for calculating the air density in []
-        g = 9.81;           % Gravitational acceleration in [N/s^2]
-        C_D_0 = 0.032;      % Zero air resistance coefficient in []             
-        e = 0.8;            % Oswaldfactor in []
-        F = 845;            % Effective area in [m^2]
-        AR = 7.5;           % Aspect ratio in []
-        k;                  % Factor for calculation of the drag coefficient in []
-        m = 276800;         % Empty weight of the A380 in [kg]
-        q_max = 44154;      % Maximum dynamic pressure in [N/m^2]
-        T_min = 0;          % Minimum thrust in [N]
-        T_max = 1260000;    % Maximum thrust in [N]
-        C_L_min = 0.0;      % Minimum lift coefficient in []
-        C_L_max = 1.48;     % Maximum lift coefficient in []
-        %% Problem sizes
-        n_x = 4;            % Size of the state vector
-        n_u = 2;            % Control vector size
-        n_s = 1;            % Size of the pure state constraint vector
-        n_psi = 8;          % Size of the boundary condition vector
-        %% Variables for the calculation
-        N;                  % Number of discretisations
-        t;                  % Variable for the time vector
-        ode_method;         % Implicit or explicit iterative methods to approximate the solution of a ODE
-        z_0;                % Array for the start values for fmincon
-        lb;                 % lower bounds for fmincon
-        ub;                 % upper bounds for fmincon
-    end
-    methods
-        %% Constructor: Set initial conditions of the direct solver
-        function obj = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method)
-            % Grid size
-            obj.N = N;
-            obj.t = linspace(obj.t_0,obj.t_f,obj.N);
-            % Method for solving the ODE
-            obj.ode_method = ode_method;
-            % Start vector fmincon
-            if obj.N == size(z_0,1)
-                obj.z_0 = z_0;
-            else
-                obj.z_0 = z_0 .* ones(obj.N,obj.n_x+obj.n_u);
-            end
-            % Box conditions
-            obj.lb = lb .* ones(obj.N,obj.n_x+obj.n_u);
-            obj.ub = ub .* ones(obj.N,obj.n_x+obj.n_u);
-            % Parameters
-            obj.t_0 = params(1);
-            obj.t_f = params(2);
-            obj.X_0 = X_0;
-            obj.X_T = X_T;
-            obj.alpha = params(3);
-            obj.beta = params(4);
-            obj.g = params(5);
-            obj.C_D_0 = params(6);
-            obj.e = params(7);
-            obj.F = params(8);
-            obj.AR = params(9);
-            obj.k = 1/(pi*obj.e*obj.AR);
-            obj.m = params(10);
-            obj.q_max = params(11);
-        end
-        %% Differential equation
-        function X = f(obj,t,z)
-            X = [                                                                                                                 z(4)*sind(z(2)),...
-                                              (1/(2*obj.m*z(4))) * (obj.F*z(6)*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*cosd(z(2))),...
-                                                                                                                                  z(4)*cosd(z(2)),...
-                 (1/(2*obj.m)) * (2*z(5) + (-obj.C_D_0 - obj.k*(z(6))^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)))];
-        end
-        %% Objective function
-        function T = F_sol(obj,z)
-            T = -(z(end,3)-obj.X_0(3));
-        end
-        %% Nonlinear constraint functions
-        function [c,ceq] = nonlcon(obj,z)
-            % Equality constraints
-            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
-            % Inequality constraints
-            x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-            ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
-            for i = 0:obj.N-2
-                ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
-            end
-            ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
-                                                                      z(1,2)-obj.X_0(2),...
-                                                                      z(1,3)-obj.X_0(3),...
-                                                                      z(1,4)-obj.X_0(4),...
-                                                                    z(end,1)-obj.X_T(1),...
-                                                                    z(end,2)-obj.X_T(2),...
-                                                                                      0,...
-                                                                                      0];
-        end
-    end
-end
-\end{lstlisting}
-
-\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{ode\_methods.m}.}, label=code:direct_odemethods]
-classdef ode_methods
-    properties
-        %% 
-        A;
-        b;
-        c;
-        s;
-    end
-    methods
-        %% Constructor
-        function obj = ode_methods()
-            % RADAU-2A-Verfahren
-            obj.A = [5/12, -1/12;
-                      3/4,   1/4];
-            obj.b = [3/4; 1/4];
-            obj.c = [1/3; 1];
-            % s-stufiges Runge-Kutta Verfahren
-            obj.s = length(obj.c); 
-        end
-        
-        %% Explicit method
-        function Z = explicit_euler(obj,f,t,z,N,n_x)
-            Z = zeros(N,n_x);
-            % 
-            for n = 1:N-1
-                Z(n,:) = (t(n+1)-t(n))*f(t(n),z(n,:));
-            end
-        end
-        
-        %% Implicit methods
-        function Z = irk(obj,f,t,z,N,n_x)
-            % K-Werte von Runge-Kutta
-            K = zeros(obj.s,n_x);
-            % 
-            Z = zeros(N,n_x);
-            % 
-            options = optimoptions('fsolve','Display','none','OptimalityTolerance',1e-8);
-            % 
-            for n = 1:N-1
-                % Schrittweite
-                h = (t(n+1)-t(n));
-                % 
-                K_New =@(K) obj.stufenableitung(f,z(n,:),t(n),h,K,n_x);
-                K = fsolve(K_New,K,options);
-                % Runge-Kutta Schritt
-                Z(n,:) = h*obj.b'*K;
-            end
-        end
-        function K_new = stufenableitung(obj,f,y,t,h,K,n_x)
-            K_new = K;
-            for i = 1:obj.s
-                y(1:n_x) = y(1:4)+h*obj.A(1,:)*K;
-                K_new(i,:) = K(i,:) - f(t+obj.c(i)*h,y);
-            end
-        end
-    end
-end
-\end{lstlisting}
+%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von Versuchsskript \texttt{test\_0\_1.m}.}, label=code:direct_test_0_1]
+%%% Speicher Parameter
+%results_name = 'test_0_1';
+%
+%%% Testparameter
+%N = 100;               % Anzahl an Diskretisierungen
+%
+%z_0 = [   9000,...     % h_start in [m]
+%             5,...     % gamma_start in [Grad]  
+%        800000,...     % x_start in [m]
+%           250,...     % v_start in [m/s]
+%       1259999,...     % T_start in [N]
+%           1.4];       % C_L_start in []
+%% z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden moechten     
+%
+%X_0 = [   0;           % h_0 in [m]
+%       0.27;           % gamma_0 in [rad]
+%          0;           % x_0 in [m]
+%        100];          % v_0 in [m/s]
+%
+%X_T = [10668;          % h_t in [m]
+%           0];         % gamma_t  in [Grad]
+%
+%params = [       0,... % t_0:   Anfangszeitpunkt in [s]
+%              1800,... % t_f:   Endzeitpunkt in [s]
+%          1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
+%          0.000104,... % beta: 
+%              9.81,... % g:     Erdbeschleunigung in [N/s^2]
+%             0.032,... % C_D_0: Nullluftwiderstandsbeiwert in []
+%               0.8,... % e:     Oswaldfaktor in []
+%               845,... % F:     Wirksame Flaeche in [m^2]
+%               7.5,... % AR:    Fluegelstreckung in []
+%            276800,... % m:     Leergewicht des A380 in [kg]
+%             44154];   % q_max: Maximaler Staudruck in [N/m^2]  
+%
+%%% Boxbeschraenkungen
+%lb = [   -inf,...
+%         -inf,...
+%         -inf,...
+%         -inf,...
+%          0.0,...      % T_min:   Minimale Schubkraft in [N]
+%          0.0];        % C_L_min: Minimaler Auftriebsbeiwert in []
+%      
+%ub = [    inf,...
+%          inf,...
+%          inf,...
+%          inf,...
+%      1260000,...      % T_max:   Maximale Schubkraft in [N]
+%         1.48];        % C_L_max: Maximaler Auftriebsbeiwert in []
+%
+%%% Loesungsmethode der ODE und Objekt der Problemklasse erhalten
+%ode_methods = ode_methods();
+%prob = maximalrangeflight(N,z_0,X_0,X_T,params,lb,ub,@ode_methods.explicit_euler);
+%
+%%% Optionen fuer fmincon von Matlab
+%options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+%\end{lstlisting}
+%
+%
+%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{main.m}.}, label=code:direct_main]
+%clear  variables; close  all; clc;
+%
+%%% Memory paths
+%addpath('../utils');
+%addpath('./config');
+%addpath('./results');
+%
+%%% Loading the corresponding configuration file
+%test_0_1;
+%
+%%% Solving the control problem with fmincon
+%prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+%
+%%% Plot the solution
+%plotter = Plotter();
+%titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
+%          "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
+%          "\textbf{Steuerung 2: Auftriebsbeiwert}"];
+%labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
+%          "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$",...
+%          "$T_{sol}$ in $[N]$","$C_{L_{sol}}$ in $[1]$"];
+%frame_prop = [0.5,0.5,0.5,0.5,2,2];
+%line_style = ["b-","b-","b-","b-","r-","r-"];
+%order = [3,1,5,2,4,6];
+%fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
+%
+%%% Save the graphics and the data
+%saveas(fig,strcat('./results/',results_name,'.png'));
+%writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
+%\end{lstlisting}
+%
+%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{maximalrangeflight.m}.}, label=code:direct_maximalrangeflight]
+%classdef maximalrangellight
+%    properties
+%        %% Parameters for the optimal control problem
+%        t_0 = 0;            % Starting time in [s]
+%        t_f = 1800;         % End time in [s]
+%        X_0 = [   0;        % h_0 in [m]
+%               0.27;        % gamma_0 in [rad]
+%                  0;        % x_0 in [m]
+%                100];       % v_0 in [m/s]
+%
+%        X_T = [10668;       % h_t in [m]
+%                   0];      % gamma_t in [Grad]
+%        alpha = 1.247015;   % Parameters for calculating the air density in []
+%        beta = 0.000104;    % Parameters for calculating the air density in []
+%        g = 9.81;           % Gravitational acceleration in [N/s^2]
+%        C_D_0 = 0.032;      % Zero air resistance coefficient in []             
+%        e = 0.8;            % Oswaldfactor in []
+%        F = 845;            % Effective area in [m^2]
+%        AR = 7.5;           % Aspect ratio in []
+%        k;                  % Factor for calculation of the drag coefficient in []
+%        m = 276800;         % Empty weight of the A380 in [kg]
+%        q_max = 44154;      % Maximum dynamic pressure in [N/m^2]
+%        T_min = 0;          % Minimum thrust in [N]
+%        T_max = 1260000;    % Maximum thrust in [N]
+%        C_L_min = 0.0;      % Minimum lift coefficient in []
+%        C_L_max = 1.48;     % Maximum lift coefficient in []
+%        %% Problem sizes
+%        n_x = 4;            % Size of the state vector
+%        n_u = 2;            % Control vector size
+%        n_s = 1;            % Size of the pure state constraint vector
+%        n_psi = 8;          % Size of the boundary condition vector
+%        %% Variables for the calculation
+%        N;                  % Number of discretisations
+%        t;                  % Variable for the time vector
+%        ode_method;         % Implicit or explicit iterative methods to approximate the solution of a ODE
+%        z_0;                % Array for the start values for fmincon
+%        lb;                 % lower bounds for fmincon
+%        ub;                 % upper bounds for fmincon
+%    end
+%    methods
+%        %% Constructor: Set initial conditions of the direct solver
+%        function obj = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method)
+%            % Grid size
+%            obj.N = N;
+%            obj.t = linspace(obj.t_0,obj.t_f,obj.N);
+%            % Method for solving the ODE
+%            obj.ode_method = ode_method;
+%            % Start vector fmincon
+%            if obj.N == size(z_0,1)
+%                obj.z_0 = z_0;
+%            else
+%                obj.z_0 = z_0 .* ones(obj.N,obj.n_x+obj.n_u);
+%            end
+%            % Box conditions
+%            obj.lb = lb .* ones(obj.N,obj.n_x+obj.n_u);
+%            obj.ub = ub .* ones(obj.N,obj.n_x+obj.n_u);
+%            % Parameters
+%            obj.t_0 = params(1);
+%            obj.t_f = params(2);
+%            obj.X_0 = X_0;
+%            obj.X_T = X_T;
+%            obj.alpha = params(3);
+%            obj.beta = params(4);
+%            obj.g = params(5);
+%            obj.C_D_0 = params(6);
+%            obj.e = params(7);
+%            obj.F = params(8);
+%            obj.AR = params(9);
+%            obj.k = 1/(pi*obj.e*obj.AR);
+%            obj.m = params(10);
+%            obj.q_max = params(11);
+%        end
+%        %% Differential equation
+%        function X = f(obj,t,z)
+%            X = [                                                                                                                 z(4)*sind(z(2)),...
+%                                              (1/(2*obj.m*z(4))) * (obj.F*z(6)*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*cosd(z(2))),...
+%                                                                                                                                  z(4)*cosd(z(2)),...
+%                 (1/(2*obj.m)) * (2*z(5) + (-obj.C_D_0 - obj.k*(z(6))^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)))];
+%        end
+%        %% Objective function
+%        function T = F_sol(obj,z)
+%            T = -(z(end,3)-obj.X_0(3));
+%        end
+%        %% Nonlinear constraint functions
+%        function [c,ceq] = nonlcon(obj,z)
+%            % Equality constraints
+%            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; 
+%            % Inequality constraints
+%            x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
+%            ceq = zeros(1,obj.n_x*obj.N+obj.n_psi);
+%            for i = 0:obj.N-2
+%                ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
+%            end
+%            ceq((obj.n_x*obj.N+1):(obj.n_x*obj.N+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
+%                                                                      z(1,2)-obj.X_0(2),...
+%                                                                      z(1,3)-obj.X_0(3),...
+%                                                                      z(1,4)-obj.X_0(4),...
+%                                                                    z(end,1)-obj.X_T(1),...
+%                                                                    z(end,2)-obj.X_T(2),...
+%                                                                                      0,...
+%                                                                                      0];
+%        end
+%    end
+%end
+%\end{lstlisting}
+%
+%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{ode\_methods.m}.}, label=code:direct_odemethods]
+%classdef ode_methods
+%    properties
+%        %% 
+%        A;
+%        b;
+%        c;
+%        s;
+%    end
+%    methods
+%        %% Constructor
+%        function obj = ode_methods()
+%            % RADAU-2A-Verfahren
+%            obj.A = [5/12, -1/12;
+%                      3/4,   1/4];
+%            obj.b = [3/4; 1/4];
+%            obj.c = [1/3; 1];
+%            % s-stufiges Runge-Kutta Verfahren
+%            obj.s = length(obj.c); 
+%        end
+%        
+%        %% Explicit method
+%        function Z = explicit_euler(obj,f,t,z,N,n_x)
+%            Z = zeros(N,n_x);
+%            % 
+%            for n = 1:N-1
+%                Z(n,:) = (t(n+1)-t(n))*f(t(n),z(n,:));
+%            end
+%        end
+%        
+%        %% Implicit methods
+%        function Z = irk(obj,f,t,z,N,n_x)
+%            % K-Werte von Runge-Kutta
+%            K = zeros(obj.s,n_x);
+%            % 
+%            Z = zeros(N,n_x);
+%            % 
+%            options = optimoptions('fsolve','Display','none','OptimalityTolerance',1e-8);
+%            % 
+%            for n = 1:N-1
+%                % Schrittweite
+%                h = (t(n+1)-t(n));
+%                % 
+%                K_New =@(K) obj.stufenableitung(f,z(n,:),t(n),h,K,n_x);
+%                K = fsolve(K_New,K,options);
+%                % Runge-Kutta Schritt
+%                Z(n,:) = h*obj.b'*K;
+%            end
+%        end
+%        function K_new = stufenableitung(obj,f,y,t,h,K,n_x)
+%            K_new = K;
+%            for i = 1:obj.s
+%                y(1:n_x) = y(1:4)+h*obj.A(1,:)*K;
+%                K_new(i,:) = K(i,:) - f(t+obj.c(i)*h,y);
+%            end
+%        end
+%    end
+%end
+%\end{lstlisting}
 
 
 
@@ -292,7 +301,7 @@ Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkte
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
 Es folgt das Ergebnis
@@ -303,7 +312,21 @@ Es folgt das Ergebnis
 \end{center}
 \end{figure}
 
-
+\newpage
+\subsection{Ergebnis 2}\label{kap:Versuch0Ergebnis2}
+Verwendet wird:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 400$ 
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_0_2}
+\caption{Versuch 1 - Ergebnis 2}\label{img:test_0_2}
+\end{center}
+\end{figure}
 
 
 
@@ -320,14 +343,14 @@ Es folgt das Ergebnis
 
 \newpage
 \section{Versuch 1}\label{kap:Versuch1}
-Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält.
+Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält. %$z_0 = (20,9,6000,90,1259999,1.47)$
 
 \subsection{Ergebnis 1}
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 1200$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Reduzierte Endzeit: $t_f = 700$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
 Es folgt das Ergebnis
@@ -343,8 +366,8 @@ Es folgt das Ergebnis
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 1400$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Reduzierte Endzeit: $t_f = 900$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
 Es folgt das Ergebnis
@@ -359,9 +382,9 @@ Es folgt das Ergebnis
 \subsection{Ergebnis 3}
 Verwendet wird:
 \begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 200$ 
-\item Reduzierte Endzeit: $t_f = 1400$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 1100$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
 Es folgt das Ergebnis
@@ -393,17 +416,19 @@ Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}
 \subsection{Ergebnis 1}
 Verwendet werden:
 \begin{itemize}
-\item Reduzierte Endzeit: $t_f = 1400$
-\item Angepasste Starthöhe: $h_0 = $
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 1200$
+\item Angepasste Starthöhe: $h_0 = 100$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
 Es folgt das Ergebnis
- 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_2_1}
+\caption{Versuch 2 - Ergebnis 1}\label{img:test_2_1}
+\end{center}
+\end{figure}
 
 
 
@@ -429,17 +454,19 @@ Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}
 \subsection{Ergebnis 1}
 Verwendet werden:
 \begin{itemize}
-\item Reduzierte Endzeit: $t_f = 1400$
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 1200$
 \item Neues Startgewicht: $m = 500000$
+\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
-
-
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_3_1}
+\caption{Versuch 3 - Ergebnis 1}\label{img:test_3_1}
+\end{center}
+\end{figure}
 
 
 
@@ -464,7 +491,7 @@ Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}
 %
 \item \textbf{Maximale Reichweite:} 15200000 m (Quelle: \url{https://de.wikipedia.org/wiki/Airbus_A380})
 %
-\item \textbf{Anstellwinkel:} -90 - 90
+\item \textbf{Anstellwinkel:} $\gamma \in [-80,80]$
 \end{itemize}
 Damit ergibt sich das veränderte Optimalsteuerungsproblem:
 \[\begin{split}
@@ -479,7 +506,7 @@ Damit ergibt sich das veränderte Optimalsteuerungsproblem:
 %
 q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Zustandsbedingungen)}\\\
 h(t) &\in [0,13100] \hspace{9.5mm} \forall t \in [t_0,t_f] \hspace{5mm} \text{(Boxbeschränkungen)}\\\
-\gamma(t) &\in [-90,90] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
+\gamma(t) &\in [-80,80] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
 x(t) &\in [0,15200000] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
 v(t) &\in [0,266] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
 T(t) &\in [T_{\min},T_{\max}] \hspace{9.5mm} \forall t \in [t_0,t_f]\\\
@@ -489,20 +516,55 @@ C_L(t) &\in [C_{L, \min},C_{L, \max}] \hspace{3mm} \forall t \in [t_0,t_f]
 \subsection{Ergebnis 1}
 Verwendet werden:
 \begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 1200$
+\item Neues Startgewicht: $m = 500000$
+\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_4_1}
+\caption{Versuch 4 - Ergebnis 1}\label{img:test_4_1}
+\end{center}
+\end{figure}
+
+\newpage
+\subsection{Ergebnis 2}
+Verwendet werden:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
 \item Reduzierte Endzeit: $t_f = 1400$
 \item Neues Startgewicht: $m = 500000$
+\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_4_2}
+\caption{Versuch 4 - Ergebnis 2}\label{img:test_4_2}
+\end{center}
+\end{figure}
 
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=.7\textwidth]{images/01_Modellaufbau/V3E1}
-%\caption{Versuch 3 - Ergebnis 1}\label{img:V1E1}
-%\end{center}
-%\end{figure}
-
-
-
-
+\newpage
+\subsection{Ergebnis 3}
+Verwendet werden:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 1800$
+\item Neues Startgewicht: $m = 500000$
+\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_4_3}
+\caption{Versuch 4 - Ergebnis 3}\label{img:test_4_3}
+\end{center}
+\end{figure}
 
 
 
@@ -514,7 +576,7 @@ Verwendet werden:
 \section{Versuch 5}
 Testet doch mal, ob ihr bei vorgegebener Steuerung einen deutlichen Unterschied zwischen expl. und impl. Verfahren feststellt. Falls nicht ist das schon mal ein deutliches Indiz dafür, dass ihr euch den Rechenaufwand eines impl. Verfahrens auch in der Optimierung sparen könnt. Ich denke letztere ist eher die Herausforderung bei eurem Projekt, da es wahrscheinlich viele lokale Minima gibt. Deswegen wäre es wahrscheinlich auch sinnvoll unterschiedliche Algorithmen (z.B. SQP) auszuprobieren. Dafür müsst ihr nur die entsprechende Option für fmincon setzen und müsst auch nicht unbedingt den Algorithmus im Detail verstehen. Sowas könnt ihr dann natürlich auch gerne in die Präsentation/Ausarbeitung aufnehmen.
 
-
+\textbf{Steht noch aus !!!}
 
 
 
@@ -526,4 +588,16 @@ Von Explizit auf implizites Verfahren
 
 Ich denke auch nicht unbedingt, dass die Stabilität des ODE-Solvers oder die Steifheit der ODE das (Haupt-)Problem ist. Wahrscheinlich könnt ihr ein explizites Verfahren verwenden.
 
+\textbf{Steht noch aus !!!}
 
+
+
+
+
+
+
+\newpage
+\section{Versuch 7}
+Gitterverfeinerung mit Runge-Kutta 3 und 4 Verfahren.
+
+\textbf{Steht noch aus !!!}

@@ -7,7 +7,7 @@
 results_name = 'test_1_4';
 
 %% Testparameter
-N = 100;               % Anzahl an Diskretisierungen
+N = 200;               % Anzahl an Diskretisierungen
 
 z_0 = [   9000,...     % h_start in [m]
              5,...     % gamma_start in [Grad]  
@@ -26,7 +26,7 @@ X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-              1400,... % t_f:   Endzeitpunkt in [s]
+               900,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -36,6 +36,8 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
                7.5,... % AR:    Flügelstreckung in []                        (aspect ratio) (Das Seitenverhältnis eines Flügels ist definiert als das Verhältnis seiner Spannweite zu seiner mittleren Sehne) -> (Spannweite in [m])^2 / Tragflächeninhalt in [m^2] = b^2 / F
             276800,... % m:     Leergewicht des A380 in [kg]
              44154];   % q_max: Maximaler Staudruck in [N/m^2]  
+
+t = linspace(params(1),params(2),N);
 
 %% Boxbeschränkungen
 lb = [   -inf,...
@@ -54,9 +56,16 @@ ub = [    inf,...
 
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
-% ode_method = @ode_methods.explicit_euler;
-ode_method = @ode_methods.explicit_rk4;
-prob = MaximalRangeFlight(N,z_0,X_0,X_T,params,lb,ub,ode_method);
+ode_method = @ode_methods.explicit_euler;
+% ode_method = @ode_methods.explicit_rk4;
+% ode_method = @ode_methods.implicit_rk_radau2A;
+prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',50.0e+03,'MaxIterations',4.0e+05);
+% SQP-Verfahren
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-11);
+% options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+
+% Innere Punkte Verfahren
+% options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
