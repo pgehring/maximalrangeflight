@@ -141,21 +141,27 @@ Gedanken wie der Verlauf aussehen könnte:\\
 Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
 
+
 %Hallo Jörn,
 %
-%vorweg noch vielen Dank für die Hinweise bezüglich der Mehrschiessverfahren und dem Raketenwagen Beispiel.
+%Nochmal vielen Dank für deine Hinweise und deine Mühen!!!
+%Einige Punkte konnten wir schon umsetzen, teils sogar erfolgreich :)
 %
 %Folgende Punkte haben wir nun bei den direkten Verfahren umgesetzt bzw. getestet:
 % - Performance und Fehler Verbesserung des Codes: Wir haben den Code nun so angepasst, sodass wir test files haben in denen wir alle Parameter, Startwerte etc. anpassen können. Welcher File welchen Versuch darstellt ist aktuell im Anhang der Doku festgehalten. Des Weiteren ist uns gestern noch ein Fehler in der nonlcon(obj,z) Funktion aufgefallen. Dabei haben wir unseren Vektor ceq  immer zu lang gewählt mit (n_x*N)+n_psi anstatt mit (n_x*(N-1))+n_psi so wie in der Lösung des Raketenwagen Beispiels. Diese Verbesserung wurde auch nochmal in der Doku festgehalten. Im Zuge dessen haben wir auch die darin enthaltene for Schleife vektorisiert.
 % - Mit dieser Verbesserung/Korrektur laufen nun auch mal das Innere Punkte Verfahren. Das Verfahren der Strategie der aktiven Mengen jedoch noch nicht.
 % - Du hast ja geschrieben wir sollen mal die impliziten und expliziten Verfahren mit vorgegebener Steuerung untersuchen. Leider war uns nicht ganz klar was du damit gemeint hast? Meinst du von unserem Startwert X_0 aus und einer vorgegebener Steuerung T(t) und C_L(t) die Lösung von h,gamma,x,v mit einem Impliziten und expliziten Verfahren berechnen?
-% - Deine Hinweise bezüglich der Veränderung von Parametern wie der Endzeit wurden in den verschiedenen Versuchen ausprobiert. Leider kommen für uns nicht wirkliche aussagekräftige Ergebnisse raus, weshalb wir jetzt nicht genau wissen wie wir weiter vorgehen sollen?
+% - Deine Hinweise bezüglich der Veränderung von Parametern wie der Endzeit wurden in den verschiedenen Versuchen ausprobiert. Leider kommen für uns nicht wirkliche aussagekräftige Ergebnisse raus. Oft sind die Ergebnisse auch deutlich entfernt von einem realen physikalischen Verhalten (z.B. Flughöhen von über 30.000m).
 %
-%Wäre sehr nett von dir, wenn du dir die Zeit für ein Gespräch mit uns nehmen könntest?
+%​​​​​​​Bei dem Beispiel Raketenwagen mit den indirekten Lösungsverfahren konnten wir nur ein kleinen Erfolg erzielen (siehe Anhang Raketenwagen.pdf Kapitel 0.4).
+%
+%Bezüglich unserer aktuellen Probleme und geringen Erfahrung, wissen wir jetzt nicht genau wie wir weiter machen sollen. Es wäre deshalb sehr nett von dir, wenn du dir vielleicht die Zeit für ein Gespräch mit uns nehmen könntest?
 %
 %Mit freundlichen Grüßen
 %
 %Philipp, Heiko, Felix
+ 
+
 
 
 
