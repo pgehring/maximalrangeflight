@@ -46,6 +46,7 @@ for i = 1:length(configs)
         solutions{i} = {results_name, prob, prob_sol, options};
     catch ME
         fprintf('Error occured while solving control problem with config %s\nContinuing with next file..\n', configs(i))
+        disp(ME.message)
         continue % with next config
     end
 end
