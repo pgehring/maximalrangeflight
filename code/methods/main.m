@@ -11,7 +11,7 @@
 
 clear  variables; 
 close  all;
-% clc;
+clc;
 
 %% Setup workspace
 addpath('../utils');
@@ -48,15 +48,15 @@ X0 = [  0;           % h_0 in [m]
         100];          % v_0 in [m/s] 
 X0(2) = X0(2)*180/pi;
 
-odemethods = {@ode45};
-
+odemethods = {@ode45, @ode23s};
+ode_labels = ["ode45", "ode23s"];
 %% solve model
-
+solutions = {};
 for i=1:length(odemethods)
     solver = odemethods{i};
     
     [~, X] = solver(@model, t, X0, [], params_cell);
-    
+    solutions{i} = {X};
 end
 
 %% plotting
@@ -64,10 +64,32 @@ titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
           "Geschwindigkeit"];
 labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
           "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
-      
-plotter = Plotter();
-plotter.plot_state(t, X, titles, labels);
 
+axes_list = [];
+for j = 1:length(solutions)
+    solution = solutions{i};
+    [X] = solution{:};
+    
+    disp(ode_labels(j))
+    [r, c] = size(X);
+    hold on
+    for jj=1:c
+        if j == 1
+            ax = subplot(4,1, jj);
+            ax.NextPlot = 'add';
+            axes_list = [axes_list, ax];
+        end
+        
+        plot(axes_list(jj), t, X(:, jj))
+        ylabel(labels(jj))
+        xlabel("Zeit $t$ in $s$")
+        
+        if j == length(solutions)
+            legend(axes_list(jj), ode_labels)
+        end
+    end 
+end
+hold off
 
 %% Workspace cleanup
 diary off
