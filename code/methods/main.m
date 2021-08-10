@@ -9,7 +9,7 @@
 % Date:         27.08.2021
 % Author:       Gehring, Philipp / Karus, Heiko / Goetz, Felix
 
-clear  variables; 
+clear; 
 close  all;
 clc;
 
@@ -39,7 +39,7 @@ params_cell = num2cell(params);
 N = 100;
 
 t0 = 0;
-tf = 120;
+tf = 1200;
 t = linspace(t0, tf, N);
 
 X0 = [  0;           % h_0 in [m]
@@ -48,14 +48,19 @@ X0 = [  0;           % h_0 in [m]
         100];          % v_0 in [m/s] 
 X0(2) = X0(2)*180/pi;
 
-odemethods = {@ode45, @ode23s};
-ode_labels = ["ode45", "ode23s"];
+odemethods = {@ode45, @ode23s, @euler_expl, @euler_impl, @irk};
+ode_labels = ["ode45", "ode23s", "euler expl", "euler impl", "radau-2a"];
+ode_styles = ["--r", ":m", "--b", "-.k", "c"];
 %% solve model
 solutions = {};
 for i=1:length(odemethods)
     solver = odemethods{i};
+    opts = odeset('RelTol',1e-2,'AbsTol',1e-5);
     
+    tic
     [~, X] = solver(@model, t, X0, [], params_cell);
+    toc
+%     fprintf("time elapsed")
     solutions{i} = {X};
 end
 
@@ -64,32 +69,29 @@ titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
           "Geschwindigkeit"];
 labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
           "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
+plot_position = [50, 50, 800, 400];
 
-axes_list = [];
-for j = 1:length(solutions)
-    solution = solutions{i};
-    [X] = solution{:};
+set(0,'defaulttextinterpreter','latex');
+set(0,'defaultAxesTickLabelInterpreter','latex');
+      
+figures = [];
+for jj=1:length(titles)
+    f = figure(jj);
+    f.Position = plot_position;
+    figures = [figures, f ];
     
-    disp(ode_labels(j))
-    [r, c] = size(X);
     hold on
-    for jj=1:c
-        if j == 1
-            ax = subplot(4,1, jj);
-            ax.NextPlot = 'add';
-            axes_list = [axes_list, ax];
-        end
+    for j = 1:length(solutions)
+        disp(ode_labels(jj))
+        [X_plot] = solutions{j}{:};
         
-        plot(axes_list(jj), t, X(:, jj))
-        ylabel(labels(jj))
+        plot(gca(), t, X_plot(:, jj), ode_styles(j))
+        ylabel(sprintf("%s\n%s", titles(jj), labels(jj)))
         xlabel("Zeit $t$ in $s$")
-        
-        if j == length(solutions)
-            legend(axes_list(jj), ode_labels)
-        end
-    end 
+    end
+    hold off
+    legend(ode_labels, 'Interpreter','latex')
 end
-hold off
 
 %% Workspace cleanup
 diary off
