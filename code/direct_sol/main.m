@@ -24,7 +24,7 @@ if exist('console.log', 'file')
 end
 
 %% Loading the corresponding configuration file
-configs = ["test_1_4"];
+configs = ["test_1_6"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
