@@ -25,13 +25,28 @@ classdef Plotter
         function fig = plot_fmincon(obj,t,sol,results_name,titles,labels,order,frame_prop,line_style)
             obj.nfigures = obj.nfigures +1;
             fig = create_fig(obj, obj.nfigures);
+            
             fig_title_str = strcat('Versuch: \, ','\verb|',results_name,'|');
             fig_title = sgtitle(fig,fig_title_str,'FontSize',20);
             fig_title.Interpreter = 'latex';
+            
             [r,c] = size(sol);
             for i = [1:c]
                 sol_id = order(i);
                 sp = create_subplot(obj,t,sol(:,sol_id),[2, 3],i,titles(sol_id),labels(sol_id),frame_prop(sol_id),line_style(sol_id));
+            end
+        end
+        
+        function fig = plot_state(obj, t, X, titles, labels)
+            % function to plot the state vector over time
+            
+            obj.nfigures = obj.nfigures +1;
+            fig = create_fig(obj, obj.nfigures);
+            
+            
+            [r,c] = size(X);
+            for i = [1:c]
+                sp = create_subplot(obj,t,X(:,i),[c, 1],i,titles(i),labels(i),0.5,"b-");
             end
         end
         
