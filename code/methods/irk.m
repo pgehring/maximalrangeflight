@@ -40,7 +40,7 @@ function [t,y] = irk(f,tspan,y0,opts, param)
     y(1,:)=y0(:)';
     
     % Parameter für fsolve
-    options = optimoptions('fsolve','Display','none','OptimalityTolerance',1e-8);
+    options = optimoptions('fsolve','Display','none','Algorithm', 'levenberg-marquardt', 'OptimalityTolerance', 1e-8);
     % Berechenen der Werte für jeden Zeitpunkt
     for n = 1:N
         % 

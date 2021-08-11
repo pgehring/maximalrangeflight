@@ -34,7 +34,7 @@ end
 function [Y,isConverged]=newton4euler(f,x,ytranspose,Y,h,param)
     % Funktion für das Newton Verfahren, angepasst für implizites Euler-Verfahren
 
-    tol = 1E-3;
+    RelTol = 1E-3;
     maxit = 10e4;
 
     isConverged= (1==0);  % startet mit FALSE
@@ -44,7 +44,7 @@ function [Y,isConverged]=newton4euler(f,x,ytranspose,Y,h,param)
         dFdY = h * fValue - eye(length(Y));
         increment=dFdY\F;
         Y = Y - increment;
-        if norm(increment,2) < tol*norm(Y,2)
+        if norm(increment,2) < RelTol*norm(Y,2)
             isConverged= (1==1);  % wird TRUE hier
             return
         end

@@ -55,16 +55,17 @@ ode_styles = ["--r", ":m", "--b", "-.k", "c"];
 solutions = {};
 for i=1:length(odemethods)
     solver = odemethods{i};
-    opts = odeset('RelTol',1e-2,'AbsTol',1e-5);
+    opts = odeset('RelTol',1e-3,'AbsTol',1e-5);
     
     tic
-    [~, X] = solver(@model, t, X0, [], params_cell);
-    toc
-%     fprintf("time elapsed")
-    solutions{i} = {X};
+    [~, X] = solver(@model, t, X0, opts, params_cell);
+    time_elapsed = toc;
+    fprintf("solution took %fs to complete with %s\n", time_elapsed, ode_labels(i))
+    solutions{i} = {X, time_elapsed, ode_labels(i)};
 end
 
 %% plotting
+names = ["methods_plot_h","methods_plot_gamma", "methods_plot_x", "methods_plot_v"];
 titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
           "Geschwindigkeit"];
 labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
@@ -83,15 +84,19 @@ for jj=1:length(titles)
     hold on
     for j = 1:length(solutions)
         disp(ode_labels(jj))
-        [X_plot] = solutions{j}{:};
+        [X_plot, ~, ~] = solutions{j}{:};
         
         plot(gca(), t, X_plot(:, jj), ode_styles(j))
         ylabel(sprintf("%s\n%s", titles(jj), labels(jj)))
         xlabel("Zeit $t$ in $s$")
     end
     hold off
-    legend(ode_labels, 'Interpreter','latex')
+    legend(ode_labels, 'Interpreter','latex','Location','north','NumColumns',length(ode_labels))
+    saveas(f,strcat('./results/', names(jj), '.svg'));
+    saveas(f,strcat('./results/', names(jj), '.png'));
+    saveas(f,strcat('./results/', names(jj), '.pdf'));
 end
+
 
 %% Workspace cleanup
 diary off
