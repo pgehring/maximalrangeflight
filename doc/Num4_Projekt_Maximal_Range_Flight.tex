@@ -105,11 +105,86 @@ bibliography=totoc,    % LV in IV
 %------------------------------------------------------------------------------
 % Mathematische Umgebungen (Satz, Definition, Beweis ...)
 %------------------------------------------------------------------------------
-\newtheorem{myDef}{Definition}
-\newtheorem{myTheorem}{Theorem}
-\newtheorem{mySatz}{Satz}
-\newtheorem{myBeweis}{Beweis}
-\newtheorem*{myBemerkung}{Bemerkung}
+% Quellen:
+%	Umgebungen: 	https://www.youtube.com/watch?v=_KFr29O7Jrc
+%					https://de.overleaf.com/learn/latex/Environments
+%	Zähler: https://www.youtube.com/watch?v=_NjyOVC54aQ
+
+\usepackage{ifthen}
+
+% Zähler für die Nummerierung der Umgebungen und dessen Referenzen
+% 	Zu jedem Zähler umgnr gehört der Ausgabebefehl \theumgnr, der u.a. von 
+% 	\ref aufgerufen wird (siehe Quelle).
+\newcounter{umgnr}[chapter]
+\renewcommand{\theumgnr}{\arabic{chapter}.\arabic{umgnr}}
+
+% Umgebung "Satz":
+\newenvironment{satz}[1][]
+{% \begin{satz}
+\medskip\noindent%
+\refstepcounter{umgnr}% Zähler erhöhen
+\textbf{Satz~\theumgnr \ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{% \end{satz}
+\medskip
+}
+
+% Umgebung "Hilfssatz":
+\newenvironment{hilfssatz}[1][]
+{\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Hilfssatz~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{\medskip}
+
+% Umgebung "Definition":
+\newenvironment{definition}[1][]
+{\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Definition~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{\medskip}
+
+% Umgebung "Bemerkung":
+\newenvironment{bemerkung}[1][]
+{\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Bemerkung~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{\medskip}
+
+% Umgebung "Beispiel":
+\newenvironment{beispiel}[1][]
+{\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Beispiel~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{
+\hfill $\diamond$
+\medskip
+}
+
+% Umgebung "Lemma":
+\newenvironment{lemma}[1][]
+{\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Lemma~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{\medskip}
+
+% Umgebung "Korollar":
+\newenvironment{korollar}[1][]
+{\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Korollar~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+}
+{\medskip}
+
+% Umgebung "Beweis":
+\newenvironment{beweis}[1][]
+{% \begin{beweis}
+\textbf{Beweis\ifthenelse{\equal{#1}{}}{:}{~(#1):}}
+\begin{itshape}
+}
+{% \end{beweis}
+\end{itshape}
+\hfill $\Box$
+\medskip
+}
 
 %------------------------------------------------------------------------------
 % Formatierung

@@ -46,12 +46,12 @@ Somit ergibt sich das diskretisierte Optimalsteuerungsproblem:
 Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\] sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
 
 Dieses endlichdimensionale, nichtlineare Optimierungsproblem lässt sich dann mit einem geeigneten Optimierungsverfahren lösen. Mögliche Optimierungsverfahren sind das SQP-Verfahren, das Innere-Punkte-Verfahren oder die Strategie der aktiven Menge. Hierfür muss das Optimierungsproblem in die Form:
-\[\begin{split}
-\min_{z \in S} F(z) &:= \varphi(X_0,X_{N-1}) \\\
-\text{unter} \hspace{10mm} G(z) &\leq 0_{n_s \cdot N} \hspace{43mm} \text{(Ungleichungsnebenbedingungen)} \\\
-H(z) &= 0_{n_X \cdot (N-1) + n_{\psi}} \hspace{32mm} \text{(Gleichungsnebenbedingungen)}\\\
-z &\in S := \R^{n_x \cdot N} \times [U_{\min},U_{\max}]^{N} \hspace{10mm} \text{(Zulässigemenge)}
-\end{split} \]
+\begin{align*}
+\min_{z \in S} F(z) &:= \varphi(X_0,X_{N-1}) & & \\
+\text{unter} \hspace{10mm} G(z) &\leq 0_{n_s \cdot N} & &  \text{(Ungleichungsnebenbedingungen)} \\
+H(z) &= 0_{n_X \cdot (N-1) + n_{\psi}} & & \text{(Gleichungsnebenbedingungen)}\\
+z &\in S := \R^{n_x \cdot N} \times [U_{\min},U_{\max}]^{N} & &  \text{(Zulässigemenge)}
+\end{align*}
 gebracht werden mit der Optimierungsvariablen 
 \begin{equation}
 z := (X_0,X_1,...,X_{N-1},U_0,U_1,...,U_{N-1})^T
