@@ -24,7 +24,7 @@ if exist('console.log', 'file')
 end
 
 %% Loading the corresponding configuration file
-configs = ["test_1_6"];
+configs = ["test_1_1"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
@@ -37,13 +37,20 @@ for i = 1:length(configs)
     try
         % Solving the control problem with fmincon
         tic;
-        [prob_sol,fval,exitflag,output] = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
+        [t_sol,prob_sol,~,i_sol] = shooting_method( prob.tspan,...
+                                                      prob.z_0,...
+                                                       @prob.G,...
+                                                     @prob.G_Z,...
+                                                       @prob.R,...
+                                                   @prob.R_Z_0,...
+                                                   @prob.R_Z_f);
         duration_time = toc;
         fprintf('Duration time for solving the Problem: %4.2f [min]\n',duration_time/60);
-        fprintf('Required iterations: %4.2f \n',output.iterations);
-        fprintf('Required function evaluations: %4.2f \n',output.funcCount);
-
-        solutions{i} = {results_name, prob, prob_sol, options};
+        fprintf('Required iterations: %4.2f \n',i_sol);
+        % fprintf('Required iterations: %4.2f \n',output.iterations);
+        % fprintf('Required function evaluations: %4.2f \n',output.funcCount);
+        % solutions{i} = {results_name, prob, prob_sol, options};
+        solutions{i} = {results_name,prob,prob_sol,shooting_methods.options};
     catch ME
         fprintf('Error occured while solving control problem with config %s\nContinuing with next file..\n', configs(i))
         disp(ME.message)
@@ -68,8 +75,10 @@ for j=1:length(solutions)
     solution = solutions{j};
     [results_name, prob, prob_sol, options] = solution{:};
     
+    prob_sol = prob.sol_func(prob_sol);
+    
     % Plot solution
-    fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
+    fig = plotter.plot_fmincon(t_sol,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
 
     % Save the graphics
     fprintf('Saving the graphics ...\n');
