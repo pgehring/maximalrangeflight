@@ -7,8 +7,8 @@
 results_name = 'test_1_1';
 
 %% Testparameter + Lösungsmethode der ODE und Objekt der Problemklasse erhalten
-z_0 = [  0,...         % h_start in [m]
-       0.27,...        % gamma_start in [Grad]  
+z_0 = [  30,...         % h_start in [m]
+       3,...        % gamma_start in [Grad]  
          0,...         % x_start in [m]
         100,...        % v_start in [m/s]
           10,...        % lambda_1
@@ -39,7 +39,7 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
 prob = maximal_range_flight(z_0,X_0,X_T,params);
 
 %% Boxbeschränkungen
-h_min         = 1e-10;
+h_min         = 1e-12;
 AbsTol        =  1e-8;
 RelTol        =  1e-8;
 StopTol       = 1e-12;
