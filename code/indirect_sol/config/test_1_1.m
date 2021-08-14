@@ -7,14 +7,14 @@
 results_name = 'test_1_1';
 
 %% Testparameter + Lösungsmethode der ODE und Objekt der Problemklasse erhalten
-z_0 = [  30,...         % h_start in [m]
-       3,...        % gamma_start in [Grad]  
+z_0 = [ 0,...         % h_start in [m]
+       0.27,...        % gamma_start in [Grad]  
          0,...         % x_start in [m]
         100,...        % v_start in [m/s]
-          10,...        % lambda_1
-          2,...        % lambda_2
-          1.5,...        % lambda_3
-          3];          % lambda_4   
+          -1,...        % lambda_1
+          -1,...        % lambda_2
+          -1,...        % lambda_3
+          1];          % lambda_4   
 
 X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
@@ -25,7 +25,7 @@ X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-               550,... % t_f:   Endzeitpunkt in [s]
+               600,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -61,5 +61,7 @@ ub = [    inf,...
       1260000,...      % T_max:   Maximale Schubkraft in [N]
          1.48];        % C_L_max: Maximaler Auftriebsbeiwert in []
 
-shooting_methods = shooting_methods(h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag);
+ode_method = @ode45;
+% ode_method = @ode23s;
+shooting_methods = shooting_methods(ode_method,h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag);
 shooting_method = @shooting_methods.Einfachschiessverfahren;
