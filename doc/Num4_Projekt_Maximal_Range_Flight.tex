@@ -67,6 +67,7 @@ bibliography=totoc,    % LV in IV
 % Grafiken
 %------------------------------------------------------------------------------
 \usepackage{graphicx}
+\usepackage[font=footnotesize, labelfont=bf]{caption, subfig}
 \usepackage{float} % um figure/Bild/Abbildung an bestimmte Stelle mit [H]
 \usepackage{framed}
 
@@ -83,6 +84,8 @@ bibliography=totoc,    % LV in IV
 % Für Tabellen mit fester Gesamtbreite und variabler Spaltenbreite
 %------------------------------------------------------------------------------
 \usepackage{tabularx} 
+\usepackage{booktabs}
+\usepackage{longtable}
 
 %------------------------------------------------------------------------------
 % Besondere Schriftauszeichnungen
@@ -234,7 +237,6 @@ bibliography=totoc,    % LV in IV
 \usepackage{algorithm}
 
 \usepackage{subfloat}
-\usepackage{subcaption}
 \usepackage{mathrsfs}
 
 %verhindet, dass sich Fußnote auf zwei Seiten erstreckt
@@ -258,7 +260,7 @@ bibliography=totoc,    % LV in IV
 \newcommand{\titel}{Maximal range flight}
 \newcommand{\jahr}{2021}
 \newcommand{\gutachterA}{Prof. Dr. rer. nat. Dirk Lebiedz}
-\newcommand{\gutachterB}{M.Sc. Jörn Dietrich}
+\newcommand{\gutachterB}{Jörn Dietrich, M.Sc.}
 
 \newcommand{\fakultaet}{Mathematik und Wirtschaftswissenschaften}
 \newcommand{\institut}{Institut für numerische Mathematik}
@@ -291,7 +293,6 @@ pdfborder=0 0 0	% keine Box um die Links!
 
 \counterwithout{footnote}{chapter}
 \usepackage{multirow}
-\usepackage{longtable}
 %==============================================================================
 
 
@@ -304,7 +305,7 @@ pdfborder=0 0 0	% keine Box um die Links!
 % Beginn Dokument
 %------------------------------------------------------------------------------
 % Trennungsregeln
-\hyphenation{Sil-ben-trenn-ung}
+\hyphenation{MATLAB}
 
 \begin{document}
 
