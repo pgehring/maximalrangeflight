@@ -70,6 +70,13 @@ classdef maximal_range_flight
 
         %% Funktionen Randwertproblem
         function Z_dot = G(obj,t,z)
+            
+            % Staudruck beschränkung
+            q = (obj.alpha*exp(-obj.beta*z(1))*z(4)^2)/2;
+            if q>obj.q_max
+                diff = obj.q_max-q;
+            end
+            
             % Synthese-Steuerung: Auftriebsbeiwert
             tol = 1e-8;
             K_1 = (obj.F*obj.alpha*exp(-obj.beta*z(1))*z(4)*z(6))/(2*obj.m);
@@ -86,31 +93,100 @@ classdef maximal_range_flight
             b_8 = (abs(K_1)<tol && K_2>0);
             b_9 = (K_1>0 && K_2>0);
             %
+            test = 0;
             if b_2 || b_3 || b_6 || b_9
                 C_L = obj.C_L_min;
+                test = test + 1;
             elseif b_1_1
                 C_L = K_1/(2*K_2);
+                test = test + 1;
             elseif b_1_2 || b_4 || b_7 || b_8
                 C_L = obj.C_L_max;
+                test = test + 1;
             else
                 C_L = (obj.C_L_max-obj.C_L_min)/2;
+                test = test + 1;
             end
             % Synthese-Steuerung: Schub
             if z(8) > 0
-                T = obj.T_max;
-            elseif z(8) < 0
                 T = obj.T_min;
+            elseif z(8) < 0
+                T = obj.T_max;
             else
                 T = (obj.T_max-obj.T_min)/2;
             end
-            Z_dot = [                                                                                                                                                                                          z(4)*sind(z(2));...
-                                                                                                                            (1/(2*obj.m*z(4))) * (obj.F*C_L*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*cosd(z(2)));...
-                                                                                                                                                                                                               z(4)*cosd(z(2));...
-                                                                                                  (1/(2*obj.m)) * (2*T + (-obj.C_D_0 - obj.k*(C_L)^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)));...
-                                                        -(obj.alpha*obj.beta*obj.F*exp(-obj.beta*z(1))*C_L*z(4)*z(6))/(2*obj.m) + ((obj.C_D_0+obj.k*C_L^2)*obj.alpha*obj.beta*obj.F*exp(-obj.beta*z(1))*z(4)^2*z(8))/(2*obj.m);...
-                                                                                                                            cosd(z(2))*z(4)*z(5) + (obj.g*sind(z(2))*z(6))/z(4) - sind(z(2))*z(4)*z(7) - cosd(z(2))*obj.g*z(8);...
-                                                                                                                                                                                                                             0;...
-                     sind(z(2))*z(5)+ ((obj.F*obj.alpha*exp(-obj.beta*z(1))*C_L)/(2*obj.m)+(obj.g*cosd(z(2)))/(z(4)^2))*z(6) + cosd(z(2))*z(7) - ((obj.C_D_0+obj.k*C_L^2)*obj.F*obj.alpha*exp(-obj.beta*z(1))*z(4)*z(8))/obj.m];
+            
+            
+            
+%             % Lösung von C_L mit fmincon 
+% %             H =@(u) (obj.F*obj.alpha*exp(-obj.beta*z(1))*u(2)*z(4)*z(6))/(2*obj.m) + (u(1)*z(8))/obj.m - ((obj.C_D_0+obj.k*u(2)^2)*obj.F*obj.alpha*exp(-obj.beta*z(1))*z(4)^2*z(8))/(2*obj.m);
+% %             H =@(u) (obj.F*obj.alpha*exp(-obj.beta*z(1))*u(2)*z(4)*z(6))/(2*obj.m) + (u(1)*z(8))/obj.m - (obj.k*u(2)^2*obj.F*obj.alpha*exp(-obj.beta*z(1))*z(4)^2*z(8))/(2*obj.m);
+% %             H =@(u) K_1*u(2) + (u(1)*z(8))/obj.m - K_2*u(2)^2;
+%             H =@(u) sind(z(2))*z(4)*z(5) +...
+%                     K_1*u(2) +...
+%                     -(obj.g*cosd(z(2))*z(6))/(z(4)) ...
+%                     + cosd(z(2))*z(4)*z(7)...
+%                     +(u(1)*z(8))/obj.m ...
+%                     - K_2*u(2)^2 ...
+%                     - (obj.C_D_0*obj.F*obj.alpha*exp(-obj.beta*z(1))*z(4)^2*z(8))/(2*obj.m)...
+%                     - obj.g*sind(z(2))*z(8);
+% 
+%             start = [0;1.48];
+% %             start = [T;C_L];
+%             lb = [obj.T_min;obj.C_L_min];
+%             ub = [obj.T_max,obj.C_L_max];
+% %             options = optimoptions('fmincon','Display','off','ConstraintTolerance',1e-8,'StepTolerance',1e-11);
+%             options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-11,'OptimalityTolerance',1e-10);
+%             [u_sol,fval,exitflag,output] = fmincon(H,start,[],[],[],[],lb,ub,[],options);
+%             
+% %             T = u_sol(1);
+% %             C_L = u_sol(2);
+%             
+%             if abs(T-u_sol(1)) > 1
+%                 diff = T-u_sol(1)
+%                 H([T;C_L])
+%                 H(u_sol)
+%                 disp('ERROR')
+%             elseif abs(C_L-u_sol(2)) > 1e-3
+%                 diff = C_L - u_sol(2)
+%                 disp('ERROR 2')
+%             elseif (exitflag ~= 1) && (abs(H([T;C_L])-H(u_sol))>10)
+%                 H([T;C_L])
+%                 H(u_sol)
+%                 disp('ERROR 3')
+%             end
+%             
+%             plot = 0;
+%             if plot ==1
+%                 diff_T = linspace(obj.T_min,obj.T_max,50);
+%                 diff_C_L = linspace(obj.C_L_min,obj.C_L_max,50);
+%                 n_T = length(diff_T);
+%                 n_C_L = length(diff_C_L);
+%                 sol_grid = zeros(n_T,n_C_L);
+%                 for i=1:length(diff_T)
+%                     for j=1:length(diff_C_L)
+%                         sol_grid(j,i) = H([diff_T(i),diff_C_L(j)]);
+%                     end
+%                 end                
+%                 surf(diff_T,diff_C_L,sol_grid)
+%             end
+            
+            
+            Z_dot = [                                                                                                                                                                                             z(4)*sind(z(2));...
+                                                                                                                               (1/(2*obj.m*z(4))) * (obj.F*C_L*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*cosd(z(2)));...
+                                                                                                                                                                                                                  z(4)*cosd(z(2));...
+                                                                                                     (1/(2*obj.m)) * (2*T + (-obj.C_D_0 - obj.k*(C_L)^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)));...
+                                                        -(-(obj.alpha*obj.beta*obj.F*exp(-obj.beta*z(1))*C_L*z(4)*z(6))/(2*obj.m) + ((obj.C_D_0+obj.k*C_L^2)*obj.alpha*obj.beta*obj.F*exp(-obj.beta*z(1))*z(4)^2*z(8))/(2*obj.m));...
+                                                                                                                            -(cosd(z(2))*z(4)*z(5) + (obj.g*sind(z(2))*z(6))/z(4) - sind(z(2))*z(4)*z(7) - cosd(z(2))*obj.g*z(8));...
+                                                                                                                                                                                                                                0;...
+                     -(sind(z(2))*z(5)+ ((obj.F*obj.alpha*exp(-obj.beta*z(1))*C_L)/(2*obj.m)+(obj.g*cosd(z(2)))/(z(4)^2))*z(6) + cosd(z(2))*z(7) - ((obj.C_D_0+obj.k*C_L^2)*obj.F*obj.alpha*exp(-obj.beta*z(1))*z(4)*z(8))/obj.m)];
+                 
+            % Staudruck beschränkung
+%             z_new = z + Z_dot;
+%             q = (obj.alpha*exp(-obj.beta*z_new(1))*z_new(4)^2)/2;
+%             if q>obj.q_max
+%                 diff = obj.q_max-q
+%             end
         end
 
         function Z = G_Z(obj,t,z)
@@ -141,9 +217,9 @@ classdef maximal_range_flight
             end
             % Synthese-Steuerung: Schub
             if z(8) > 0
-                T = obj.T_max;
-            elseif z(8) < 0
                 T = obj.T_min;
+            elseif z(8) < 0
+                T = obj.T_max;
             else
                 T = (obj.T_max-obj.T_min)/2;
             end

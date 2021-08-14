@@ -7,6 +7,7 @@
 classdef shooting_methods
     properties
         %% Variablen für die Berechnung
+        ode_method;
         % Step size control
         armijo;
         beta;
@@ -25,7 +26,8 @@ classdef shooting_methods
     end
     methods
         %% Constructor
-        function obj = shooting_methods(h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag)
+        function obj = shooting_methods(ode_method,h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag)
+            obj.ode_method = ode_method;
             % Step size control
             obj.armijo = true;
             obj.beta = 0.5;
@@ -44,7 +46,7 @@ classdef shooting_methods
         end
         
         %% Single shooting method
-        function [t_out,y_out,S_b,i] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+        function [t_out,y_out,eta,i] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
             eta = eta_0(:);
             n_y = length(eta_0);
             n_r = length(r(eta,eta));
@@ -57,7 +59,7 @@ classdef shooting_methods
                     S_a = eye(n_y); % Einheitsmatrix als Startwert für Sensitivitäts-DGL
                     while (i < obj.maxit)
                         % Lösen des Anfangwertproblems
-                        sol_y = ode45(g,tspan,eta,obj.options);
+                        sol_y = obj.ode_method(g,tspan,eta,obj.options);
                         y_t_eta = sol_y.y';
                         % Berechnung von F(eta)
                         F = r(eta,y_t_eta(end,:));
@@ -66,7 +68,7 @@ classdef shooting_methods
                         end
                         % Berechnung der Jacobimatrix 
                         S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
-                        sol_S = ode45(S_t,tspan,reshape(S_a,[],1),obj.options);
+                        sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
                         S_b = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
                         F_jac = r_y_a(eta,y_t_eta(end,:)) + r_y_b(eta,y_t_eta(end,:))*S_b;
                         % Berechnung der Newton-Richtung d
@@ -95,7 +97,7 @@ classdef shooting_methods
                     I = eye(n_y); % Einheitsmatrix für Einheitsvektoren
                     while (i < obj.maxit)
                         % Lösen des Anfangwertproblems
-                        sol_y = ode45(g,tspan,eta,obj.options);
+                        sol_y = obj.ode_method(g,tspan,eta,obj.options);
                         y_t_eta = sol_y.y';  
                         % Berechnung von F(eta)
                         F = r(eta,y_t_eta(end,:));
@@ -106,7 +108,7 @@ classdef shooting_methods
                         F_jac = zeros(n_r,n_y);
                         for j=1:n_y
                             y_a_h = eta + obj.h_min * I(:,j); % Erneutes lösen des AWP für ein neues y_a = (eta+h*e_j)
-                            sol_y_h = ode45(g,tspan,y_a_h,obj.options);
+                            sol_y_h = obj.ode_method(g,tspan,y_a_h,obj.options);
                             F_h = r(y_a_h,sol_y_h.y(:,end));
                             F_jac(:,j) = (F_h-F)/obj.h_min; % bilden der Jac-Matrix über finite Differenzen
                         end
@@ -120,7 +122,7 @@ classdef shooting_methods
                                 y_out = y_t_eta;
                                 return
                             end
-                            [~,y_step] = ode45(g,tspan,eta+d,obj.options);
+                            [~,y_step] = obj.ode_method(g,tspan,eta+d,obj.options);
                             F_step = r(eta+d,y_step(end,:));
                             if norm(F_step) <= norm(F) + obj.sigma*norm(F_jac*d)
                                 break
