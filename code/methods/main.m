@@ -35,6 +35,10 @@ params = [1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
               1.47];   % C_L_start in [1]
 params_cell = num2cell(params);
 
+MODEL = "d" % model switch  d: direct_model
+            %               i: indirect_model
+            
+
 %% solution parameters
 N = 100;
 
@@ -42,15 +46,48 @@ t0 = 0;
 tf = 1200;
 t = linspace(t0, tf, N);
 
-X0 = [  0;           % h_0 in [m]
-       0.27;           % gamma_0 in [rad]
-          0;           % x_0 in [m]
-        100];          % v_0 in [m/s] 
-X0(2) = X0(2)*180/pi;
 
-odemethods = {@ode45, @ode23s, @euler_expl, @euler_impl, @irk};
-ode_labels = ["ode45", "ode23s", "euler expl", "euler impl", "radau-2a"];
-ode_styles = ["--r", ":m", "--b", "-.k", "c"];
+switch MODEL
+    case "i"
+        X0 = [  0;           % h_0 in [m]
+                0.27;           % gamma_0 in [rad]
+                0;           % x_0 in [m]
+                100;        % v_0 in [m/s] 
+                -1;        
+                -1;           
+                -1;           
+                1];          
+        X0(2) = X0(2)*180/pi;
+        
+        odemethods = {@ode45, @ode23s, @euler_expl};
+        ode_labels = ["ode45", "ode23s", "euler expl", "radau-2a"];
+        ode_styles = ["--r", ":m", "--b", "c"];
+        
+        func = @indirect_model;
+        names = ["methods_plot_i_h","methods_plot_i_gamma", "methods_plot_i_x", "methods_plot_i_v", "methods_plot_i_l1", "methods_plot_i_l2", "methods_plot_i_l3", "methods_plot_i_l4"];
+        titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
+                  "Geschwindigkeit", "lambda", "lambda", "lambda", "lambda" ];
+        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
+                  "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$", "$\lambda_1$", "$\lambda_2$", "$\lambda_3$", "$\lambda_4$"];
+    case "d"
+        func = @direct_model;
+        names = ["methods_plot_d_h","methods_plot_d_gamma", "methods_plot_d_x", "methods_plot_d_v"];
+        titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
+                  "Geschwindigkeit"];
+        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
+                  "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
+              
+        odemethods = {@ode45, @ode23s, @euler_expl, @euler_impl, @irk};
+        ode_labels = ["ode45", "ode23s", "euler expl", "euler impl", "radau-2a"];
+        ode_styles = ["--r", ":m", "--b", "-.k", "c"];
+        
+        X0 = [  0;           % h_0 in [m]
+                0.27;           % gamma_0 in [rad]
+                0;           % x_0 in [m]
+                100];          % v_0 in [m/s] 
+        X0(2) = X0(2)*180/pi;
+end
+
 %% solve model
 solutions = {};
 for i=1:length(odemethods)
@@ -58,18 +95,13 @@ for i=1:length(odemethods)
     opts = odeset('RelTol',1e-3,'AbsTol',1e-5);
     
     tic
-    [~, X] = solver(@direct_model, t, X0, opts, params_cell);
+    [~, X] = solver(func, t, X0, opts, params_cell);
     time_elapsed = toc;
     fprintf("solution took %fs to complete with %s\n", time_elapsed, ode_labels(i))
     solutions{i} = {X, time_elapsed, ode_labels(i)};
 end
 
 %% plotting
-names = ["methods_plot_h","methods_plot_gamma", "methods_plot_x", "methods_plot_v"];
-titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-          "Geschwindigkeit"];
-labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
-          "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
 plot_position = [50, 50, 800, 400];
 
 set(0,'defaulttextinterpreter','latex');
@@ -83,7 +115,7 @@ for jj=1:length(titles)
     
     hold on
     for j = 1:length(solutions)
-        disp(ode_labels(jj))
+        disp(ode_labels(j))
         [X_plot, ~, ~] = solutions{j}{:};
         
         plot(gca(), t, X_plot(:, jj), ode_styles(j))
@@ -92,9 +124,7 @@ for jj=1:length(titles)
     end
     hold off
     legend(ode_labels, 'Interpreter','latex','Location','north','NumColumns',length(ode_labels))
-    saveas(f,strcat('./results/', names(jj), '.svg'));
     saveas(f,strcat('./results/', names(jj), '.png'));
-    saveas(f,strcat('./results/', names(jj), '.pdf'));
 end
 
 
