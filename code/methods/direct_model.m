@@ -1,4 +1,4 @@
-function X = model(t, z, params)
+function X = direct_model(t, z, params)
 % dynamical model of airplane
     [alpha, beta, g, C_D_0, e, F, AR, m, q_max, T, C_L] = params{:};
 
