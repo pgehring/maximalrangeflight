@@ -58,7 +58,7 @@ for i=1:length(odemethods)
     opts = odeset('RelTol',1e-3,'AbsTol',1e-5);
     
     tic
-    [~, X] = solver(@model, t, X0, opts, params_cell);
+    [~, X] = solver(@direct_model, t, X0, opts, params_cell);
     time_elapsed = toc;
     fprintf("solution took %fs to complete with %s\n", time_elapsed, ode_labels(i))
     solutions{i} = {X, time_elapsed, ode_labels(i)};
