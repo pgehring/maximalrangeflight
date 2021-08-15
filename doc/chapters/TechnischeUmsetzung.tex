@@ -7,36 +7,58 @@ Optimalsteuerungsproblems erläutert.
 Das in Kapitel \autoref{} gezeigte Modell des Flugzeugs wurde durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell
 Lösen zu können, werden Methoden von MATLAB und eigens implementierte Methoden zur Integration verwendet.
 
-In der Tabelle sind alle verwendeten Methoden aufgeführt.
 Mit dem Vergleich der Methoden konnte die fehlerfreie Implementierung bestätigt werden und die für den Anwendungsfall effizienteste Methode 
 ausgewählt werden.
 
-\begin{table}[htbp]
-    \caption{Untersuchte Einschrittalgorithmen}
-    \begin{tabularx}{\textwidth}{Xccc}
-        \toprule
-        Algorithmus & Rechenzeit & Reichenzeitverbesserung & max. Fehler \\
-        \midrule
+% \begin{table}[htbp]
+%     \caption{Untersuchte Einschrittalgorithmen}
+%     \begin{tabularx}{\textwidth}{Xccc}
+%         \toprule
+%         Algorithmus & Rechenzeit & Reichenzeitverbesserung & max. Fehler \\
+%         \midrule
         
-        \bottomrule
-    \end{tabularx}
-\end{table}
+%         \bottomrule
+%     \end{tabularx}
+% \end{table}
 
 \begin{figure}[!htbp]
     \centering 
-    \subfloat[\label{fig:methods_h}]{\includegraphics[width=0.45\textwidth]{images/03_TechnischeUmsetzung/methods_plot_h}}
+    \subfloat[\label{fig:methods_d_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_d_h}}
     \qquad
-    \subfloat[\label{fig:methods_gamma}]{\includegraphics[width=0.45\textwidth]{images/03_TechnischeUmsetzung/methods_plot_gamma}} \\
+    \subfloat[\label{fig:methods_d_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_d_gamma}} \\
 
-    \subfloat[\label{fig:methods_x}]{\includegraphics[width=0.45\textwidth]{images/03_TechnischeUmsetzung/methods_plot_x}}
+    \subfloat[\label{fig:methods_d_x}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_d_x}}
     \qquad
-    \subfloat[\label{fig:methods_v}]{\includegraphics[width=0.45\textwidth]{images/03_TechnischeUmsetzung/methods_plot_v}}
-    \caption{Lösung des Differentialgleichungsmodells. Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\) und \(C_L\) gelöst.} %
+    \subfloat[\label{fig:methods_d_v}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_d_v}}
+    \caption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space}). Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\) und \(C_L\) gelöst.} %
     % \subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \subref{fig:methods_gamma} zeigt den %
     % Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges.} %
     % \subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.}
 \end{figure}
 
+\begin{figure}[!htbp]
+    \centering 
+    \subfloat[\label{fig:methods_i_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_h}}
+    \qquad
+    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_gamma}} \\
+
+    \subfloat[\label{fig:methods_i_x}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_x}}
+    \qquad
+    \subfloat[\label{fig:methods_i_v}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_v}} \\
+
+    \subfloat[\label{fig:methods_i_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l1}}
+    \qquad
+    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l2}} \\
+
+    \subfloat[\label{fig:methods_i_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l3}}
+    \qquad
+    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l4}} \\
+
+    \caption{Lösung des Differentialgleichungsmodells. Die acht Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\) und \(C_L\) gelöst.} %
+    % \subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \subref{fig:methods_gamma} zeigt den %
+    % Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges.} %
+    % \subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.}
+\end{figure}
 \section{Klassenstruktur des Problems}
 
 UML
