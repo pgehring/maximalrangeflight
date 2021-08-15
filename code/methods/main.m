@@ -35,7 +35,7 @@ params = [1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
               1.47];   % C_L_start in [1]
 params_cell = num2cell(params);
 
-MODEL = "d" % model switch  d: direct_model
+MODEL = "i" % model switch  d: direct_model
             %               i: indirect_model
             
 
@@ -43,7 +43,7 @@ MODEL = "d" % model switch  d: direct_model
 N = 100;
 
 t0 = 0;
-tf = 1200;
+tf = 600;
 t = linspace(t0, tf, N);
 
 
@@ -60,7 +60,7 @@ switch MODEL
         X0(2) = X0(2)*180/pi;
         
         odemethods = {@ode45, @ode23s, @euler_expl};
-        ode_labels = ["ode45", "ode23s", "euler expl", "radau-2a"];
+        ode_labels = ["ode45", "ode23s", "euler expl"];
         ode_styles = ["--r", ":m", "--b", "c"];
         
         func = @indirect_model;
@@ -102,7 +102,7 @@ for i=1:length(odemethods)
 end
 
 %% plotting
-plot_position = [50, 50, 800, 400];
+plot_position = [50, 50, 500, 350];
 
 set(0,'defaulttextinterpreter','latex');
 set(0,'defaultAxesTickLabelInterpreter','latex');
