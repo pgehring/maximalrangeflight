@@ -147,5 +147,16 @@ classdef shooting_methods
         
         %% Multiple shooting method
         
+        %% ODE method (g,tspan,eta,obj.options)
+        function [t,y] = euler_expl(f,tspan,y0,N)
+            t = linspace(tspan(1),tspan(2),N+1)';
+            h = t(2)-t(1);
+            y = zeros(N+1,length(y0));
+            y(1,:) = y0(:)';
+
+            for i = 1 : N
+                y(i+1,:) = y(i,:) + (t(i+1)-t(i)) * f(t(i),y(i,:)')';
+            end
+        end
     end
 end
