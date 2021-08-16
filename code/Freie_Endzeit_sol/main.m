@@ -24,15 +24,15 @@ if exist('console.log', 'file')
 end
 
 %% Loading the corresponding configuration file
-configs = ["test_1_2"];
+configs = ["test_2_1"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
     run(configs(i))
     
     % Initialize logging
-%     diary console.log
-%     fprintf('started script %s (%d of %d) at %s\n', configs(i), i, length(configs), datestr(datetime))
+    diary console.log
+    fprintf('started script %s (%d of %d) at %s\n', configs(i), i, length(configs), datestr(datetime))
     
     try
         % Solving the control problem with fmincon
@@ -46,12 +46,11 @@ for i = 1:length(configs)
         solutions{i} = {results_name, prob, prob_sol, options};
     catch ME
         fprintf('Error occured while solving control problem with config %s\nContinuing with next file..\n', configs(i))
-        disp(ME.message)
         continue % with next config
     end
 end
-
 %% Plot the solution and saving the results
+
 plotter = Plotter();
 titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
           "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
@@ -68,8 +67,9 @@ for j=1:length(solutions)
     solution = solutions{j};
     [results_name, prob, prob_sol, options] = solution{:};
     
+    new_sol = [prob_sol(:,1:4),prob_sol(:,6:7)];
     % Plot solution
-    fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
+    fig = plotter.plot_fmincon(prob.t,new_sol,results_name,titles,labels,order,frame_prop,line_style);
 
     % Save the graphics
     fprintf('Saving the graphics ...\n');
@@ -83,5 +83,5 @@ for j=1:length(solutions)
 end
 
 fprintf('All done!\n');
-% diary off
-% movefile("console.log", sprintf("./results/%s_console.log", datestr(datetime, 30)))
+diary off
+movefile("console.log", sprintf("./results/%s_console.log", datestr(datetime, 30)))
