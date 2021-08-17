@@ -1,32 +1,33 @@
-% test_1_2.m
+% test_3_1.m
 
 % Versuchsaufbau:
-%   - Veränderte Endzeit
+%   - Veränderte Starthöhe
 
 %% Speicher Parameter
-results_name = 'test_1_2';
+results_name = 'test_3_1';
 
 %% Testparameter
 N = 100;               % Anzahl an Diskretisierungen
 
 z_0 = [   9000,...     % h_start in [m]
              5,...     % gamma_start in [Grad]  
-        800000,...     % x_start in [m]
-           250,...     % v_start in [m/s]
+        8000,...     % x_start in [m]
+           50,...     % v_start in [m/s]
+           500,...     % Endzeit t_f
        1259999,...     % T_start in [N]
            1.4];       % C_L_start in []
-z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
+% z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten   
 
-X_0 = [   0;           % h_0 in [m]
-       0.27;           % gamma_0 in [Grad]  (Steigflug mit Neigungswinkel von cs 20°)
+X_0 = [4000;           % h_0 in [m]
+       0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
           0;           % x_0 in [m]
         100];          % v_0 in [m/s] (Benötigte Startgeschwindigkeit zum Abheben)
 
 X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
-params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-               350,... %900,... % t_f:   Endzeitpunkt in [s]
+params = [       0,... % s_0:   Anfangszeitpunkt in [s]
+                 1,... % s_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -40,14 +41,16 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
 t = linspace(params(1),params(2),N);
 
 %% Boxbeschränkungen
-lb = [   -inf,...
-         -inf,...
-         -inf,...
-         -inf,...
+lb = [    0.0,...
+        -80.0,...
+          0.0,...
+          0.0,...
+          0.0,...
           0.0,...      % T_min:   Minimale Schubkraft in [N]
           0.0];        % C_L_min: Minimaler Auftriebsbeiwert in []
       
 ub = [    inf,...
+         80.0,...
           inf,...
           inf,...
           inf,...
@@ -57,17 +60,8 @@ ub = [    inf,...
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
 ode_method = @ode_methods.explicit_euler;
-% ode_method = @ode_methods.explicit_rk4;
-% ode_method = @ode_methods.implicit_rk_radau2A;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-% SQP-Verfahren
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-11);
-% options = optimoptions('fmincon','Display','off','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
-
-% Innere Punkte Verfahren
-% options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
-
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-12,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-12,'ConstraintTolerance',1e-8,'UseParallel',true);

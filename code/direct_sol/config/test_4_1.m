@@ -20,7 +20,7 @@ z_0 = [     20,...     % h_start in [m]
 z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
 
 X_0 = [   0;           % h_0 in [m]
-       0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
+       0.27;           % gamma_0 in [Grad]  (Steigflug mit Neigungswinkel von cs 20°)
           0;           % x_0 in [m]
         100];          % v_0 in [m/s] (Benötigte Startgeschwindigkeit zum Abheben)
 
@@ -59,8 +59,6 @@ ub = [   13100,...
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
 ode_method = @ode_methods.explicit_euler;
-% ode_method = @ode_methods.explicit_rk4;
-% ode_method = @ode_methods.implicit_rk_radau2A;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab

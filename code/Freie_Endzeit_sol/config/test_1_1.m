@@ -1,4 +1,4 @@
-% test_1_2.m
+% test_1_1.m
 
 % Versuchsaufbau:
 %   - Veränderte Endzeit
