@@ -16,39 +16,27 @@ J_g^{(5,1)} & 0 & 0 & J_g^{(5,4)} & 0 & J_g^{(5,6)} & 0 & J_g^{(5,8)} \\
 J_g^{(8,1)} & J_g^{(8,2)} & 0 & J_g^{(8,4)} & J_g^{(8,5)} & J_g^{(8,6)} & J_g^{(8,7)} & J_g^{(8,8)}
 \end{pmatrix}\]
 mit:
-\begin{align*}
+\begin{align}
 J_g^{(1,2)} &= v(t) \cos(\gamma(t)) \\
-J_g^{(1,4)} &= \sin(\gamma(t))
-\end{align*}
-\begin{align*}
+J_g^{(1,4)} &= \sin(\gamma(t)) \\
 J_g^{(2,1)} &= - \dfrac{F \alpha \beta e^{-\beta h(t)} v(t) C_L(t)}{2m} \\
 J_g^{(2,2)} &= \dfrac{g \sin(\gamma(t))}{v(t)} \\
-J_g^{(2,4)} &= \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)}
-\end{align*}
-\begin{align*}
+J_g^{(2,4)} &= \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)} \\
 J_g^{(3,2)} &= - v(t) \sin(\gamma(t)) \\
-J_g^{(3,4)} &= \cos(\gamma(t))
-\end{align*}
-\begin{align*}
+J_g^{(3,4)} &= \cos(\gamma(t)) \\
 J_g^{(4,1)} &= \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha \beta e^{-\beta h(t)} v^2(t)}{2m} \\
 J_g^{(4,2)} &= - g \cos(\gamma(t)) \\
-J_g^{(4,4)} &= -\dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t)}{m} 
-\end{align*}
-\begin{align*}
+J_g^{(4,4)} &= -\dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t)}{m}  \\
 J_g^{(5,1)} &= \dfrac{\alpha \beta^2 F e^{-\beta h(t)} C_L(t) v(t) \lambda_2(t)}{2m} - \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta^2 F e^{-\beta h(t)} v^2(t) \lambda_4(t)}{2m} \\
 J_g^{(5,4)} &= - \dfrac{\alpha \beta F e^{-\beta h(t)} C_L(t) \lambda_2(t)}{2m} + \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v(t) \lambda_4(t)}{m} \\
 J_g^{(5,6)} &= - \dfrac{\alpha \beta F e^{-\beta h(t)} C_L(t) v(t)}{2m}\\
-J_g^{(5,8)} &= \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v^2(t)}{2m}
-\end{align*}
-\begin{align*}
+J_g^{(5,8)} &= \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v^2(t)}{2m} \\
 J_g^{(6,2)} &= -\sin(\gamma(t)) v(t) \lambda_1(t) + \dfrac{g \cos(\gamma(t)) \lambda_2(t)}{v(t)} - \cos(\gamma(t)) v(t) \lambda_3(t) + \sin(\gamma(t)) g \lambda_4(t) \\
 J_g^{(6,4)} &= \cos(\gamma(t)) \lambda_1(t) - \dfrac{g \sin(\gamma(t)) \lambda_2(t)}{v^2(t)} - \sin(\gamma(t)) \lambda_3(t) \\
 J_g^{(6,5)} &= \cos(\gamma(t)) v(t) \\
 J_g^{(6,6)} &= \dfrac{g \sin(\gamma(t))}{v(t)} \\
 J_g^{(6,7)} &= - \sin(\gamma(t)) v(t) \\
-J_g^{(6,8)} &= - \cos(\gamma(t)) g
-\end{align*}
-\begin{align*}
+J_g^{(6,8)} &= - \cos(\gamma(t)) g \\
 J_g^{(8,1)} &= -\dfrac{F \alpha \beta e^{-\beta h(t)} C_L(t) \lambda_2(t)}{2m}  + \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha \beta e^{-\beta h(t)} v(t) \lambda_4(t)}{m} \\
 J_g^{(8,2)} &= \cos(\gamma(t)) \lambda_1(t) - \dfrac{g \sin(\gamma(t)) \lambda_2(t)}{v^2(t)} - \sin(\gamma(t)) \lambda_3(t) \\
 J_g^{(8,4)} &= - \dfrac{2 g \cos(\gamma(t)) \lambda_2(t)}{v^3(t)} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} \lambda_4(t)}{m} \\
@@ -56,43 +44,7 @@ J_g^{(8,5)} &= \sin(\gamma(t)) \\
 J_g^{(8,6)} &= \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)} \\
 J_g^{(8,7)} &= \cos(\gamma(t)) \\
 J_g^{(8,8)} &= - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t)}{m} 
-\end{align*}
-
-%\[\begin{split}
-%J_g^{(1,2)} &= v(t) \cos(\gamma(t)) \\\
-%J_g^{(1,4)} &= \sin(\gamma(t)) \\\
-%J_g^{(2,1)} &= - \dfrac{F \alpha \beta e^{-\beta h(t)} v(t) C_L(t)}{2m} \\\
-%J_g^{(2,2)} &= \dfrac{g \sin(\gamma(t))}{v(t)} \\\
-%J_g^{(2,4)} &= \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)} \\\
-%J_g^{(3,2)} &= - v(t) \sin(\gamma(t)) \\\
-%J_g^{(3,4)} &= \cos(\gamma(t)) \\\
-%J_g^{(4,1)} &= \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha \beta e^{-\beta h(t)} v^2(t)}{2m} \\\
-%J_g^{(4,2)} &= - g \cos(\gamma(t)) \\\
-%J_g^{(4,4)} &= -\dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t)}{m} \\\
-%%
-%J_g^{(5,1)} &= \dfrac{\alpha \beta^2 F e^{-\beta h(t)} C_L(t) v(t) \lambda_2(t)}{2m} - \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta^2 F e^{-\beta h(t)} v^2(t) \lambda_4(t)}{2m} \\\
-%J_g^{(5,4)} &= - \dfrac{\alpha \beta F e^{-\beta h(t)} C_L(t) \lambda_2(t)}{2m} + \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v(t) \lambda_4(t)}{m} \\\
-%J_g^{(5,6)} &= - \dfrac{\alpha \beta F e^{-\beta h(t)} C_L(t) v(t)}{2m}\\\
-%J_g^{(5,8)} &= \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v^2(t)}{2m} \\\
-%%
-%J_g^{(6,2)} &= -\sin(\gamma(t)) v(t) \lambda_1(t) + \dfrac{g \cos(\gamma(t)) \lambda_2(t)}{v(t)} - \cos(\gamma(t)) v(t) \lambda_3(t) + \sin(\gamma(t)) g(t) \lambda_4(t) \\\
-%J_g^{(6,4)} &= \cos(\gamma(t)) \lambda_1(t) - \dfrac{g \sin(\gamma(t)) \lambda_2(t)}{v^2(t)} - \sin(\gamma(t)) \lambda_3(t) \\\
-%J_g^{(6,5)} &= \cos(\gamma(t)) v(t) \\\
-%J_g^{(6,6)} &= \dfrac{g \sin(\gamma(t))}{v(t)} \\\
-%J_g^{(6,7)} &= - \sin(\gamma(t)) v(t) \\\
-%J_g^{(6,8)} &= - \cos(\gamma(t)) g(t) \\\
-%%
-%J_g^{(8,1)} &= -\dfrac{F \alpha \beta e^{-\beta h(t)} C_L(t) \lambda_2(t)}{2m}  + \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha \beta e^{-\beta h(t)} v(t) \lambda_4(t)}{m} \\\
-%J_g^{(8,2)} &= \cos(\gamma(t)) \lambda_1(t) - \dfrac{g \sin(\gamma(t)) \lambda_2(t)}{v^2(t)} - \sin(\gamma(t)) \lambda_3(t) \\\
-%J_g^{(8,4)} &= - \dfrac{2 g \cos(\gamma(t)) \lambda_2(t)}{v^3(t)} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} \lambda_4(t)}{m} \\\
-%J_g^{(8,5)} &= \sin(\gamma(t)) \\\
-%J_g^{(8,6)} &= \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)} \\\
-%J_g^{(8,7)} &= \cos(\gamma(t)) \\\
-%J_g^{(8,8)} &= - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t)}{m} 
-%\end{split}\]
-
-
-
+\end{align}
 Für $r_0(Z(t_0),Z(t_f)) = 0$ müssen zunächst die Endbedingungen mit gebildet aus 
 \[\begin{split}
 X_i(t_f) &= c_i \hspace{25mm} (i=1,...,r) \\\
@@ -152,29 +104,29 @@ mit
 
 
 \section{Algorithmus Einfachschiessverfahren}
-Für eine gegebene Startschätzung $\eta$ des Anfangswerts $y(a)$ besitze das Anfangswertproblem
-\[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta\]
-die Lösung $y(t;\eta)$ auf $[a,b]$. Damit $y(t;\eta)$ auch die Randbedingung erfüllt, muss 
-\begin{equation}\label{func:SchiessF}
-F(\eta) := r(y(a;\eta), y(b;\eta)) = r(\eta, y(b;\eta)) = 0_{n_y}
-\end{equation}
-gelten. Gleichung \ref{func:SchiessF} ist also ein \textbf{nichtlineares Gleichungssystem} für die Funktion $F$. Anwendung des Newtonverfahrens führt auf das sogenannte Einfachschießverfahren:
-
-\begin{definition}[Algorithmus Einfachschießverfahren]\label{algo:EinfSchiess}
-Initialisierung: Wähle Startschätzung $\eta^{[0]} \in \R^{n_y}$ und setze $i = 0$:
-\begin{enumerate}
-\item Löse das Anfangswertproblem \[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta^{[i]} \ \ \ \ (a \leq t \leq b)\] zur Berechnung von $F(\eta^{[i]})$ und berechne die Jacobimatrix \[F'(\eta^{[i]}) = r'_{y_a} (\eta^{[i]}, y(b;\eta^{[i]})) + r'_{y_b}(\eta^{[i]}, y(b;\eta^{[i]})) \cdot S(b)\] wobei $S$ Lösung der Sensitivitäts-Differentialgleichung \[S'(t) = g'_y(t, y(t;\eta^{[i]})) \cdot S(t) \ \ \ \ S(a) = I_{n_y \times n_y}\] ist.
+%Für eine gegebene Startschätzung $\eta$ des Anfangswerts $y(a)$ besitze das Anfangswertproblem
+%\[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta\]
+%die Lösung $y(t;\eta)$ auf $[a,b]$. Damit $y(t;\eta)$ auch die Randbedingung erfüllt, muss 
+%\begin{equation}\label{func:SchiessF}
+%F(\eta) := r(y(a;\eta), y(b;\eta)) = r(\eta, y(b;\eta)) = 0_{n_y}
+%\end{equation}
+%gelten. Gleichung \ref{func:SchiessF} ist also ein \textbf{nichtlineares Gleichungssystem} für die Funktion $F$. Anwendung des Newtonverfahrens führt auf das sogenannte Einfachschießverfahren:
 %
-\item Ist $F(\eta^{[i]}) = 0_{n_y}$ (oder ist ein anderes Abbruchkriterium) erfüllt, \textbf{STOP!}
+%\begin{definition}[Algorithmus Einfachschießverfahren]\label{algo:EinfSchiess}
+%Initialisierung: Wähle Startschätzung $\eta^{[0]} \in \R^{n_y}$ und setze $i = 0$:
+%\begin{enumerate}
+%\item Löse das Anfangswertproblem \[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta^{[i]} \ \ \ \ (a \leq t \leq b)\] zur Berechnung von $F(\eta^{[i]})$ und berechne die Jacobimatrix \[F'(\eta^{[i]}) = r'_{y_a} (\eta^{[i]}, y(b;\eta^{[i]})) + r'_{y_b}(\eta^{[i]}, y(b;\eta^{[i]})) \cdot S(b)\] wobei $S$ Lösung der Sensitivitäts-Differentialgleichung \[S'(t) = g'_y(t, y(t;\eta^{[i]})) \cdot S(t) \ \ \ \ S(a) = I_{n_y \times n_y}\] ist.
+%%
+%\item Ist $F(\eta^{[i]}) = 0_{n_y}$ (oder ist ein anderes Abbruchkriterium) erfüllt, \textbf{STOP!}
+%%
+%\item Berechne die Newton-Richtung $d^{[i]}$ als Lösung des linearen Gleichungssystems \[F'(\eta^{[i]})d = -F(\eta^{[i]})\]
+%%
+%\item Setze $\eta^{[i+1]} = \eta^{[i]} + d^{[i]}$ und $i=i+1$ und gehe zu 1.).
+%\end{enumerate}
+%\end{definition}
 %
-\item Berechne die Newton-Richtung $d^{[i]}$ als Lösung des linearen Gleichungssystems \[F'(\eta^{[i]})d = -F(\eta^{[i]})\]
-%
-\item Setze $\eta^{[i+1]} = \eta^{[i]} + d^{[i]}$ und $i=i+1$ und gehe zu 1.).
-\end{enumerate}
-\end{definition}
-
-Die Ableitung $F'(\eta^{[i]})$ in Schritt 2.) des Einfachschießverfahrens \ref{algo:EinfSchiess} kann alternativ
-durch \textbf{finite Differenzen} approximiert werden:
-\[\dfrac{\partial}{\partial \eta_j} F(\eta) \approx \dfrac{F(\eta + h e_j) - F(\eta)}{h} \ \ \ \ (j=1,...,n_y)\]
-mit $e_j = j$-ter Einheitsvektor. Dieser Ansatz erfordert das Lösen von $n_y$ Anfangswertproblemen!
+%Die Ableitung $F'(\eta^{[i]})$ in Schritt 2.) des Einfachschießverfahrens \ref{algo:EinfSchiess} kann alternativ
+%durch \textbf{finite Differenzen} approximiert werden:
+%\[\dfrac{\partial}{\partial \eta_j} F(\eta) \approx \dfrac{F(\eta + h e_j) - F(\eta)}{h} \ \ \ \ (j=1,...,n_y)\]
+%mit $e_j = j$-ter Einheitsvektor. Dieser Ansatz erfordert das Lösen von $n_y$ Anfangswertproblemen!
 
