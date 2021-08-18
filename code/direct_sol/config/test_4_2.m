@@ -1,9 +1,11 @@
 % test_4_1.m
 
 % Versuchsaufbau:
-%   - Veränderte Endzeit
-%   - Verändertes Gewicht des Flugzeuges
+%   - Veränderte Endzeit: t_f = 550 [s]
+%   - Verändertes Gewicht des Flugzeuges: m = 5000000 [kg]
 %   - Zusätzliche Boxbeschränkungen an die Zustandsvariablen
+%   - Explizites Euler-Verfahren für ODE
+%   - SQP-Verfahren
 
 %% Speicher Parameter
 results_name = 'test_4_2';
@@ -64,4 +66,5 @@ ode_method = @ode_methods.explicit_euler;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);

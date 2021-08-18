@@ -1,8 +1,10 @@
 % test_3_1.m
 
 % Versuchsaufbau:
-%   - Veränderte Endzeit
-%   - Verändertes Gewicht des Flugzeuges
+%   - Veränderte Endzeit: t_f = 550 [s]
+%   - Verändertes Gewicht des Flugzeuges: m = 5000000 [kg]
+%   - Explizites Euler-Verfahren für ODE
+%   - SQP-Verfahren
 
 %% Speicher Parameter
 results_name = 'test_3_1';
@@ -16,7 +18,7 @@ z_0 = [     20,...     % h_start in [m]
             90,...     % v_start in [m/s]
        1259999,...     % T_start in [N]
           1.47];       % C_L_start in []
-z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
+% z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
 
 X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [Grad]  (Steigflug mit Neigungswinkel von cs 20°)
@@ -58,9 +60,8 @@ ub = [    inf,...
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
 ode_method = @ode_methods.explicit_euler;
-% ode_method = @ode_methods.explicit_rk4;
-% ode_method = @ode_methods.implicit_rk_radau2A;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
 options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);

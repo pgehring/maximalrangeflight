@@ -1,8 +1,10 @@
 % test_2_2.m
 
 % Versuchsaufbau:
-%   - Veränderte Endzeit
-%   - Verändertes Starthöhe
+%   - Veränderte Endzeit: t_f = 300 [s]
+%   - Verändertes Starthöhe: h_0 = 4000 [m]
+%   - Explizites Euler-Verfahren für ODE
+%   - SQP-Verfahren
 
 %% Speicher Parameter
 results_name = 'test_2_2';
@@ -61,4 +63,5 @@ ode_method = @ode_methods.explicit_euler;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
