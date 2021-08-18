@@ -18,13 +18,13 @@ addpath('../utils');
 addpath('./config');
 addpath('./results');
 
-diary off
-if exist('console.log', 'file')
-    delete('console.log')
-end
+% diary off
+% if exist('console.log', 'file')
+%     delete('console.log')
+% end
 
 %% Loading the corresponding configuration file
-configs = ["test_2_1"];
+configs = ["test_1_3"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
@@ -39,10 +39,19 @@ for i = 1:length(configs)
         tic;
         [prob_sol,fval,exitflag,output] = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
         duration_time = toc;
+        %
         fprintf('Duration time for solving the Problem: %4.2f [min]\n',duration_time/60);
         fprintf('Required iterations: %4.2f \n',output.iterations);
         fprintf('Required function evaluations: %4.2f \n',output.funcCount);
-
+        if isfile(strcat('./results/',results_name,'_fmincon.txt'))
+            fmincon_sol = readmatrix(strcat('./results/',results_name,'_fmincon.txt'));
+            fmincon_sol(end+1,:) = [fval,exitflag,duration_time,output.iterations,output.funcCount,output.firstorderopt];
+            writematrix(fmincon_sol,strcat('./results/',results_name,'_fmincon.txt'));
+        else
+            fmincon_sol = [fval,exitflag,duration_time,output.iterations,output.funcCount,output.firstorderopt];
+            writematrix(fmincon_sol,strcat('./results/',results_name,'_fmincon.txt'));
+        end
+        %
         solutions{i} = {results_name, prob, prob_sol, options};
     catch ME
         fprintf('Error occured while solving control problem with config %s\nContinuing with next file..\n', configs(i))

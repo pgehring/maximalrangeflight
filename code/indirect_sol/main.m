@@ -31,13 +31,13 @@ for i = 1:length(configs)
     run(configs(i))
     
     % Initialize logging
-    diary console.log
-    fprintf('started script %s (%d of %d) at %s\n', configs(i), i, length(configs), datestr(datetime))
+%     diary console.log
+%     fprintf('started script %s (%d of %d) at %s\n', configs(i), i, length(configs), datestr(datetime))
     
     try
         % Solving the control problem with fmincon
         tic;
-        [t_sol,prob_sol,eta,i_sol] = shooting_method( prob.tspan,...
+        [t_sol,prob_sol,eta,i_sol,Norm_F] = shooting_method( prob.tspan,...
                                                         prob.z_0,...
                                                          @prob.G,...
                                                        @prob.G_Z,...
@@ -74,10 +74,29 @@ for j=1:length(solutions)
     
     solution = solutions{j};
     [results_name, prob, prob_sol, options] = solution{:};
+    writematrix(prob_sol(1,:),strcat('./results/',results_name,'_vec.txt'));
     
-    prob_sol = prob.sol_func(prob_sol);
+    % Plot lambdas
+    figure(3)
+    subplot(2,2,1);
+    plot(t_sol,prob_sol(:,5),'-b');
+    ylabel("$\lambda_1$");
+    xlabel('$t$ in $[s]$');
+    subplot(2,2,2);
+    plot(t_sol,prob_sol(:,6),'-b');
+    ylabel("$\lambda_2$");
+    xlabel('$t$ in $[s]$');
+    subplot(2,2,3);
+    plot(t_sol,prob_sol(:,7),'-b');
+    ylabel("$\lambda_3$");
+    xlabel('$t$ in $[s]$');
+    subplot(2,2,4);
+    plot(t_sol,prob_sol(:,8),'-b')
+    ylabel("$\lambda_4$");
+    xlabel('$t$ in $[s]$');
     
     % Plot solution
+    prob_sol = prob.sol_func(prob_sol);
     fig = plotter.plot_fmincon(t_sol,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
 
     % Save the graphics
@@ -91,6 +110,13 @@ for j=1:length(solutions)
     writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
 end
 
+figure(2)
+x = linspace(1,i_sol,length(Norm_F));
+y = Norm_F;
+plot(x,y);
+xlabel('Iterationen')
+ylabel('$\Vert F \Vert$')
+
 fprintf('All done!\n');
-diary off
-movefile("console.log", sprintf("./results/%s_console.log", datestr(datetime, 30)))
+% diary off
+% movefile("console.log", sprintf("./results/%s_console.log", datestr(datetime, 30)))

@@ -71,6 +71,48 @@ Unterschiedliche Steuerungen
 Maximale differenz der Funktionswerte
 
 
+expliziter Euler Algorithmus
+
+%\floatname{algorithm}{Klasse}
+%\begin{algorithm}[H]
+%\caption{MaximalRangeFlight}\label{algo:SISPF}
+%\textbf{[$\lbrace s^i_t, w^i_t \rbrace^{N_s}_{i=1}$] = PFSIR [$\lbrace s^i_{t-1}, w^i_{t-1} \rbrace^{N_s}_{i=1}$]}
+%\begin{algorithmic}
+%\FOR {$i = 1,...,N_s$}
+%\STATE $s^i_t \sim q(x_t \mid s^i_{i-1})$
+%\STATE $w^i_t = p(z_t \mid s^i_t)$
+%\ENDFOR
+%\STATE $t = \sum_{i=1}^{N_s} w^i_t$
+%\FOR {$i = 1,...,N_s$}
+%\STATE $w^i_t = t^{-1} w^i_{t-1}$ (Normalisieren)
+%\ENDFOR
+%\STATE [$\lbrace s^{\ast j}_t, w^{j}_t, i^{j} \rbrace^{N_s}_{j=1}$] = RESAMPLE [$\lbrace s^i_t, w^{j}_t \rbrace^{N_s}_{j=1}$]
+%\end{algorithmic}
+
+%\floatname{algorithm}{Algorithmus}
+%\begin{algorithm}[H]
+%\caption{Vollständige Euler-Diskretisierung}\label{algo:SISPF}
+%\textbf{[$\lbrace s^i_t, w^i_t \rbrace^{N_s}_{i=1}$] = PFSIR [$\lbrace s^i_{t-1}, w^i_{t-1} \rbrace^{N_s}_{i=1}$]}
+%\begin{algorithmic}
+%\FOR {$i = 1,...,N_s$}
+%\STATE $s^i_t \sim q(x_t \mid s^i_{i-1})$
+%\STATE $w^i_t = p(z_t \mid s^i_t)$
+%\ENDFOR
+%\STATE $t = \sum_{i=1}^{N_s} w^i_t$
+%\FOR {$i = 1,...,N_s$}
+%\STATE $w^i_t = t^{-1} w^i_{t-1}$ (Normalisieren)
+%\ENDFOR
+%\STATE [$\lbrace s^{\ast j}_t, w^{j}_t, i^{j} \rbrace^{N_s}_{j=1}$] = RESAMPLE [$\lbrace s^i_t, w^{j}_t \rbrace^{N_s}_{j=1}$]
+%\end{algorithmic}
+
+
+
+
+\section{Beschränkte nichtlineare Optimierungsverfahren}
+SQP Verfahren \\
+Innere Punkte Verfahren \\
+Strategie der aktiven Menge
+
 
 
 \section{Klassenstruktur des Problems}

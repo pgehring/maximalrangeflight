@@ -1,11 +1,12 @@
-% test_0_1.m
+% test_1_3.m
 
 % Versuchsaufbau:
+%   - Veränderte Endzeit: t_f = 300 [s]
 %   - Explizites Euler-Verfahren für ODE
-%   - SQP-Verfahren
+%   - Innere-Punkte-Verfahren Verfahren
 
 %% Speicher Parameter
-results_name = 'test_0_1';
+results_name = 'test_1_3';
 
 %% Testparameter
 N = 100;               % Anzahl an Diskretisierungen
@@ -27,7 +28,7 @@ X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-              1800,... % t_f:   Endzeitpunkt in [s]
+               300,... %900,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -61,5 +62,5 @@ ode_method = @ode_methods.explicit_euler;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
+options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);

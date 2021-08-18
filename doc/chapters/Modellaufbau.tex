@@ -46,7 +46,9 @@ Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels Geschwindi
     \dot{x}(t) &= v(t) \cos(\gamma(t))\\\
     \dot{h}(t) &= v(t) \sin(\gamma(t))
 \end{split} \]
-Es ergibt sich somit das Optimalsteuerungsproblem:
+Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}).
+
+\begin{problem}[Optimalsteuerungsproblem - Maximal-Range-Flight]\label{prob:MaxRF}
 \begin{align*}
     \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) & & \\\
     \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} & & \\\
@@ -61,6 +63,8 @@ Es ergibt sich somit das Optimalsteuerungsproblem:
     T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\\
     C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
 \end{align*}
+\end{problem}
+
 Für das Modell werden folgende Parameter aus Tabelle \ref{tab:ProblemPara} verwendet.
 \begin{table}[H]
     \begin{center}

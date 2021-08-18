@@ -46,11 +46,13 @@ classdef shooting_methods
         end
         
         %% Single shooting method
-        function [t_out,y_out,eta,i] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+        function [t_out,y_out,eta,i,Norm_F] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
             eta = eta_0(:);
             n_y = length(eta_0);
             n_r = length(r(eta,eta));
             S_b = [];
+            %
+            Norm_F = [];
             %
             i = 0;
             switch obj.flag
@@ -63,6 +65,8 @@ classdef shooting_methods
                         y_t_eta = sol_y.y';
                         % Berechnung von F(eta)
                         F = r(eta,y_t_eta(end,:));
+                        %
+                        Norm_F(i+1) = norm(F);
                         if (norm(F) < obj.StopTol)
                             break; % Abbruchbedingung
                         end
@@ -81,7 +85,7 @@ classdef shooting_methods
                                 y_out = y_t_eta;
                                 return
                             end
-                            [~,y_step] = ode45(g,tspan,eta+d,obj.options);
+                            [~,y_step] = obj.ode_method(g,tspan,eta+d,obj.options);
                             F_step = r(eta+d,y_step(end,:));
                             if norm(F_step) <= norm(F) + obj.sigma*norm(F_jac*d)
                                 break
@@ -101,6 +105,8 @@ classdef shooting_methods
                         y_t_eta = sol_y.y';  
                         % Berechnung von F(eta)
                         F = r(eta,y_t_eta(end,:));
+                        %
+                        Norm_F(i+1) = norm(F);
                         if (norm(F) < obj.StopTol)
                             break; % Abbruchbedingung
                         end

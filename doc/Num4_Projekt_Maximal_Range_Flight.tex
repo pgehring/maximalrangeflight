@@ -178,6 +178,19 @@ bibliography=totoc,    % LV in IV
 }
 {\medskip}
 
+% Umgebung "Problem":
+\usepackage{mdframed}
+\newenvironment{problem}[1][]
+{\begin{mdframed}
+\medskip\noindent \refstepcounter{umgnr}%
+\textbf{Problem~\theumgnr\ifthenelse{\equal{#1}{}}{}{~(#1)}}
+\begin{itshape}}
+{
+\end{itshape}
+\end{mdframed}
+\medskip
+}
+
 % Umgebung "Beweis":
 \newenvironment{beweis}[1][]
 {% \begin{beweis}

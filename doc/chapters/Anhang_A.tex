@@ -1,9 +1,9 @@
-\chapter{Programmcode direkte Lösungsverfahren und Versuchsprotokolle}
+\chapter{Programmcode direkte Lösungsverfahren und Versuchsprotokolle}\label{Anhang:DirektV}
 
 \section{Aufbau Programmcode}
 Für das Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren wurde folgende Programmcodestruktur aufgebaut:
 \begin{itemize}
-\item \texttt{config}: In diesem Ordner sind die Versuchsskripte abgespeichert. Beispielhaft ist in Programmcode \ref{code:direct_test_4_1} das Versuchsskript von Versuch Null Ergebnis eins (Kapitel \ref{kap:Versuch4Ergebnis1}) dargestellt.
+\item \texttt{config}: In diesem Ordner sind die Versuchsskripte abgespeichert. Beispielhaft ist in Programmcode \ref{code:direct_test_4_1} das Versuchsskript von Versuch Null Ergebnis eins (Kapitel \ref{kap:Versuch41}) dargestellt.
 %
 \item \texttt{results}: In diesem Ordner werden nach erfolgreicher Berechnung des entsprechenden Versuchs die Lösungsdaten und Lösungsgraphik, als zum Beispiel \texttt{test\_0\_1.txt} und \texttt{test\_0\_1.png}, abgespeichert.
 \item \texttt{main.m}: Mit diesem Matlab Skript wird das entsprechende Versuchsskript geladen und mit dem direkten Lösungsverfahren berechnet.
@@ -232,7 +232,7 @@ end
 \section{Versuch 0}\label{kap:Versuch0}
 Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
 
-\subsection{Ergebnis 1}\label{kap:Versuch0Ergebnis1}
+\subsection{Ergebnis 1}\label{kap:Versuch01}
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
@@ -248,7 +248,7 @@ Es folgt das Ergebnis
 \end{figure}
 
 \newpage
-\subsection{Ergebnis 2}\label{kap:Versuch0Ergebnis2}
+\subsection{Ergebnis 2}\label{kap:Versuch02}
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 400$ 
@@ -280,7 +280,7 @@ Es folgt das Ergebnis
 \section{Versuch 1}\label{kap:Versuch1}
 Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält. %$z_0 = (20,9,6000,90,1259999,1.47)$
 
-\subsection{Ergebnis 1}
+\subsection{Ergebnis 1}\label{kap:Versuch11}
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
@@ -297,7 +297,7 @@ Es folgt das Ergebnis
 \end{figure}
 
 \newpage
-\subsection{Ergebnis 2}
+\subsection{Ergebnis 2}\label{kap:Versuch12}
 Verwendet wird:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
@@ -345,15 +345,15 @@ Es folgt das Ergebnis
 
 
 \newpage
-\section{Versuch 2}
+\section{Versuch 2}\label{kap:Versuch2}
 Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich die Starthöhe des Flugzeuges angepasst.
 
-\subsection{Ergebnis 1}
+\subsection{Ergebnis 1}\label{kap:Versuch21}
 Verwendet werden:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
 \item Reduzierte Endzeit: $t_f = 250 \ [s]$
-\item Angepasste Starthöhe: $h_0 = 100 \ [m]$
+\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
 \item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
@@ -366,12 +366,12 @@ Es folgt das Ergebnis
 \end{figure}
 
 \newpage
-\subsection{Ergebnis 2}
+\subsection{Ergebnis 2}\label{kap:Versuch22}
 Verwendet werden:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
 \item Reduzierte Endzeit: $t_f = 300 \ [s]$
-\item Angepasste Starthöhe: $h_0 = 100 \ [m]$
+\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
 \item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
 \end{itemize}
@@ -399,10 +399,10 @@ Es folgt das Ergebnis
 
 
 \newpage
-\section{Versuch 3}
+\section{Versuch 3}\label{kap:Versuch3}
 Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560.000 \ [kg]$ \cite{A380Tech}. Gewählt wird eine Masse von $500.000 \ [kg]$.
 
-\subsection{Ergebnis 1}
+\subsection{Ergebnis 1}\label{kap:Versuch31}
 Verwendet werden:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
@@ -420,7 +420,7 @@ Es folgt das Ergebnis
 \end{figure}
 
 \newpage
-\subsection{Ergebnis 2}
+\subsection{Ergebnis 2}\label{kap:Versuch32}
 Verwendet werden:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
@@ -443,7 +443,7 @@ Es folgt das Ergebnis
 
 
 \newpage
-\section{Versuch 4}
+\section{Versuch 4}\label{kap:Versuch4}
 Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst, sowie Box-Beschränkungen für die Zustände gesetzt. Diese zusätzlichen Box-Beschränkungen spiegeln die technischen Eigenschaften des Flugzeuges A380-800 der Firma Airbus wieder \cite{A380Tech}:
 \begin{itemize}
 \item \textbf{Höchstgeschwindigkeit:} Die maximale Geschwindigkeit beträgt $960 \ [km/h]$ ($266 \ [m/s]$).
@@ -473,7 +473,7 @@ C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
 \end{align*}
 
 \newpage
-\subsection{Ergebnis 1}\label{kap:Versuch4Ergebnis1}
+\subsection{Ergebnis 1}\label{kap:Versuch41}
 Verwendet werden:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 
@@ -491,7 +491,7 @@ Es folgt das Ergebnis
 \end{figure}
 
 \newpage
-\subsection{Ergebnis 2}
+\subsection{Ergebnis 2}\label{kap:Versuch42}
 Verwendet werden:
 \begin{itemize}
 \item Anzahl an Diskretisierungen: $N = 100$ 

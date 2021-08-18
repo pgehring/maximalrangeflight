@@ -1,9 +1,11 @@
 % test_4_3.m
 
 % Versuchsaufbau:
-%   - Veränderte Endzeit
-%   - Verändertes Gewicht des Flugzeuges
+%   - Veränderte Endzeit: t_f = 550 [s]
+%   - Verändertes Gewicht des Flugzeuges: m = 5000000 [kg]
 %   - Zusätzliche Boxbeschränkungen an die Zustandsvariablen
+%   - Explizites Euler-Verfahren für ODE
+%   - Innere-Punkte-Verfahren Verfahren
 
 %% Speicher Parameter
 results_name = 'test_4_3';
@@ -28,7 +30,7 @@ X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-              1800,... % t_f:   Endzeitpunkt in [s]
+               550,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -61,4 +63,5 @@ ode_methods = ode_methods();
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,@ode_methods.explicit_euler);
 
 %% Optionen für fmincon von Matlab
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05);
+options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
