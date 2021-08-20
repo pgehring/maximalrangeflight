@@ -242,7 +242,7 @@ Verwendet wird:
 Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_0_1}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
 \caption{Versuch 1 - Ergebnis 1}\label{img:test_0_1}
 \end{center}
 \end{figure}
@@ -251,18 +251,19 @@ Es folgt das Ergebnis
 \subsection{Ergebnis 2}\label{kap:Versuch02}
 Verwendet wird:
 \begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 400$ 
+\item Anzahl an Diskretisierungen: $N = 100$ 
 \item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
 \item Explizites Euler Verfahren zum Lösen der DGL
+%
+\item Innere-Punkte-Verfahren
 \end{itemize}
 Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_0_2}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2}
 \caption{Versuch 1 - Ergebnis 2}\label{img:test_0_2}
 \end{center}
 \end{figure}
-
 
 
 
@@ -309,26 +310,28 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2}
-\caption{Versuch 1 - Ergebnis 1}\label{img:test_1_2}
+\caption{Versuch 1 - Ergebnis 2}\label{img:test_1_2}
 \end{center}
 \end{figure}
 
-%\newpage
-%\subsection{Ergebnis 3}
-%Verwendet wird:
-%\begin{itemize}
-%\item Anzahl an Diskretisierungen: $N = 100$ 
-%\item Reduzierte Endzeit: $t_f = 1100$
-%\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
-%\item Explizites Euler Verfahren zum Lösen der DGL
-%\end{itemize}
-%Es folgt das Ergebnis
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{images/04_Direkte_Verfahren/test_1_3}
-%\caption{Versuch 1 - Ergebnis 1}\label{img:test_1_3}
-%\end{center}
-%\end{figure}
+\newpage
+\subsection{Ergebnis 2}\label{kap:Versuch13}
+Verwendet wird:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 300 \ [s]$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+%
+\item Innere-Punkte-Verfahren
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_3}
+\caption{Versuch 1 - Ergebnis 3}\label{img:test_1_3}
+\end{center}
+\end{figure}
 
 
 
@@ -379,11 +382,29 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2}
-\caption{Versuch 2 - Ergebnis 1}\label{img:test_2_2}
+\caption{Versuch 2 - Ergebnis 3}\label{img:test_2_2}
 \end{center}
 \end{figure}
 
-
+\newpage
+\subsection{Ergebnis 3}\label{kap:Versuch23}
+Verwendet werden:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 250 \ [s]$
+\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
+\item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL.
+%
+\item Innere-Punkte-Verfahren
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_3}
+\caption{Versuch 2 - Ergebnis 3}\label{img:test_23}
+\end{center}
+\end{figure}
 
 
 
@@ -436,6 +457,32 @@ Es folgt das Ergebnis
 \caption{Versuch 3 - Ergebnis 2}\label{img:test_3_2}
 \end{center}
 \end{figure}
+
+\newpage
+\subsection{Ergebnis 3}\label{kap:Versuch33}
+Verwendet werden:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 550 \ [s]$
+\item Neues Startgewicht: $m = 500000 \ [kg]$
+\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+%
+\item Innere-Punkte-Verfahren
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_3}
+\caption{Versuch 3 - Ergebnis 3}\label{img:test_3_3}
+\end{center}
+\end{figure}
+
+
+
+
+
+
 
 
 
@@ -508,23 +555,25 @@ Es folgt das Ergebnis
 \end{center}
 \end{figure}
 
-%\newpage
-%\subsection{Ergebnis 3}
-%Verwendet werden:
-%\begin{itemize}
-%\item Anzahl an Diskretisierungen: $N = 100$ 
-%\item Reduzierte Endzeit: $t_f = 1800$
-%\item Neues Startgewicht: $m = 500000$
-%\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-%\item Explizites Euler Verfahren zum Lösen der DGL
-%\end{itemize}
-%Es folgt das Ergebnis
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_3}
-%\caption{Versuch 4 - Ergebnis 3}\label{img:test_4_3}
-%\end{center}
-%\end{figure}
+\newpage
+\subsection{Ergebnis 3}\label{kap:Versuch43}
+Verwendet werden:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 550 \ [s]$
+\item Neues Startgewicht: $m = 500000 \ [kg]$
+\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+%
+\item Innere-Punkte-Verfahren
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_3}
+\caption{Versuch 4 - Ergebnis 3}\label{img:test_4_3}
+\end{center}
+\end{figure}
 
 
 
