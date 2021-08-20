@@ -38,21 +38,21 @@ ausgewählt werden.
 
 \begin{figure}[!htbp]
     \centering 
-    \subfloat[\label{fig:methods_i_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_h}}
+    \subfloat[\label{fig:methods_i_h}]{\includegraphics{../code/methods/results/methods_plot_i_h.pdf}}
     \qquad
-    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_gamma}} \\
+    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics{../code/methods/results/methods_plot_i_gamma.pdf}} \\
 
-    \subfloat[\label{fig:methods_i_x}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_x}}
+    \subfloat[\label{fig:methods_i_x}]{\includegraphics{../code/methods/results/methods_plot_i_x.pdf}}
     \qquad
-    \subfloat[\label{fig:methods_i_v}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_v}} \\
+    \subfloat[\label{fig:methods_i_v}]{\includegraphics{../code/methods/results/methods_plot_i_v.pdf}} \\
 
-    \subfloat[\label{fig:methods_i_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l1}}
+    \subfloat[\label{fig:methods_i_h}]{\includegraphics{../code/methods/results/methods_plot_i_l1.pdf}}
     \qquad
-    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l2}} \\
+    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics{../code/methods/results/methods_plot_i_l2.pdf}} \\
 
-    \subfloat[\label{fig:methods_i_h}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l3}}
+    \subfloat[\label{fig:methods_i_h}]{\includegraphics{../code/methods/results/methods_plot_i_l3.pdf}}
     \qquad
-    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics[width=0.45\textwidth]{../code/methods/results/methods_plot_i_l4}} \\
+    \subfloat[\label{fig:methods_i_gamma}]{\includegraphics{../code/methods/results/methods_plot_i_l4.pdf}} \\
 
     \caption{Lösung des Differentialgleichungsmodells. Die acht Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\) und \(C_L\) gelöst.} %
     % \subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \subref{fig:methods_gamma} zeigt den %
@@ -109,10 +109,30 @@ expliziter Euler Algorithmus
 
 
 \section{Beschränkte nichtlineare Optimierungsverfahren}
-SQP Verfahren \\
-Innere Punkte Verfahren \\
-Strategie der aktiven Menge
+Bei den direkten Verfahren wird ein Trajektorienoptimierungsproblem durch Umwandlung in ein nichtlineares Programm (NLP) gelöst. Im vorliegenden Projekt wird dabei ein gradientenbasiertes lokales Verfahren verwendet, welches durch die Optimization Toolbox von Matlab bereitgestellt wird. Wie der Name schon sagt, verwenden gradientenbasierte Methoden Ableitungen erster und zweiter Ordnung um lokale Minima zu finden. Zwei wichtige gradientenbasierte Methoden zur Lösung von beschränkten nichtlinearen Optimierungsproblemen sind die sequentielle quadratische Programmierung (SQP) und das Innere-Punkte-Verfahren (IP). Beide reduzieren dieses recht komplizierte Problem in einfachere Teilprobleme und lösen diese nacheinander, bis ein lokales Optimum gefunden ist.
 
+SQP-Verfahren lösen eine Folge von quadratischen Programmen (QP), um die Abstiegsrichtung zu finden, daher der Name sequentielle quadratische Programmierung. Das Minimum ist erreicht, wenn die Karush-Kuhn-Tucker (KKT)-Bedingungen erfüllt sind.
+
+Die KKT-Bedingungen sind notwendige Bedingungen erster Ordnung dafür, dass ein Punkt ein Optimum ist, und beschreiben die Beziehung zwischen dem Gradienten der Zielfunktion und dem Gradienten der aktiven Nebenbedingungen. Wenn das Optimum im Inneren der zulässigen Menge liegt, ist die notwendige Bedingung erster Ordnung einfach dieselbe wie im Fall ohne Nebenbedingungen, nämlich, dass der Gradient der Zielfunktion gleich Null ist.
+
+Die Matlab-Funktion fmincon verwendet zwei Varianten der SQP-Methode namens active-set und sqp. Diese beiden Algorithmen sind sich sehr ähnlich und verwenden eine Quasi-Newton-Methode, um sich einer Lösung zu nähern, die die KKT-Bedingungen erfüllt. Es handelt sich um ein Quasi-Newton-Verfahren, da die Hesse-Matrix nicht exakt berechnet, sondern durch Approximation, in diesem Fall einer BFGS-Update, angenähert wird. Diese Approximation wird vorgenommen, da die Hesse-Matrix oft nicht vorliegt. Sowohl active-set als auch sqp stellen sicher, dass die Hesse-Matrix positiv definit ist, indem sie die BFGS-Methode mit einer positiv definitiven Matrix initialisieren. Diese Eigenschaft der Hesse-Matrix wird dadurch aufrechterhalten, dass der Algorithmus während des BFGS-Updates verschiedene Matrixoperationen verwendet. Weitere Informationen finden Sie im MathWorks Optimization Toolbox User's Guide (2021). Die Bedingung, dass die Hesse-Matrix positiv definit ist, ist zusammen mit den Optimalitätsbedingungen erster Ordnung, die durch die KKT-Bedingungen beschrieben werden, eine notwendige und hinreichende Bedingung für ein Minimum. 
+
+Bei jeder Iteration wird der Gradient mit Hilfe von finiten Differenzen berechnet und die Hesse-Matrix wird aktualisiert. Diese Informationen werden dann verwendet, um ein quadratisches Programm (QP) aufzustellen, das minimiert wird, um die Abstiegsrichtung zu finden.
+
+Zusammenfassend lässt sich sagen, dass das SQP-Verfahren folgende drei Schritte umfasst:
+\begin{enumerate}
+\item Berechnung des Gradienten und Aktualisierung der Hesse-Matrix
+%
+\item QP aufstellen und lösen, um die Abstiegsrichtung zu bestimmen
+%
+\item Durchführen einer Liniensuche um eine geeignete Schrittlänge zu finden
+\end{enumerate}
+
+Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine Folge von angenäherten Minimierungsproblemen. Der Ansatz besteht in der Umordnung des ursprünglichen Problems unter Verwendung einer Barrierefunktion, in der Regel einer logarithmischen oder inversen Funktion, und dann diese neue Merit-Funktion nach nach absteigendem $\mu$ zu lösen. \texttt{fmincon} verwendet eine logarithmische Barrierefunktion.
+
+Das Innere-Punkte-Verfahren erzeugt im Gegensatz zu SQP eine eine Folge von streng zulässigen Iterierten, die zu einer Lösung aus dem Inneren der zulässigen Menge konvergieren.
+
+Der Matlab Optimization User's Guide enthält einige Empfehlungen, wann welcher Algorithmus verwendet werden sollte. Die erste Empfehlung lautet, das Innere-Punkte-Verfahren für sowohl große, dünn besetzte Probleme als auch kleine und dichte Probleme zu verwenden. Außerdem werden bei allen Iterationen Schranken gesetzt und \texttt{NaN}- und \texttt{Inf}-Ergebnisse verarbeitet. Für kleinere Probleme ist SQP schneller.
 
 
 \section{Klassenstruktur des Problems}

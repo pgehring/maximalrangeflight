@@ -98,13 +98,10 @@ classdef MaximalRangeFlight
         %% Nonlinear constraint functions
         function [c,ceq] = nonlcon(obj,z)
             % Equality constraints
-            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; % (n_c+n_s)*(N+1)=(0+1)*((100-1)+1)=100
+            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max;
             % Inequality constraints
             x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-            ceq = zeros(1,obj.n_x*(obj.N-1)+obj.n_psi); % (n_x*N)+n_psi=(4*(100-1))+8=404
-%             for i = 0:obj.N-2
-%                 ceq((obj.n_x*i+1):(obj.n_x*i+obj.n_x)) = z(i+1,1:obj.n_x) + x(i+1,:) - z(i+2,1:obj.n_x);
-%             end
+            ceq = zeros(1,obj.n_x*(obj.N-1)+obj.n_psi);
             ceq(1:obj.n_x*(obj.N-1)) = (z(1:end-1,1:obj.n_x) + x - z(2:end,1:obj.n_x))';
             ceq((obj.n_x*(obj.N-1)+1):(obj.n_x*(obj.N-1)+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
                                                                           z(1,2)-obj.X_0(2),...

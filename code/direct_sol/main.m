@@ -24,7 +24,7 @@ addpath('./results');
 % end
 
 %% Loading the corresponding configuration file
-configs = ["test_1_3"];
+configs = ["test_1_3","test_2_3","test_3_3","test_4_3"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
