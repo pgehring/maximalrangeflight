@@ -17,6 +17,7 @@ clc;
 addpath('../utils');
 addpath('./config');
 addpath('./results');
+addpath('../direct_sol/results/');
 
 diary off
 if exist('console.log', 'file')
@@ -24,7 +25,7 @@ if exist('console.log', 'file')
 end
 
 %% Loading the corresponding configuration file
-configs = ["test_1_1"];
+configs = ["test_1_2"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
@@ -37,7 +38,7 @@ for i = 1:length(configs)
     try
         % Solving the control problem with fmincon
         tic;
-        [t_sol,prob_sol,eta,i_sol,Norm_F] = shooting_method( prob.tspan,...
+        [t_sol,prob_sol,~,eta,i_sol,Norm_F] = shooting_method( prob.tspan,...
                                                         prob.z_0,...
                                                          @prob.G,...
                                                        @prob.G_Z,...

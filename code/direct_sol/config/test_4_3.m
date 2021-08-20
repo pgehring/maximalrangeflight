@@ -19,7 +19,7 @@ z_0 = [     20,...     % h_start in [m]
             90,...     % v_start in [m/s]
        1259999,...     % T_start in [N]
           1.47];       % C_L_start in []
-% z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
+z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
 
 X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)

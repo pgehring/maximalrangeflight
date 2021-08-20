@@ -46,7 +46,7 @@ classdef shooting_methods
         end
         
         %% Single shooting method
-        function [t_out,y_out,eta,i,Norm_F] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+        function [t_out,y_out,S_b,eta,i,Norm_F] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
             eta = eta_0(:);
             n_y = length(eta_0);
             n_r = length(r(eta,eta));
@@ -143,25 +143,80 @@ classdef shooting_methods
                     fprintf(2,'ERROR: Falsches Verfahren für die Berechnung der Jacobimatrix!\n');
                     return;
             end
-            if i == obj.maxit
-                disp('Warning: Max iterations reached!');
-            end
+%             if i == obj.maxit
+%                 disp('Warning: Max iterations reached!');
+%             end
             % Rückgabewerte
             t_out = sol_y.x';
             y_out = y_t_eta;
         end
         
         %% Multiple shooting method
-        
-        %% ODE method (g,tspan,eta,obj.options)
-        function [t,y] = euler_expl(f,tspan,y0,N)
+        function [t_out,y_out,N,eta,i,Norm_F] = Mehrfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+            N = size(eta_0,2);
+            % Zeitinterval
             t = linspace(tspan(1),tspan(2),N+1)';
-            h = t(2)-t(1);
-            y = zeros(N+1,length(y0));
-            y(1,:) = y0(:)';
+            % Problemgröße
+            n_y = size(eta_0,1);
+            % Parameter und Einstellungen
+            eta = eta_0;
+            %
+            Norm_F = [];
+            %
+            obj.flag = 'SensDGL';
+            
+            % Funkntion zum auswerten der Funktionen F und F_jac
+            function [F,F_jac] = F_Fjac_func(eta)
+                % Zurücksetzen der alten Werte
+                t_out = [];
+                y_out = [];
+                F = [];
+                F_jac = [];
+                % AWP lösen und aufstellen von F(eta) und der Jacobimatrix
+                for j = 1:N
+                    % Lösung für gegebenes eta berechnen. Nicht die beste Lösung 
+                    % für ein anderes eta lösen, deshalb maxit=1!!!
+                    [t_AWP,y_AWP,S_b_AWP,~,~,~] = obj.Einfachschiessverfahren([t(j),t(j+1)],eta(:,j),g,g_y,r,r_y_a,r_y_b);
+                    % Bilden von F(eta) und der Jacobimatrix
+                    if j ~= N
+                        F_jac(((j*n_y)-(n_y-1)):(j*n_y),((j*n_y)-(n_y-1)):(j*n_y)) = S_b_AWP;
+                        F(((j*n_y)-(n_y-1)):(j*n_y),1)= y_AWP(end,:)' - eta(:,j+1);
+                        F_jac(((j*n_y)-(n_y-1)):(j*n_y),(((j+1)*n_y)-(n_y-1)):((j+1)*n_y)) = - eye(n_y);
+                    else
+                        r_vec = r(eta(:,1),y_AWP(end,:));
+                        F((end+1):(end+length(r_vec)),:) = r_vec;
+                        F_jac(((j*n_y)-(n_y-1)):((j-1)*n_y)+length(r_vec),((j*n_y)-(n_y-1)):(j*n_y)) = r_y_b(eta(:,1),y_AWP(end,:)) * S_b_AWP;
+                        F_jac((end-length(r_vec)+1):end,1:n_y) = r_y_a(eta(:,1),y_AWP(end,:));
+                    end
+                    % Ausgabe abspeichern
+                    t_out((end+1):(end+size(t_AWP,1)),:) = t_AWP;
+                    y_out((end+1):(end+size(t_AWP,1)),:) = y_AWP;
+                end
+            end
 
-            for i = 1 : N
-                y(i+1,:) = y(i,:) + (t(i+1)-t(i)) * f(t(i),y(i,:)')';
+            % Start des Mehrschiesverfahrens
+            i = 0;
+            while (i < obj.maxit)
+                % AWP lösen und aufstellen von F(eta) und der Jacobimatrix
+                [F,F_jac] = F_Fjac_func(eta);
+                % Abbruchbedingung
+                Norm_F(i+1) = norm(F);
+                if (norm(F) <= obj.StopTol)
+                    break; 
+                end
+                % Berechnung der Newton-Richtung d 
+                d = - F_jac \ F;
+                d_r = reshape(d,n_y,N);
+                % Armijo-Regel zur Schrittweitensteuerung
+                t_armijo = 1; % initial t
+                [F_armijo,F_jac_armijo] = F_Fjac_func(eta + t_armijo * d_r);
+                while (F_armijo > (F_armijo + obj.sigma * t_armijo * F_jac_armijo * d))
+                    t_armijo = obj.beta*t_armijo;
+                    [F_armijo,F_jac_armijo] = F_Fjac_func(eta + t_armijo * d_r);
+                end
+                % Neue Werte eta und i
+                eta = eta + t_armijo*d_r;
+                i = i + 1;
             end
         end
     end

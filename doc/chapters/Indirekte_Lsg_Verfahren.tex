@@ -1,5 +1,205 @@
 \chapter{Lösen des Optimalsteuerungsproblem mit indirekten Lösungsverfahren}
 
+\section{Anwendung Minimumpinzip von Pontryagin}
+Aus dem Modellaufbau ergeben sich die Definitionen 
+\begin{align*}
+    g(X(t_f)) &=  -(x(t_f) - x_0) & & (g : \R^n \to \R) \\
+    f_0(X(t),U(t)) &\equiv 0 & &(f_0 : \R^n \times \R^m \to \R^n)\\
+    f(X(t),U(t)) &= \dot{X}(t) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T & &(f : \R^n \times \R^m \to \R^n) \\
+    U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \left( = 
+    \left[
+        \begin{matrix}
+            [T_{\min},T_{\max}] \\ 
+            [C_{L, \min},C_{L, \max}]
+        \end{matrix} 
+    \right]\right) \subset \R^2 & &(U : [t_0,t_f] \to \R^m)
+\end{align*}
+Des Weiteren sei $\psi : \R^4 \to \R^2$ eine $C^1$-Funktion (mit $0 \leq (r = 2) \leq (n = 4)$) \[\psi(X(t_f)) = 
+\begin{pmatrix}
+    h(t_f) - h_f \\ 
+    \gamma(t_f) - \gamma_f
+\end{pmatrix} = 0\]
+
+So ergibt sich das autonome Mayer-Problem mit 
+\begin{equation} \label{equ:mayer_problem}
+    \begin{aligned}
+        \min F(X,U) &:= g(X(t_f)) =  -(x(t_f) - x_0) & & \\
+        \text{unter}  \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T & & \forall t \in [t_0,t_f] \\
+        %
+        X(t_0) &= X_0 = (h_0,\gamma_0,x_0,v_0)^T & & \\
+        \psi(X(t_f)) &= 0 & & \\
+        %
+        q(X(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f] \\
+        U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \subset \R^2  & & \forall t \in [t_0,t_f] 
+    \end{aligned}
+\end{equation}
+
+Für die Funktion $f$ lässt sich konkret
+\begin{equation} \label{equ:state_space}
+    f(X(t),U(t)) = \dot{X}(t) = \begin{pmatrix}
+        v(t) \sin(\gamma(t)) \\ 
+        \dfrac{F \alpha e^{-\beta h(t)} v(t) C_L(t)}{2m} - \dfrac{g \cos(\gamma(t))}{v(t)} \\ 
+        v(t) \cos(\gamma(t)) \\ 
+        \dfrac{T(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t))
+    \end{pmatrix}
+\end{equation}
+
+Für die Hamilton-Funktion ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0$) und $\lambda : [t_0,t_f] \to \R^n$
+\begin{equation} \label{equ:hamilt_func}
+    \begin{split}
+        H(X(t),U(t),\lambda(t)) &= \lambda_0 f_0(X(t),U(t)) + \lambda(t)^T f(X(t),U(t)) \\\
+        &= \lambda(t)^T f(X(t),U(t)) \\\
+        &= \lambda_1(t) \dot{h}(t) + \lambda_2(t) \dot{\gamma}(t) + \lambda_3(t) \dot{x}(t) + \lambda_4(t) \dot{v}(t) \\\
+        &= \sin(\gamma(t)) v(t) \lambda_1 \\\
+        &\hspace{7mm} + \dfrac{F \alpha e^{-\beta h(t)} C_L(t) v(t) \lambda_2(t)}{2m} - \dfrac{g \cos(\gamma(t)) \lambda_2(t)}{v(t)} \\\
+        &\hspace{7mm} + \cos(\gamma(t)) v(t) \lambda_3(t) \\\
+        &\hspace{7mm} + \dfrac{T(t) \lambda_4(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t) \lambda_4(t)}{2m} - g \sin(\gamma(t)) \lambda_4(t)
+    \end{split}
+\end{equation}
+
+Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontryagin aufstellen:
+\begin{enumerate}
+    \item \textbf{Minimumbedingung:} Es gilt an allen Stetigkeitsstellen $t \in [t_0,t_f]$ von $u^{\ast}(t)$ die Minimumbedingung \[H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \min_{U(t) \in \mathcal{U}} H(X^{\ast}(t),U(t),\lambda(t))\] Leitet man nun nach der Steuerfunktion $U(t)$ ab, so ergibt sich für den unbeschränkten Fall der Steuerung die Minimumbedingung
+    \[\dfrac{\partial}{\partial U} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
+    \dfrac{\lambda_4(t)}{m} \\ 
+    - \dfrac{k F \alpha e^{-\beta h(t)} v^2(t) \lambda_4(t) C_L(t)}{m} + \dfrac{F \alpha e^{-\beta h(t)} v(t) \lambda_2(t)}{2m}
+    \end{pmatrix}^T \stackrel{!}{=} 0\]
+    und 
+    \[\dfrac{\partial^2}{\partial U^2} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
+    0 & - \dfrac{k F \alpha e^{-\beta h(t)} v^2(t) \lambda_4(t)}{m} 
+    \end{pmatrix} \stackrel{!}{\geq} 0\] wobei \[\sigma(x(t),\lambda(t)) := H_u(X^{\ast}(t),U^{\ast}(t),\lambda(t))\] Schaltfunktion genannt wird. Für die Betrachtung mit den Beschränkungen der Steuerfunktion ergibt sich für den Schub:
+    \[T(t) = \left\lbrace \begin{array}{ll}
+    T_{\min} & ,\text{falls } \lambda_4 > 0  \\ 
+    \text{beliebig} \in [T_{\min},T_{\max}] & ,\text{falls } \lambda_4 = 0  \\ 
+    T_{\max} & ,\text{falls } \lambda_4 < 0
+    \end{array} \right.\]
+    Für die Bestimmung der Steuerfunktion des Auftriebbeiwerts lässt sich die Hamilton-Funktion verkürzt schreiben mit den Thermen $K_1(t)$ und $K_2(t)$
+    \[
+    \begin{split}
+        \tilde{H}(X^{\ast}(t),C_L(t),\lambda(t)) &= \dfrac{F \alpha e^{-\beta h^{\ast}(t)} v^{\ast}(t) \lambda_2(t)}{2m} \cdot C_L(t) - \dfrac{k F \alpha e^{-\beta h^{\ast}(t)}  v^{\ast 2}(t) \lambda_4(t)}{2m} \cdot C_L^2(t) \\\
+        &= K_1(t) C_L(t) - K_2(t) C_L^2(t)
+    \end{split}
+    \]
+    Soll nun $\tilde{H}(X^{\ast}(t),C_L(t),\lambda(t))$ minimal werden, so müssen die Folgenden Bedinungen überprüft werden:
+    \begin{enumerate}
+        \item[1.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} < 0$:
+        \begin{enumerate}
+            \item[1.1.)] Für die Ableitungen von $\tilde{H}$ ergeben sich
+            \[\begin{split}
+            - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+            - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+            \end{split}\]
+            So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$.
+            %
+            \item[1.2.)] Falls $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > C_{L, \max}$ so gilt  $C_L(t) = C_{L, \max}$.
+        \end{enumerate}
+        %
+        \item[2.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = 0 = C_{L, \min}$.
+        %
+        \item[3.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \min}$.
+        %
+        \item[4.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        K_1(t) &\stackrel{!}{=} 0 \\\
+        0 &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = C_{L, \max}$.
+        %
+        \item[5.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} = 0$: Daraus folgt für die Steuerfunktion $C_L(t) = \text{beliebig} \in [C_{L, \min},C_{L, \max}]$.
+        %
+        \item[6.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        K_1(t) &\stackrel{!}{=} 0 \\\
+        0 &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = C_{L, \min}$.
+        %
+        \item[7.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \max}$.
+        %
+        \item[8.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = 0$. Es gilt also $C_L(t) = C_{L, \max}$.
+        %
+        \item[9.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$. Es gilt also $C_L(t) = C_{L, \min}$.
+    \end{enumerate}
+    Damit folgt für die Steuerfunktion des Auftriebsbeiwerts
+    \[C_L(t) = \left\lbrace 
+    \begin{array}{ll}
+        C_{L, \min} & ,\text{falls Bedingung } 2,3,6 \text{ oder } 9 \text{ gilt} \\ 
+        \text{beliebig} \in [C_{L, \min},C_{L, \max}] & ,\text{falls Bedingung } 5 \text{ gilt} \\ 
+        \dfrac{K_1(t)}{2 K_2(t)} & ,\text{falls Bedingung } 1.1 \text{ gilt} \\ 
+        C_{L, \max} & ,\text{falls Bedingung } 1.2,4,7 \text{ oder } 8 \text{ gilt}  
+    \end{array} 
+    \right.\]
+    %
+    \item \textbf{Adjungierte DGL:} Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),U^{\ast}(t),\lambda(t))$ so erhält man 
+        \[\begin{split}
+            \dfrac{\partial}{\partial h} H &= - \dfrac{\alpha \beta F e^{-\beta h(t)} C_L(t) v(t) \lambda_2(t)}{2m} + \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v^2(t) \lambda_4(t)}{2m} \\\
+            \dfrac{\partial}{\partial \gamma} H &= \cos(\gamma(t)) v(t) \lambda_1(t) + \dfrac{g \sin(\gamma(t)) \lambda_2(t)}{v(t)} - \sin(\gamma(t)) v(t) \lambda_3(t) - \cos(\gamma(t)) g \lambda_4(t) \\\
+            \dfrac{\partial}{\partial x} H &= 0 \\\
+            \dfrac{\partial}{\partial v} H &= \sin(\gamma(t)) \lambda_1(t) + \left( \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)} \right) \lambda_2(t) \\\
+            &\hspace{7mm} + \cos(\gamma(t)) \lambda_3(t) - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t) \lambda_4(t)}{m} \\\ 
+        \end{split}\]
+        wobei gilt 
+        \[\dot{\lambda}(t)^T = - \dfrac{\partial}{\partial X} H = -H_{X} = \left( -\dfrac{\partial}{\partial h} H, -\dfrac{\partial}{\partial \gamma} H, -\dfrac{\partial}{\partial x} H, -\dfrac{\partial}{\partial v} H \right)\]
+    %
+    \item \textbf{Transversalitätsbedingung:} Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung mit dem Vektor $\nu \in \R^r$ mit $(\lambda_0,\lambda(t),\nu) \neq 0$ für alle $t \in [t_0,t_f]$
+        \[\begin{split}
+            \lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
+            &= \lambda_0 
+            \begin{pmatrix}
+            0 & 0 & -1 & 0
+            \end{pmatrix}  
+            + \nu^T 
+            \begin{pmatrix}
+            1 & 0 & 0 & 0 \\
+            0 & 1 & 0 & 0 
+            \end{pmatrix}  \\\
+            &= \begin{pmatrix}
+            \nu_1 & \nu_2 & -\lambda_0 & 0 
+            \end{pmatrix}
+        \end{split}\]
+    (ist $\lambda_{0} =1$ da $x(t_f)$ frei ist und $\psi_X(X^{\ast}(t_f))$ hat vollen Zeilenrang???) 
+    %
+    \item \textbf{Konstanz:} Für autonome Systeme gilt \[H(X^{\ast}(t),U^{\ast}(t), \lambda(t)) = const \ \in [t_0,t_f]\]
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Zweipunkt-Randwertproblem und Beschränkungsuntersuchungen}
 Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem umgestellt werden.
 
 \begin{problem}[Zweipunkt-Randwertproblem]\label{prob:ZweiRand}
@@ -11,7 +211,14 @@ R(Z(t_0),Z(t_f)) &= 0_{n_Z}
 im Intervall $[t_0,t_f]$.
 \end{problem}
 
-Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschränkung des Staudrucks $q(v(t),h(t)) \leq q_{\max}$, wie in Problem \ref{prob:MaxRF} gefordert. Untersuchungen der Ergebnisse aus den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} haben gezeigt, dass diese zu keinem Zeitpunkt den maximalen Wert $q_{\max}$ der Beschränkung erreicht haben. Aus Vereinfachungsgründen, wird diese Beschränkung deshalb in diesem Kapitel nicht weiter berücksichtigt.
+Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschränkung des Staudrucks $q(v(t),h(t)) \leq q_{\max}$, wie in Problem \ref{prob:MaxRF} gefordert. Untersuchungen der Ergebnisse aus den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} haben gezeigt, dass diese zu keinem Zeitpunkt den maximalen Wert $q_{\max}$ der Beschränkung erreicht haben (Abbildung \ref{img:test_1_1_staudruck}). Aus Vereinfachungsgründen, wird diese Beschränkung deshalb in diesem Kapitel nicht weiter berücksichtigt.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
+\caption{Untersuchung, ob bei Versuch \ref{kap:Versuch11} der maximale Staudruck überschritten bzw. angenähert wird.}\label{img:test_1_1_staudruck}
+\end{center}
+\end{figure}
 
 
 
@@ -29,9 +236,7 @@ Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschr�
 
 
 
-
-
-\section{Aufstellen des Randwertproblems}
+\section{Aufstellen des Zweipunkt-Randwertproblems}
 Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $G(t,Z(t),U(t))$ und $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ besteht:
 \begin{itemize}
 \item Für $G(t,Z(t),U(t))$ ergibt sich
@@ -142,6 +347,7 @@ mit
 
 
 
+\section{Versuche und Probleme}
 
 
 
@@ -153,31 +359,30 @@ mit
 
 
 
-
-\section{Algorithmus Einfachschiessverfahren}
-Für eine gegebene Startschätzung $\eta$ des Anfangswerts $y(a)$ besitze das Anfangswertproblem
-\[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta\]
-die Lösung $y(t;\eta)$ auf $[a,b]$. Damit $y(t;\eta)$ auch die Randbedingung erfüllt, muss 
-\begin{equation}\label{func:SchiessF}
-F(\eta) := r(y(a;\eta), y(b;\eta)) = r(\eta, y(b;\eta)) = 0_{n_y}
-\end{equation}
-gelten. Gleichung \ref{func:SchiessF} ist also ein \textbf{nichtlineares Gleichungssystem} für die Funktion $F$. Anwendung des Newtonverfahrens führt auf das sogenannte Einfachschießverfahren:
-
-\begin{definition}[Algorithmus Einfachschießverfahren]\label{algo:EinfSchiess}
-Initialisierung: Wähle Startschätzung $\eta^{[0]} \in \R^{n_y}$ und setze $i = 0$:
-\begin{enumerate}
-\item Löse das Anfangswertproblem \[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta^{[i]} \ \ \ \ (a \leq t \leq b)\] zur Berechnung von $F(\eta^{[i]})$ und berechne die Jacobimatrix \[F'(\eta^{[i]}) = r'_{y_a} (\eta^{[i]}, y(b;\eta^{[i]})) + r'_{y_b}(\eta^{[i]}, y(b;\eta^{[i]})) \cdot S(b)\] wobei $S$ Lösung der Sensitivitäts-Differentialgleichung \[S'(t) = g'_y(t, y(t;\eta^{[i]})) \cdot S(t) \ \ \ \ S(a) = I_{n_y \times n_y}\] ist.
+%\section{Algorithmus Einfachschiessverfahren}
+%Für eine gegebene Startschätzung $\eta$ des Anfangswerts $y(a)$ besitze das Anfangswertproblem
+%\[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta\]
+%die Lösung $y(t;\eta)$ auf $[a,b]$. Damit $y(t;\eta)$ auch die Randbedingung erfüllt, muss 
+%\begin{equation}\label{func:SchiessF}
+%F(\eta) := r(y(a;\eta), y(b;\eta)) = r(\eta, y(b;\eta)) = 0_{n_y}
+%\end{equation}
+%gelten. Gleichung \ref{func:SchiessF} ist also ein \textbf{nichtlineares Gleichungssystem} für die Funktion $F$. Anwendung des Newtonverfahrens führt auf das sogenannte Einfachschießverfahren:
 %
-\item Ist $F(\eta^{[i]}) = 0_{n_y}$ (oder ist ein anderes Abbruchkriterium) erfüllt, \textbf{STOP!}
+%\begin{definition}[Algorithmus Einfachschießverfahren]\label{algo:EinfSchiess}
+%Initialisierung: Wähle Startschätzung $\eta^{[0]} \in \R^{n_y}$ und setze $i = 0$:
+%\begin{enumerate}
+%\item Löse das Anfangswertproblem \[y'(t) = g(t, y(t)) \ \ \ \ y(a) = \eta^{[i]} \ \ \ \ (a \leq t \leq b)\] zur Berechnung von $F(\eta^{[i]})$ und berechne die Jacobimatrix \[F'(\eta^{[i]}) = r'_{y_a} (\eta^{[i]}, y(b;\eta^{[i]})) + r'_{y_b}(\eta^{[i]}, y(b;\eta^{[i]})) \cdot S(b)\] wobei $S$ Lösung der Sensitivitäts-Differentialgleichung \[S'(t) = g'_y(t, y(t;\eta^{[i]})) \cdot S(t) \ \ \ \ S(a) = I_{n_y \times n_y}\] ist.
+%%
+%\item Ist $F(\eta^{[i]}) = 0_{n_y}$ (oder ist ein anderes Abbruchkriterium) erfüllt, \textbf{STOP!}
+%%
+%\item Berechne die Newton-Richtung $d^{[i]}$ als Lösung des linearen Gleichungssystems \[F'(\eta^{[i]})d = -F(\eta^{[i]})\]
+%%
+%\item Setze $\eta^{[i+1]} = \eta^{[i]} + d^{[i]}$ und $i=i+1$ und gehe zu 1.).
+%\end{enumerate}
+%\end{definition}
 %
-\item Berechne die Newton-Richtung $d^{[i]}$ als Lösung des linearen Gleichungssystems \[F'(\eta^{[i]})d = -F(\eta^{[i]})\]
-%
-\item Setze $\eta^{[i+1]} = \eta^{[i]} + d^{[i]}$ und $i=i+1$ und gehe zu 1.).
-\end{enumerate}
-\end{definition}
-
-Die Ableitung $F'(\eta^{[i]})$ in Schritt 2.) des Einfachschießverfahrens \ref{algo:EinfSchiess} kann alternativ
-durch \textbf{finite Differenzen} approximiert werden:
-\[\dfrac{\partial}{\partial \eta_j} F(\eta) \approx \dfrac{F(\eta + h e_j) - F(\eta)}{h} \ \ \ \ (j=1,...,n_y)\]
-mit $e_j = j$-ter Einheitsvektor. Dieser Ansatz erfordert das Lösen von $n_y$ Anfangswertproblemen!
+%Die Ableitung $F'(\eta^{[i]})$ in Schritt 2.) des Einfachschießverfahrens \ref{algo:EinfSchiess} kann alternativ
+%durch \textbf{finite Differenzen} approximiert werden:
+%\[\dfrac{\partial}{\partial \eta_j} F(\eta) \approx \dfrac{F(\eta + h e_j) - F(\eta)}{h} \ \ \ \ (j=1,...,n_y)\]
+%mit $e_j = j$-ter Einheitsvektor. Dieser Ansatz erfordert das Lösen von $n_y$ Anfangswertproblemen!
 
