@@ -3,9 +3,7 @@ Das in Gleichung \eqref{equ:mayer_problem} gezeigte Optimalsteuerungsproblem in 
 
 \section{Numerische Lösung von gewöhnlichen Differentialgleichungen}
 Das gezeigte Modell des Flugzeugs wurde durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell lösen zu können, werden Methoden von \textit{MATLAB} und eigens implementierte Methoden zur Integration verwendet.
-
-Mit dem Vergleich der Methoden konnte die fehlerfreie Implementierung bestätigt werden und die für den Anwendungsfall effizienteste Methode 
-ausgewählt werden.
+Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurden diese mit konstanten Werten für die Steuerfunktionen \(T\) und \(C_L\) gelöst. Hierbei wurden die Werte innerhalb ihres physikalisch sinnvollen Bereiches ausgewählt und konstante Werte dem Löser übergeben.
 
 % define new column for ragged right content
 \newcolumntype{Z}{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}X}
@@ -35,7 +33,7 @@ ausgewählt werden.
     \subfloat[\label{fig:methods_d_x}]{\includegraphics{../code/methods/results/methods_plot_d_x}}
     \qquad
     \subfloat[\label{fig:methods_d_v}]{\includegraphics{../code/methods/results/methods_plot_d_v}}
-    \caption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space}). Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\) und \(C_L\) gelöst.} %
+    \caption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space}). Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.} %
     % \subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \subref{fig:methods_gamma} zeigt den %
     % Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges.} %
     % \subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.}
@@ -75,7 +73,7 @@ ausgewählt werden.
     \qquad
     \subfloat[\label{fig:methods_i_l4}]{\includegraphics{../code/methods/results/methods_plot_i_l4.pdf}} \\
 
-    \caption{Lösung des Differentialgleichungsmodells. Die acht Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\) und \(C_L\) gelöst.}
+    \caption{Lösung des Differentialgleichungsmodells. Die acht Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.}
     % \protect\subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \protect\subref{fig:methods_gamma} zeigt den Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \protect\subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges. \protect\subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.
 \end{figure}
 
