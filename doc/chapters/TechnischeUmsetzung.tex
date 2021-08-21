@@ -12,14 +12,14 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
     \caption{Untersuchte Einschrittalgorithmen zur Lösung Zustandsdifferentialgleichung}
     \begin{tabularx}{.9\textwidth}{Zccc}
         \toprule
-        \textbf{Algorithmus} & \textbf{Laufzeit} & \textbf{Laufzeit Verbesserung } & \textbf{max. Fehler} \\
-                            &   \textbf{in \text{[$s$]}} & \textbf{in \text{[\%]}} & $\Delta y$ \\
+        \textbf{Algorithmus}        & \textbf{Laufzeit} & \textbf{Laufzeit Verbesserung } & \textbf{max. Fehler} \\
+                                    & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} & $\Delta y$ \\
         \midrule
-        explizites Euler Verfahren &&&\\
-        implizites Euler Verfahren &&&\\
-        RADAU-2A Verafahren &&&\\
-        \textit{MATLAB} ode45 &&&\\
-        \textit{MATLAB} ode23s &&&\\
+        \textit{MATLAB} ode45       &   0,529   &   0,522   &   ?\\
+        \textit{MATLAB} ode23s      &   0,0914  &   0,0843  &   ?\\
+        explizites Euler Verfahren  &   0,00708 &   0       &   ?\\
+        implizites Euler Verfahren  &   0,0185  &   0,0115  &   ?\\
+        RADAU-2A Verafahren         &   1,36    &   1,35    &   ?\\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -45,12 +45,12 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
     \caption{Untersuchte Einschrittalgorithmen zur Lösung adjungierten Differentialgleichungen}
     \begin{tabularx}{.9\textwidth}{Zccc}
         \toprule
-        \textbf{Algorithmus} & \textbf{Laufzeit} & \textbf{Laufzeit Verbesserung } & \textbf{max. Fehler} \\
-                            &   \textbf{in \text{[$s$]}} & \textbf{in \text{[\%]}} & $\Delta y$ \\
+        \textbf{Algorithmus}        & \textbf{Laufzeit} & \textbf{Laufzeit Verbesserung } & \textbf{max. Fehler} \\
+                                    & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} & $\Delta y$ \\
         \midrule
-        explizites Euler Verfahren &&&\\
-        \textit{MATLAB} ode45 &&&\\
-        \textit{MATLAB} ode23s &&&\\
+        \textit{MATLAB} ode45       &   0,499   &   0,490   &   ?\\
+        \textit{MATLAB} ode23s      &   0,217   &   0,209   &   ?\\
+        explizites Euler Verfahren  &   0,00892 &   0       &   ?\\
         \bottomrule
     \end{tabularx}
 \end{table}
