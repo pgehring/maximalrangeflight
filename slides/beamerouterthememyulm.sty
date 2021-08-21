@@ -1,0 +1,71 @@
+%Folien der Präsentation
+
+\ProvidesPackageRCS $Header: /cvsroot/latex-beamer/latex-beamer/themes/outer/beamerouterthememyulm.sty,v 1.4 2004/10/14 09:48:48 tantau Exp $
+
+% Copyright 2003 by Till Tantau <tantau@users.sourceforge.net>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+\mode<presentation>
+
+\setbeamercolor{frametitle}{parent=palette primary}
+
+\AtBeginDocument{
+  {
+    \usebeamerfont*{headline}
+
+    \usebeamercolor{normal text}
+    \usebeamercolor{title in head/foot}
+    \usebeamercolor{subsection in head/foot}
+    \usebeamercolor{section in head/foot}
+    \usebeamercolor{frametitle}
+
+    
+    \pgfdeclareverticalshading{beamer@aboveframetitle}{\the\paperwidth}{%
+      color(0ex)=(frametitle.bg);%
+      color(0ex)=(frametitle.bg);%
+      color(0ex)=(subsection in head/foot.bg)
+    }
+
+    \pgfdeclareverticalshading{beamer@belowframetitle}{\the\paperwidth}{%
+      color(0ex)=(normal text.bg);%
+      color(0ex)=(frametitle.bg)
+    }
+  }
+}
+
+\defbeamertemplate*{headline}{myulm}
+{%
+%Box ganz oben auf jeder Folie (auf der seite)
+    \vspace{0.3cm}
+    \hbox{%
+\textcolor{beamer@blendedblue}{\line(1,0){364}}} % Obere (grüne, dünne) Linie
+    \hspace{-0.3cm}
+    \begin{tabular}[t]{cl}
+%farbige Box mit Text, ganz links oben (Seitenangabe):
+            \textcolor[rgb]{1,1,1}{\colorbox{beamer@blendedblue}{\makebox[7ex]{%
+            Seite \insertframenumber}}} &     
+%Vertikale Linie (2. links oben neben dem Datum) + Text (links neben der Linie):
+            \textcolor{beamer@blendedblue}{\zwischentitel \ \ $\vert$ \ \ \ }% &
+%Vertikale Linie (1. links oben neben dem Datum) + Text (links neben der Linie):
+            \textcolor{beamer@blendedblue}{\leitthema \ \ $\vert$ \ \ \ }%&
+%Datum + vertikale Linie (rechts neben Datum):
+            \textcolor{beamer@blendedblue}{\presdatum}\\
+    \end{tabular}  
+	\vspace{0.8cm}
+  }
+
+\defbeamertemplate*{footline}{myulm}
+  {%
+    \begin{beamercolorbox}[colsep=1.5pt]{upper separation line foot}
+    \end{beamercolorbox}
+    \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+      leftskip=.3cm,rightskip=.3cm plus1fil]{author in head/foot}%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[colsep=1.5pt]{lower separation line foot}
+    \end{beamercolorbox}
+  }
+
+\mode
+<all>
