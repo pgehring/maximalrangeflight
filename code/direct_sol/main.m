@@ -24,7 +24,12 @@ addpath('./results');
 % end
 
 %% Loading the corresponding configuration file
-configs = ["test_1_3","test_2_3","test_3_3","test_4_3"];
+configs = ["test_0_1","test_0_2"];
+configs = ["test_0_1","test_0_2",...
+           "test_1_1","test_1_2","test_1_3",...
+           "test_2_1","test_2_2","test_2_3",...
+           "test_3_1","test_3_2","test_3_3",...
+           "test_4_1","test_4_2","test_4_3"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
@@ -62,9 +67,9 @@ end
 
 %% Plot the solution and saving the results
 plotter = Plotter();
-titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-          "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
-          "\textbf{Steuerung 2: Auftriebsbeiwert}"];
+titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"uckgelegte Streckte'},...
+          {'Geschwindigkeit'},{'\textbf{Steuerung 1: Schub}'},...
+          {'\textbf{Steuerung 2: Auftriebsbeiwert}'}];
 labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
           "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$",...
           "$T_{sol}$ in $[N]$","$C_{L_{sol}}$ in $[1]$"];
@@ -73,18 +78,18 @@ line_style = ["b-","b-","b-","b-","r-","r-"];
 order = [3,1,5,2,4,6];
 
 for j=1:length(solutions)
-    
     solution = solutions{j};
     [results_name, prob, prob_sol, options] = solution{:};
     
     % Plot solution
     fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
+    plotter.plot_staudruck(prob_sol,prob,results_name);
 
     % Save the graphics
     fprintf('Saving the graphics ...\n');
+    print(fig,'-dpdf','-r600',strcat('./results/',results_name,'.pdf'));
     savefig(fig,strcat('./results/',results_name,'.fig'));
-    saveas(fig,strcat('./results/',results_name,'.png'));
-    % saveas(fig,strcat('./results/',results_name,'.svg'));
+%     saveas(fig,strcat('./results/',results_name,'.png'));
 
     % Save the data
     fprintf('Saving the data ...\n');

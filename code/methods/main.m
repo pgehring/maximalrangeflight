@@ -35,7 +35,7 @@ params = [1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
               1.47];   % C_L_start in [1]
 params_cell = num2cell(params);
 
-MODEL = "i" % model switch  d: direct_model
+MODEL = "d" % model switch  d: direct_model
             %               i: indirect_model
             
 
@@ -57,7 +57,7 @@ switch MODEL
                 -1;           
                 -1;           
                 1];          
-        X0(2) = X0(2)*180/pi;
+%         X0(2) = X0(2),*180/pi;
         
         odemethods = {@ode45, @ode23s, @euler_expl};
         ode_labels = ["ode45", "ode23s", "euler expl"];
@@ -65,17 +65,13 @@ switch MODEL
         
         func = @indirect_model;
         names = ["methods_plot_i_h","methods_plot_i_gamma", "methods_plot_i_x", "methods_plot_i_v", "methods_plot_i_l1", "methods_plot_i_l2", "methods_plot_i_l3", "methods_plot_i_l4"];
-        titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-                  "Geschwindigkeit", "lambda", "lambda", "lambda", "lambda" ];
-        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
-                  "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$", "$\lambda_1$", "$\lambda_2$", "$\lambda_3$", "$\lambda_4$"];
+        titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"ueckgelegte Streckte'},{'Geschwindigkeit'},{''},{''},{''},{''}];
+        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$","$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$", "$\lambda_1$", "$\lambda_2$", "$\lambda_3$", "$\lambda_4$"];
     case "d"
         func = @direct_model;
         names = ["methods_plot_d_h","methods_plot_d_gamma", "methods_plot_d_x", "methods_plot_d_v"];
-        titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-                  "Geschwindigkeit"];
-        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
-                  "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
+        titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"ueckgelegte Streckte'},{'Geschwindigkeit'}];
+        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$","$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
               
         odemethods = {@ode45, @ode23s, @euler_expl, @euler_impl, @irk};
         ode_labels = ["ode45", "ode23s", "euler expl", "euler impl", "radau-2a"];
@@ -85,7 +81,7 @@ switch MODEL
                 0.27;           % gamma_0 in [rad]
                 0;           % x_0 in [m]
                 100];          % v_0 in [m/s] 
-        X0(2) = X0(2)*180/pi;
+%         X0(2) = X0(2)*180/pi;
 end
 
 %% solve model
@@ -101,32 +97,47 @@ for i=1:length(odemethods)
     solutions{i} = {X, time_elapsed, ode_labels(i)};
 end
 
+
 %% plotting
 plot_position = [50, 50, 500, 350];
 
 set(0,'defaulttextinterpreter','latex');
 set(0,'defaultAxesTickLabelInterpreter','latex');
-      
+set(0,'DefaultLineMarkerSize',4);
+set(0, 'DefaultLineLineWidth', 0.8);
+FigW=7.5;
+FigH=4;
+loc=["northwest","northeast","northwest","southeast","southwest","northwest","northwest","northwest"];
+
 figures = [];
 for jj=1:length(titles)
     f = figure(jj);
     f.Position = plot_position;
     figures = [figures, f ];
-    
+    set(f,'defaulttextinterpreter','latex',...
+            'PaperUnits','centimeters','PaperSize',[FigW FigH],...
+                'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
+                'Position',[0,0,FigW,FigH]);
+
+    set(f, 'PaperPositionMode', 'manual');
     hold on
     for j = 1:length(solutions)
         disp(ode_labels(j))
         [X_plot, ~, ~] = solutions{j}{:};
-        
         plot(gca(), t, X_plot(:, jj), ode_styles(j))
-        ylabel(sprintf("%s\n%s", titles(jj), labels(jj)))
-        xlabel("Zeit $t$ in $s$")
+        ylabel(sprintf("%s\n%s", string(titles(jj)), labels(jj)),'FontSize',7)
+        xlabel("Zeit $t$ in $s$",'FontSize',7)
     end
     hold off
-    legend(ode_labels, 'Interpreter','latex','Location','north','NumColumns',length(ode_labels))
-    saveas(f,strcat('./results/', names(jj), '.png'));
+    set(findall(gcf,'-property','FontSize'),'FontSize',8);
+    [lgd, objh] = legend(ode_labels, 'Interpreter','latex','Location',loc(jj),'FontSize',5,'Orientation','vertical');
+    set(f, 'PaperPositionMode', 'auto');
+    ax = findobj(f, 'type', 'axes');
+    ax.Units = 'centimeters';
+    test=ax.Position;
+    ax.Position=[test(1)+0.2,test(2),test(3),test(4)];
+    print(f,'-dpdf','-r600',strcat('./results/', names(jj),'.pdf'));
 end
-
 
 %% Workspace cleanup
 diary off
