@@ -1,0 +1,79 @@
+MODEL = 
+
+    "d"
+
+solution took 0.528662s to complete with ode45
+solution took 0.091426s to complete with ode23s
+solution took 0.007076s to complete with euler expl
+solution took 0.018531s to complete with euler impl
+solution took 1.359364s to complete with radau-2a
+
+y_max =
+
+   86.9834    0.8523  203.3029    4.6466
+
+
+time_delta =
+
+    0.5216
+
+
+y_max =
+
+   86.5885    0.8505  204.5704    4.6606
+
+
+time_delta =
+
+    0.0843
+
+
+y_max =
+
+     0     0     0     0
+
+
+time_delta =
+
+     0
+
+
+y_max =
+
+  149.5306    1.3722  540.0049    7.5661
+
+
+time_delta =
+
+    0.0115
+
+
+y_max =
+
+   85.8033    0.8464  200.6700    4.6262
+
+
+time_delta =
+
+    1.3523
+
+ode45
+ode23s
+euler expl
+euler impl
+radau-2a
+ode45
+ode23s
+euler expl
+euler impl
+radau-2a
+ode45
+ode23s
+euler expl
+euler impl
+radau-2a
+ode45
+ode23s
+euler expl
+euler impl
+radau-2a

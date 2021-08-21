@@ -1,0 +1,65 @@
+MODEL = 
+
+    "i"
+
+solution took 0.498709s to complete with ode45
+solution took 0.217408s to complete with ode23s
+solution took 0.008920s to complete with euler expl
+
+y_max =
+
+   1.0e+15 *
+
+    0.0000    0.0000    0.0000    0.0000    0.0003    7.2135         0    0.0470
+
+
+time_delta =
+
+    0.4898
+
+
+y_max =
+
+   1.0e+15 *
+
+    0.0000    0.0000    0.0000    0.0000    0.0003    7.2135         0    0.0470
+
+
+time_delta =
+
+    0.2085
+
+
+y_max =
+
+     0     0     0     0     0     0     0     0
+
+
+time_delta =
+
+     0
+
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl
+ode45
+ode23s
+euler expl

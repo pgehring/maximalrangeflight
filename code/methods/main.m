@@ -62,6 +62,7 @@ switch MODEL
         odemethods = {@ode45, @ode23s, @euler_expl};
         ode_labels = ["ode45", "ode23s", "euler expl"];
         ode_styles = ["--r", ":m", "--b", "c"];
+        ref_method_idx = 3;
         
         func = @indirect_model;
         names = ["methods_plot_i_h","methods_plot_i_gamma", "methods_plot_i_x", "methods_plot_i_v", "methods_plot_i_l1", "methods_plot_i_l2", "methods_plot_i_l3", "methods_plot_i_l4"];
@@ -76,6 +77,7 @@ switch MODEL
         odemethods = {@ode45, @ode23s, @euler_expl, @euler_impl, @irk};
         ode_labels = ["ode45", "ode23s", "euler expl", "euler impl", "radau-2a"];
         ode_styles = ["--r", ":m", "--b", "-.k", "c"];
+        ref_method_idx = 3;
         
         X0 = [  0;           % h_0 in [m]
                 0.27;           % gamma_0 in [rad]
@@ -97,6 +99,23 @@ for i=1:length(odemethods)
     solutions{i} = {X, time_elapsed, ode_labels(i)};
 end
 
+% compute maximum state deviation and time performance
+ref_vector = solutions{ref_method_idx}{1};
+ref_time = solutions{ref_method_idx}{2};
+for i=1:length(odemethods)
+    solution_vec = solutions{i}{1};
+    
+    % state deviation
+    deviation = solution_vec - ref_vector;
+    y_max = max(abs(deviation))
+    
+    % time performance
+    time = solutions{i}{2};
+    time_delta = time - ref_time
+    
+    solutions{i} = [solutions{i}, {y_max, time_delta}];
+    
+end
 
 %% plotting
 plot_position = [50, 50, 500, 350];
@@ -123,7 +142,8 @@ for jj=1:length(titles)
     hold on
     for j = 1:length(solutions)
         disp(ode_labels(j))
-        [X_plot, ~, ~] = solutions{j}{:};
+        [X_plot, ~, ~, ~] = solutions{j}{:};
+        
         plot(gca(), t, X_plot(:, jj), ode_styles(j))
         ylabel(sprintf("%s\n%s", string(titles(jj)), labels(jj)),'FontSize',7)
         xlabel("Zeit $t$ in $s$",'FontSize',7)
