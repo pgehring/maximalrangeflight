@@ -1,0 +1,121 @@
+\documentclass{beamer}
+\mode<presentation>
+{
+  \usetheme{myulm}
+  \setbeamercovered{transparent}
+  \setbeamertemplate{navigation symbols}{} % no navigation bar
+  \setbeamersize{sidebar width left=1.17cm}
+}
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{array}
+\usepackage{colortbl}
+
+% Anfang der Titelfolie
+% Anpassung von: Titel, Untertitel, Autor, Datum und Institut
+
+\title{Hier steht der Titel der Pr\"{a}sentation, auch zweizeilig m\"{o}glich}
+\subtitle{Manchmal wird ein Untertitel ben\"{o}tigt, der ebenfalls einzeilig oder mehrzeilig sein kann}
+\author{Vorname Name}
+\newcommand{\presdatum}{\today} % alternativ zu \today: Eingabe eines festen Datums
+\institute
+{Institut, Einrichtung\\}
+%Ende der Titelfolie
+
+% Anfang der Kopfzeile der Folien
+% Anpassung von: Zwischentitel, Leitthema oder Name
+% Das Datum wird oben geändert: unter \presdatum{}!
+
+\newcommand{\zwischentitel}{Zwischentitel}
+\newcommand{\leitthema}{Leitthema oder Name}
+% Ende der Kopfzeile
+
+% Anfang der Folien
+\begin{document}
+\hspace*{-1.49cm}
+\frame[plain]{\titlepage}
+
+% Das Inhaltsverzeichnis
+\hspace*{-0.7cm}
+\begin{frame}
+  \frametitle{Inhaltsverzeichnis}
+  \tableofcontents
+\end{frame}
+
+
+% 1. Folie
+\section{Vortragsabschnitt 1}
+\begin{frame}
+  \frametitle{Entropie}
+\vspace{-2.6cm}
+  \begin{itemize}
+    \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
+    \item Aufz\"{a}hlung 2
+    \item Aufz\"{a}hlung 3
+  \end{itemize}
+\end{frame}
+
+% 2. Folie
+\begin{frame}
+  \frametitle{Entropie - Definition}
+\vspace{-2.6cm}
+  \begin{itemize}
+    \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
+    \item Aufz\"{a}hlung 2
+    \item Aufz\"{a}hlung 3
+  \end{itemize}
+\end{frame}
+
+% 3. Folie
+\section{Vortragsabschnitt 2}
+\begin{frame}
+  \frametitle{\"{U}berschrift 1}
+\vspace{-2.6cm}
+  \begin{itemize}
+    \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
+    \item Aufz\"{a}hlung 2
+    \item Aufz\"{a}hlung 3
+  \end{itemize}
+\end{frame}
+   
+% 4. Folie
+\section{Vortragsabschnitt n}
+\begin{frame}
+  \frametitle{\"{U}berschrift 2}
+ \vspace{-3.5cm}
+ \hspace{-0.8cm}
+  Das ist ein Beispieltext in Arial 14 pt
+\end{frame}
+
+% 5. Folie
+\section{Die Uni-Farben im \"{U}berblick}
+\begin{frame}
+ \frametitle{Die Uni-Farben im \"{U}berblick}
+ \vspace{-0.1cm}
+\hspace{-0.75cm}  \tiny{Mathematik/Wirtschaftswissenschaften sRGB 100\%: 86-170-28, Prozentwert von 100\% - 10\% in 10er-Schritten} \\
+\hspace{-0.7cm}  \colorbox{farbwert-mawi}{}{} \\
+ \vspace{0.5cm}
+\hspace{-0.7cm}  \tiny{Ingenieurwissenschaften/Informatik sRGB 100\%: 163-38-56, Prozentwerte von 100\% - 10\% in 10er-Schritten} \\
+\hspace{-0.7cm}  \colorbox{farbwert-inwiin}{}{} \\
+  \vspace{0.5cm}
+\hspace{-0.7cm}  \tiny{Naturwissenschaften sRGB 100\%: 163-38-56, Prozentwerte von 100\% - 10\% in 10er-Schritten} \\
+\hspace{-0.7cm}  \colorbox{farbwert-nawi}{}{} \\
+   \vspace{0.5cm}
+   \hspace{-0.7cm}  \tiny{Medizin sRGB 100\%: 38-84-124, Prozentwerte von 100\% - 10\% in 	       10er-Schritten} \\
+\hspace{-0.7cm}  \colorbox{farbwert-med-blau}{}{}  \\
+  \vspace{0.5cm}
+\hspace{-0.7cm}  \tiny{Farbwerte Uni-Blau sRGB 100\%: 125-154-170, Prozentwerte von 100\% - 10\% in 	       10er-Schritten} \\
+\hspace{-0.7cm}  \colorbox{farbwert-blau}{}{}  \\
+  \vspace{0.5cm}
+  \hspace{-0.7cm}  \tiny{Farbwert Beige sRGB 100\%: 169-162-141, Prozentwerte von 100\% - 10\% in 10er-Schritten} \\
+\hspace{-0.7cm}  \colorbox{farbwert-beige}{}{} \\
+  \vspace{0.5cm}
+\end{frame}
+%Ende der Folien
+
+\end{document}
