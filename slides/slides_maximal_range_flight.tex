@@ -18,21 +18,25 @@
 
 % Anfang der Titelfolie
 % Anpassung von: Titel, Untertitel, Autor, Datum und Institut
+\newcommand{\fakultaet}{Mathematik und Wirtschaftswissenschaften}
+\newcommand{\institut}{Institut für numerische Mathematik}
+\newcommand{\Heiko}{Heiko Karus}
+\newcommand{\Philipp}{Philipp Gehring}
+\newcommand{\Felix}{Felix Götz}
 
-\title{Hier steht der Titel der Pr\"{a}sentation, auch zweizeilig m\"{o}glich}
-\subtitle{Manchmal wird ein Untertitel ben\"{o}tigt, der ebenfalls einzeilig oder mehrzeilig sein kann}
-\author{Vorname Name}
+\title{\textbf{Optimalsteuerungsproblem  \\ \textit{Maximal Range Flight}}}
+\subtitle{Projektpräsentation -- Numerik 4}
+\author{\Heiko,\ \Philipp,\ \Felix}
 \newcommand{\presdatum}{\today} % alternativ zu \today: Eingabe eines festen Datums
-\institute
-{Institut, Einrichtung\\}
+\institute{\institut, \fakultaet\\}
 %Ende der Titelfolie
 
 % Anfang der Kopfzeile der Folien
 % Anpassung von: Zwischentitel, Leitthema oder Name
 % Das Datum wird oben geändert: unter \presdatum{}!
 
-\newcommand{\zwischentitel}{Zwischentitel}
-\newcommand{\leitthema}{Leitthema oder Name}
+\newcommand{\zwischentitel}{Projektpräsentation}
+\newcommand{\leitthema}{Maximal Range Flight}
 % Ende der Kopfzeile
 
 % Anfang der Folien
@@ -43,15 +47,15 @@
 % Das Inhaltsverzeichnis
 \hspace*{-0.7cm}
 \begin{frame}
-  \frametitle{Inhaltsverzeichnis}
+  \frametitle{Gliederung}
   \tableofcontents
 \end{frame}
 
 
 % 1. Folie
-\section{Vortragsabschnitt 1}
+\section{Problemformulierung}
 \begin{frame}
-  \frametitle{Entropie}
+  \frametitle{Modellskizze}
 \vspace{-2.6cm}
   \begin{itemize}
     \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
@@ -61,8 +65,9 @@
 \end{frame}
 
 % 2. Folie
+\section{Lösung mit direktem Verfahren}
 \begin{frame}
-  \frametitle{Entropie - Definition}
+  \frametitle{Vollständige Diskretisierung}
 \vspace{-2.6cm}
   \begin{itemize}
     \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
@@ -72,24 +77,15 @@
 \end{frame}
 
 % 3. Folie
-\section{Vortragsabschnitt 2}
+\section{Lösung mit indirekten Verfahren}
 \begin{frame}
-  \frametitle{\"{U}berschrift 1}
+  \frametitle{Minimumprinzip nach Pontryagin}
 \vspace{-2.6cm}
   \begin{itemize}
     \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
     \item Aufz\"{a}hlung 2
     \item Aufz\"{a}hlung 3
   \end{itemize}
-\end{frame}
-   
-% 4. Folie
-\section{Vortragsabschnitt n}
-\begin{frame}
-  \frametitle{\"{U}berschrift 2}
- \vspace{-3.5cm}
- \hspace{-0.8cm}
-  Das ist ein Beispieltext in Arial 14 pt
 \end{frame}
 
 % 5. Folie
