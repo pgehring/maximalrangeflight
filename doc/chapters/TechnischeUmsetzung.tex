@@ -107,9 +107,13 @@ Zusammenbau in Schiessverfahren
 
 
 
-\section{Klassenstruktur des Problems}
+\section{Aufbau des Lösers}
+Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und einem indirekten Lösungsverfahren gelöst. Zudem wurden die Untersuchungen in \autoref{sec:num_ode} separat implementiert. Um viel Code wiederverwenden zu können, sind die Löser mit einer Klassenstruktur implementiert. Hierbei ist die Ausgabe über die Klasse \verb+Plotter+ für alle Verfahren wiederverwendbar.
 
-UML
+\begin{figure}
+    \centering
+    \caption{Schematische Darstellung der Implementierten Verfahren. Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \verb+Plotter+}
+\end{figure}
 
 
 
