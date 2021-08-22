@@ -1,47 +1,114 @@
-\chapter{Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren}
+\chapter{Formulierung des Optimalsteuerungsproblem für direkte Lösungsverfahren}
 
-Direkte Lösungsverfahren basieren auf einer Diskretisierung des Optimalsteuerungsproblems. Dadurch wird das Optimalsteuerungsproblem auf ein endlichdimensionales Optimierungsproblem transformiert, welches mit einem numerischen Optimierungsverfahren gelöst werden kann.
+Direkte Lösungsverfahren basieren auf einer Diskretisierung des Optimalsteuerungsproblems. Dadurch wird das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) auf ein endlichdimensionales Optimierungsproblem transformiert, welches mit einem numerischen Optimierungsverfahren gelöst werden kann.
 
-Betrachtet wird das Optimalsteuerungsroblem (Mayer-Problem mit Boxschranken) der folgenden Form. Finde für feste Zeitpunkte $t_0 < t_f$ einen Zustand $X \in W^{1, \infty} ([t_0,t_f], \R^{n_X})$ und eine Steuerung $U \in L^{\infty} ([t_0,t_f], \R^{n_U})$, sodass die Zielfunktion unter der Betrachtung der gegebenen Bedingungen minimal wird:
-\begin{itemize}
-    \item \textbf{Zielfunktion:} $\varphi(X(t_0),X(t_f)) = -(x(t_f) - x_0)$
-    \item \textbf{Differentialgleichung:} $\dot{X}(t) = f(t,X(T),U(t)) \ \ \ \ \forall [t_0,t_f]$
-    \item \textbf{Randbedingungen:} $\psi(X(t_0),X(t_f)) = 0_{n_{\psi}}$
-    \item \textbf{Reine Zustandsbeschränkungen:} $s(t,X(t)) \leq 0_{n_s} \ \ \ \ \forall t \in [t_0,t_f]$
-    \item \textbf{Mengenbeschränkungen:} $U(t) \in \mathcal{U} = \lbrace U \in \R^{n_U} \mid U_{\min} \leq U \leq U_{\max} \rbrace \ \ \ \ \forall t \in [t_0, t_f]$
-\end{itemize}
-Die Mengenbeschränkungen werden auch als Boxbeschränkungen bezeichnet. 
 
-\section{Algorithmus vollständige Diskretisierung}
-Dieses gegebene Optimalsteuerungsproblem wird mit verschiedenen Techniken und Verfahren auf ein nichtlineares Optimierungsproblem umgeformt. Zunächst wird dabei ein Gitter erzeugt, welches das Problem diskretisiert. Dieses Gitter 
-\begin{equation}
-    \mathbb{G}_h := \lbrace t_0 < t_1 < ... < t_{N-1} = t_f \rbrace
-\end{equation}
-mit $N$, der Anzahl an Diskretisierungspunkten und mit den Schrittweiten 
-\begin{equation}
-    h_i = t_{i+1} - t_i \ \ \ \ \forall i = 0,...,N-2
-\end{equation}
+
+
+
+
+
+
+
+
+
+
+\section{Diskretisierung des Optimalsteuerungsproblems}
+Unter der Diskretisierung wird die Aufgabe verstanden, für feste Zeitpunkte $t_0 < t_f$ einen Zustand $X \in W^{1, \infty} ([t_0,t_f], \R^{n_X})$ und eine Steuerung $U \in L^{\infty} ([t_0,t_f], \R^{n_U})$ zu finden, sodass die Zielfunktion unter der Betrachtung der gegebenen Bedingungen minimal wird.
+
+Für die Diskretisierung wird daher zunächst ein Gitter erzeugt, welches das Problem in explizite $N$ Diskretisierungspunkte unterteilt. Dieses Gitter 
+\[\mathbb{G}_h := \lbrace t_0 < t_1 < ... < t_{N-1} = t_f \rbrace\]
+mit den Schrittweiten 
+\[h_i = t_{i+1} - t_i \ \ \ \ \forall i = 0,...,N-2\]
 muss dabei nicht notwendig äquidistant unterteilt sein. Es stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
 \begin{itemize}
-    \item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
-
-    \item \textbf{Diskretisierungsverfahren für die Differentialgleichung:} Die Differentialgleichung des Problems wird mit Hilfe eines Diskretisierungsverfahren diskretisiert, um die Lösung im Optimierungsproblem verarbeiten zu können. Hierfür eignen sich zum Beispiel allgemeine oder spezielle Einschrittverfahren wie das explizite Eulerverfahren oder das implizite Runge-Kutta Verfahren.
+\item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
+%
+\item \textbf{Diskretisierungsverfahren für die Differentialgleichung:} Die Differentialgleichung des Problems wird mit Hilfe eines Diskretisierungsverfahren diskretisiert, um die Lösung im Optimierungsproblem verarbeiten zu können. Hierfür eignen sich zum Beispiel allgemeine oder spezielle Einschrittverfahren wie das explizite Eulerverfahren oder das implizite Runge-Kutta Verfahren.
+%
+\item \textbf{Ranbedingungen und Beschränkungen:} Die Anfangs- und Endbedingungen aus Problem \ref{prob:MaxRF} werden zusammen in einer Randbedingungsfunktion $\psi : \R^{n_X} \times \R^{n_X} \to \R^{n_{\psi}}$ mit $n_{\psi} = 8$
+\[\psi(X_0,X_N) = 0_{n_{\psi}} = \begin{pmatrix}
+h_0(t_0) - h_0 \\ 
+\gamma_0(t_0) - \gamma_0 \\
+x_0(t_0) - x_0 \\ 
+v_0(t_0) - v_0 \\ 
+h_N(t_f) - h_f \\ 
+\gamma_N(t_f) - \gamma_f \\
+0 - 0 \\ 
+0 - 0
+\end{pmatrix}\] formuliert. Die Beschränkung des Staudrucks $q(v(t),h(t))$ wird in der reinen Zustandsbeschränkungsfunktion $s : \mathbb{G}_h \times \R^{n_X} \to \R^{n_s}$ mit $n_s = 1$
+\[s(t_i,X_i) = q(v_i(t_i),h_i(t_i)) - q_{max} \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] formuliert.
 \end{itemize}
-Somit ergibt sich das diskretisierte Optimalsteuerungsproblem (Problem \ref{prob:VolldisOpt}).
+Somit geht das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) in das diskretisierte Optimalsteuerungsproblem (Problem \ref{prob:VolldisOpt}) über.
 
-\begin{problem}[Vollständiges diskretisiertes Optimalsteuerungsproblem]\label{prob:VolldisOpt}
+\begin{problem}[Vollständig diskretisiertes Optimalsteuerungsproblem]\label{prob:VolldisOpt}
     Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\] sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
 \end{problem}
 
-Dieses diskretisierte Optimalsteuerungsproblem lässt sich dann mit einem geeigneten numerischen Optimierungsverfahren lösen. Mögliche Optimierungsverfahren sind das SQP-Verfahren, das Innere-Punkte-Verfahren oder die Strategie der aktiven Menge. Hierfür muss Problem \ref{prob:VolldisOpt} in die Form des endlichdimensionale, nichtlineare Optimierungsproblem \ref{prob:EndNichtOpt} gebracht werden.
 
-\begin{problem}[Endlichdimensionales, nichtlineares Optimierungsproblem von Problem \ref{prob:VolldisOpt}]\label{prob:EndNichtOpt}
-    Endlichdimensionales, nichtlineares Optimierungsproblem
+
+
+
+
+
+
+
+
+
+%\newpage
+%
+%Betrachtet wird das Optimalsteuerungsroblem (Mayer-Problem mit Boxschranken) der folgenden Form. Finde für feste Zeitpunkte $t_0 < t_f$ einen Zustand $X \in W^{1, \infty} ([t_0,t_f], \R^{n_X})$ und eine Steuerung $U \in L^{\infty} ([t_0,t_f], \R^{n_U})$, sodass die Zielfunktion unter der Betrachtung der gegebenen Bedingungen minimal wird:
+%\begin{itemize}
+%    \item \textbf{Zielfunktion:} $\varphi(X(t_0),X(t_f)) = -(x(t_f) - x_0)$
+%    \item \textbf{Differentialgleichung:} $\dot{X}(t) = f(t,X(T),U(t)) \ \ \ \ \forall [t_0,t_f]$
+%    \item \textbf{Randbedingungen:} $\psi(X(t_0),X(t_f)) = 0_{n_{\psi}}$
+%    \item \textbf{Reine Zustandsbeschränkungen:} $s(t,X(t)) \leq 0_{n_s} \ \ \ \ \forall t \in [t_0,t_f]$
+%    \item \textbf{Mengenbeschränkungen:} $U(t) \in \mathcal{U} = \lbrace U \in \R^{n_U} \mid U_{\min} \leq U \leq U_{\max} \rbrace \ \ \ \ \forall t \in [t_0, t_f]$
+%\end{itemize}
+%Die Mengenbeschränkungen werden auch als Boxbeschränkungen bezeichnet. 
+%
+%
+%Dieses gegebene Optimalsteuerungsproblem wird mit verschiedenen Techniken und Verfahren auf ein nichtlineares Optimierungsproblem umgeformt. Zunächst wird dabei ein Gitter erzeugt, welches das Problem diskretisiert. Dieses Gitter 
+%\begin{equation}
+%    \mathbb{G}_h := \lbrace t_0 < t_1 < ... < t_{N-1} = t_f \rbrace
+%\end{equation}
+%mit $N$, der Anzahl an Diskretisierungspunkten und mit den Schrittweiten 
+%\begin{equation}
+%    h_i = t_{i+1} - t_i \ \ \ \ \forall i = 0,...,N-2
+%\end{equation}
+%muss dabei nicht notwendig äquidistant unterteilt sein. Es stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
+%\begin{itemize}
+%    \item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
+%
+%    \item \textbf{Diskretisierungsverfahren für die Differentialgleichung:} Die Differentialgleichung des Problems wird mit Hilfe eines Diskretisierungsverfahren diskretisiert, um die Lösung im Optimierungsproblem verarbeiten zu können. Hierfür eignen sich zum Beispiel allgemeine oder spezielle Einschrittverfahren wie das explizite Eulerverfahren oder das implizite Runge-Kutta Verfahren.
+%\end{itemize}
+%Somit ergibt sich das diskretisierte Optimalsteuerungsproblem (Problem \ref{prob:VolldisOpt}).
+%
+%\begin{problem}[Vollständig diskretisiertes Optimalsteuerungsproblem]\label{prob:VolldisOpt}
+%    Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\] sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
+%\end{problem}
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Aufstellen des Optimierungsproblems}
+Dieses diskretisierte Optimalsteuerungsproblem lässt sich dann mit einem geeigneten numerischen Optimierungsverfahren lösen. Mögliche Optimierungsverfahren sind das SQP-Verfahren oder das Innere-Punkte-Verfahren. Hierfür muss Problem \ref{prob:VolldisOpt} in die Form des endlichdimensionale, nichtlineare Optimierungsproblem \ref{prob:EndNichtOpt} gebracht werden.
+
+\begin{problem}[Endlichdimensionales, nichtlineares Optimierungsproblem]\label{prob:EndNichtOpt}
+    Endlichdimensionales, nichtlineares Optimierungsproblem der Form
     \begin{align*}
         \min_{z \in S} F(z) &:= \varphi(X_0,X_{N-1}) & & \\
         \text{unter} \hspace{10mm} G(z) &\leq 0_{n_s \cdot N} & &  \text{(Ungleichungsnebenbedingungen)} \\
         H(z) &= 0_{n_X \cdot (N-1) + n_{\psi}} & & \text{(Gleichungsnebenbedingungen)}\\
-        z &\in S := \R^{n_x \cdot N} \times [U_{\min},U_{\max}]^{N} & &  \text{(Zulässigemenge)}
+        z &\in S := \R^{n_X \cdot N} \times [U_{\min},U_{\max}]^{N} & &  \text{(Zulässigemenge)}
     \end{align*}
     mit der Optimierungsvariable
     \begin{equation}
@@ -51,9 +118,9 @@ Dieses diskretisierte Optimalsteuerungsproblem lässt sich dann mit einem geeign
     \begin{equation}
         G(z) := 
         \begin{pmatrix}
-            c(t_0,X_0,U_0) \\ 
+            s(t_0,X_0,U_0) \\ 
             \vdots \\ 
-            c(t_{N-1},X_{N-1},U_{U-1})
+            s(t_{N-1},X_{N-1},U_{U-1})
         \end{pmatrix} 
     \end{equation}
     und
@@ -68,41 +135,6 @@ Dieses diskretisierte Optimalsteuerungsproblem lässt sich dann mit einem geeign
     \end{equation}
 \end{problem}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Versuchsdurchführungen und Ergebnisse}
-Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit MATLAB umgesetzt. 
-
-Da mit den Grundeinstellungen des Optimalsteuerungsproblems \ref{prob:MaxRF} keine zufriedenstellende Ergebnisse erreicht werden konnten (siehe Versuch \ref{kap:Versuch0}), wurden verschiedene Versuche aufgestellt. In den nachfolgenden Versuchen \ref{kap:Versuch1}, \ref{kap:Versuch2}, \ref{kap:Versuch3} und \ref{kap:Versuch4} wurden verschiedene Parameter variiert, beziehungsweise neue Parameter und Beschränkungen eingeführt.
-
-Plausible Ergebnisse, nach dem Aspekt der physikalischen Möglichkeiten, wurden in den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} erreicht. Ausschlaggebender Parameter stellt die Endzeit $t_f$ dar, welche über die Qualität des Ergebnisses bestimmt.
-
-Wie ist der Code / technische Umsetzung 
-
-Versuche / Probleme 
-
-Ergebnisse
-
-
-Gedanken wie der Verlauf aussehen könnte:\\
-Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
 
  

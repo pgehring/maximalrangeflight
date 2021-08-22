@@ -1,50 +1,52 @@
-\chapter{Lösen des Optimalsteuerungsproblem mit indirekten Lösungsverfahren}
+\chapter{Formulierung des Optimalsteuerungsproblem für indirekte Lösungsverfahren}
 
-\section{Anwendung Minimumpinzip von Pontryagin}
-Aus dem Modellaufbau ergeben sich die Definitionen 
-\begin{align*}
-    g(X(t_f)) &=  -(x(t_f) - x_0) & & (g : \R^n \to \R) \\
-    f_0(X(t),U(t)) &\equiv 0 & &(f_0 : \R^n \times \R^m \to \R^n)\\
-    f(X(t),U(t)) &= \dot{X}(t) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T & &(f : \R^n \times \R^m \to \R^n) \\
-    U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \left( = 
-    \left[
-        \begin{matrix}
-            [T_{\min},T_{\max}] \\ 
-            [C_{L, \min},C_{L, \max}]
-        \end{matrix} 
-    \right]\right) \subset \R^2 & &(U : [t_0,t_f] \to \R^m)
-\end{align*}
-Des Weiteren sei $\psi : \R^4 \to \R^2$ eine $C^1$-Funktion (mit $0 \leq (r = 2) \leq (n = 4)$) \[\psi(X(t_f)) = 
-\begin{pmatrix}
-    h(t_f) - h_f \\ 
-    \gamma(t_f) - \gamma_f
-\end{pmatrix} = 0\]
+Bei den indirekten Lösungsverfahren werden notwendige Bedingungen für eine optimale Lösung des Steuerungsproblems aufgestellt. Diese notwendigen Bedingungen für das Optimalsteuerungsproblem überführen das Problem in ein  Randwertproblem, welches mit verschiedenen Methoden, wie zum Beispiel dem Einfachschiess- oder Mehrfachschiessverfahren ausgewertet werden kann.
 
-So ergibt sich das autonome Mayer-Problem mit 
-\begin{equation} \label{equ:mayer_problem}
-    \begin{aligned}
-        \min F(X,U) &:= g(X(t_f)) =  -(x(t_f) - x_0) & & \\
-        \text{unter}  \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T & & \forall t \in [t_0,t_f] \\
-        %
-        X(t_0) &= X_0 = (h_0,\gamma_0,x_0,v_0)^T & & \\
-        \psi(X(t_f)) &= 0 & & \\
-        %
-        q(X(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f] \\
-        U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \subset \R^2  & & \forall t \in [t_0,t_f] 
-    \end{aligned}
-\end{equation}
+\section{Notwendige Optimalitätsbedinungen (Minimumpinzip von Pontryagin)}
+%Aus dem Modellaufbau ergeben sich die Definitionen 
+%\begin{align*}
+%    g(X(t_f)) &=  -(x(t_f) - x_0) & & (g : \R^n \to \R) \\
+%    f_0(X(t),U(t)) &\equiv 0 & &(f_0 : \R^n \times \R^m \to \R^n)\\
+%    f(X(t),U(t)) &= \dot{X}(t) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T & &(f : \R^n \times \R^m \to \R^n) \\
+%    U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \left( = 
+%    \left[
+%        \begin{matrix}
+%            [T_{\min},T_{\max}] \\ 
+%            [C_{L, \min},C_{L, \max}]
+%        \end{matrix} 
+%    \right]\right) \subset \R^2 & &(U : [t_0,t_f] \to \R^m)
+%\end{align*}
+%Des Weiteren sei $\psi : \R^4 \to \R^2$ eine $C^1$-Funktion (mit $0 \leq (r = 2) \leq (n = 4)$) \[\psi(X(t_f)) = 
+%\begin{pmatrix}
+%    h(t_f) - h_f \\ 
+%    \gamma(t_f) - \gamma_f
+%\end{pmatrix} = 0\]
+%
+%So ergibt sich das autonome Mayer-Problem mit 
+%\begin{equation} \label{equ:mayer_problem}
+%    \begin{aligned}
+%        \min F(X,U) &:= g(X(t_f)) =  -(x(t_f) - x_0) & & \\
+%        \text{unter}  \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T & & \forall t \in [t_0,t_f] \\
+%        %
+%        X(t_0) &= X_0 = (h_0,\gamma_0,x_0,v_0)^T & & \\
+%        \psi(X(t_f)) &= 0 & & \\
+%        %
+%        q(X(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f] \\
+%        U(t) &= (T(t),C_L(t))^T \in \mathcal{U} \subset \R^2  & & \forall t \in [t_0,t_f] 
+%    \end{aligned}
+%\end{equation}
+%
+%Für die Funktion $f$ lässt sich konkret
+%\begin{equation} \label{equ:state_space}
+%    f(X(t),U(t)) = \dot{X}(t) = \begin{pmatrix}
+%        v(t) \sin(\gamma(t)) \\ 
+%        \dfrac{F \alpha e^{-\beta h(t)} v(t) C_L(t)}{2m} - \dfrac{g \cos(\gamma(t))}{v(t)} \\ 
+%        v(t) \cos(\gamma(t)) \\ 
+%        \dfrac{T(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t))
+%    \end{pmatrix}
+%\end{equation}
 
-Für die Funktion $f$ lässt sich konkret
-\begin{equation} \label{equ:state_space}
-    f(X(t),U(t)) = \dot{X}(t) = \begin{pmatrix}
-        v(t) \sin(\gamma(t)) \\ 
-        \dfrac{F \alpha e^{-\beta h(t)} v(t) C_L(t)}{2m} - \dfrac{g \cos(\gamma(t))}{v(t)} \\ 
-        v(t) \cos(\gamma(t)) \\ 
-        \dfrac{T(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t))
-    \end{pmatrix}
-\end{equation}
-
-Für die Hamilton-Funktion ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0$) und $\lambda : [t_0,t_f] \to \R^n$
+Für die Notwendigen Optimalitätsbedingungen muss zunächst die Hamilton-Funktion aufgestellt werden. Diese ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0$) und $\lambda : [t_0,t_f] \to \R^{n_X}$ zu
 \begin{equation} \label{equ:hamilt_func}
     \begin{split}
         H(X(t),U(t),\lambda(t)) &= \lambda_0 f_0(X(t),U(t)) + \lambda(t)^T f(X(t),U(t)) \\\
@@ -56,8 +58,7 @@ Für die Hamilton-Funktion ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0
         &\hspace{7mm} + \dfrac{T(t) \lambda_4(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t) \lambda_4(t)}{2m} - g \sin(\gamma(t)) \lambda_4(t)
     \end{split}
 \end{equation}
-
-Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontryagin aufstellen:
+Mit der Hamilton-Funktion \ref{equ:hamilt_func} lassen sich nun die notwendigen Optimalitätsbedingungen des Minimumprinzips von Pontryagin untersuchen:
 \begin{enumerate}
     \item \textbf{Minimumbedingung:} Es gilt an allen Stetigkeitsstellen $t \in [t_0,t_f]$ von $u^{\ast}(t)$ die Minimumbedingung \[H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \min_{U(t) \in \mathcal{U}} H(X^{\ast}(t),U(t),\lambda(t))\] Leitet man nun nach der Steuerfunktion $U(t)$ ab, so ergibt sich für den unbeschränkten Fall der Steuerung die Minimumbedingung
     \[\dfrac{\partial}{\partial U} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
@@ -68,26 +69,24 @@ Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontr
     \[\dfrac{\partial^2}{\partial U^2} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
     0 & - \dfrac{k F \alpha e^{-\beta h(t)} v^2(t) \lambda_4(t)}{m} 
     \end{pmatrix} \stackrel{!}{\geq} 0\] wobei \[\sigma(x(t),\lambda(t)) := H_u(X^{\ast}(t),U^{\ast}(t),\lambda(t))\] Schaltfunktion genannt wird. Für die Betrachtung mit den Beschränkungen der Steuerfunktion ergibt sich für den Schub:
-    \[T(t) = \left\lbrace \begin{array}{ll}
-    T_{\min} & ,\text{falls } \lambda_4 > 0  \\ 
-    \text{beliebig} \in [T_{\min},T_{\max}] & ,\text{falls } \lambda_4 = 0  \\ 
-    T_{\max} & ,\text{falls } \lambda_4 < 0
-    \end{array} \right.\]
-    Für die Bestimmung der Steuerfunktion des Auftriebbeiwerts lässt sich die Hamilton-Funktion verkürzt schreiben mit den Thermen $K_1(t)$ und $K_2(t)$
-    \[
-    \begin{split}
+\[T(t) = \left\lbrace \begin{array}{ll}
+T_{\min} & ,\text{falls } \lambda_4 > 0  \\ 
+\text{beliebig} \in [T_{\min},T_{\max}] & ,\text{falls } \lambda_4 = 0  \\ 
+T_{\max} & ,\text{falls } \lambda_4 < 0
+\end{array} \right.\]
+Für die Bestimmung der Steuerfunktion des Auftriebbeiwerts lässt sich die Hamilton-Funktion verkürzt schreiben mit den Thermen $K_1(t)$ und $K_2(t)$
+    \[\begin{split}
         \tilde{H}(X^{\ast}(t),C_L(t),\lambda(t)) &= \dfrac{F \alpha e^{-\beta h^{\ast}(t)} v^{\ast}(t) \lambda_2(t)}{2m} \cdot C_L(t) - \dfrac{k F \alpha e^{-\beta h^{\ast}(t)}  v^{\ast 2}(t) \lambda_4(t)}{2m} \cdot C_L^2(t) \\\
         &= K_1(t) C_L(t) - K_2(t) C_L^2(t)
-    \end{split}
-    \]
-    Soll nun $\tilde{H}(X^{\ast}(t),C_L(t),\lambda(t))$ minimal werden, so müssen die Folgenden Bedinungen überprüft werden:
+    \end{split}\]
+Soll nun $\tilde{H}(X^{\ast}(t),C_L(t),\lambda(t))$ minimal werden, so müssen die Folgenden Bedinungen überprüft werden:
     \begin{enumerate}
         \item[1.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} < 0$:
         \begin{enumerate}
             \item[1.1.)] Für die Ableitungen von $\tilde{H}$ ergeben sich
             \[\begin{split}
-            - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-            - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+            \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+            \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
             \end{split}\]
             So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$.
             %
@@ -96,22 +95,22 @@ Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontr
         %
         \item[2.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
         \[\begin{split}
-        - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
-        - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
         \end{split}\]
         So folgt für die Steuerfunktion $C_L(t) = 0 = C_{L, \min}$.
         %
         \item[3.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
         \[\begin{split}
-        - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-        - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
         \end{split}\]
         So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \min}$.
         %
         \item[4.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
         \[\begin{split}
-        K_1(t) &\stackrel{!}{=} 0 \\\
-        0 &\geq 0 \Rightarrow \text{Minimum}
+        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
         \end{split}\]
         So folgt für die Steuerfunktion $C_L(t) = C_{L, \max}$.
         %
@@ -119,54 +118,68 @@ Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontr
         %
         \item[6.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
         \[\begin{split}
-        K_1(t) &\stackrel{!}{=} 0 \\\
-        0 &\geq 0 \Rightarrow \text{Minimum}
+        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
         \end{split}\]
         So folgt für die Steuerfunktion $C_L(t) = C_{L, \min}$.
         %
         \item[7.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
         \[\begin{split}
-        - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-        - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
         \end{split}\]
         So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \max}$.
         %
         \item[8.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
         \[\begin{split}
-        - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
-        - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
         \end{split}\]
         So folgt für die Steuerfunktion $C_L(t) = 0$. Es gilt also $C_L(t) = C_{L, \max}$.
         %
-        \item[9.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-        - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$. Es gilt also $C_L(t) = C_{L, \min}$.
-    \end{enumerate}
-    Damit folgt für die Steuerfunktion des Auftriebsbeiwerts
-    \[C_L(t) = \left\lbrace 
-    \begin{array}{ll}
-        C_{L, \min} & ,\text{falls Bedingung } 2,3,6 \text{ oder } 9 \text{ gilt} \\ 
-        \text{beliebig} \in [C_{L, \min},C_{L, \max}] & ,\text{falls Bedingung } 5 \text{ gilt} \\ 
-        \dfrac{K_1(t)}{2 K_2(t)} & ,\text{falls Bedingung } 1.1 \text{ gilt} \\ 
-        C_{L, \max} & ,\text{falls Bedingung } 1.2,4,7 \text{ oder } 8 \text{ gilt}  
-    \end{array} 
-    \right.\]
-    %
-    \item \textbf{Adjungierte DGL:} Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),U^{\ast}(t),\lambda(t))$ so erhält man 
+\item[9.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+\[\begin{split}
+\frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+\frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+\end{split}\]
+So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$. Für das Minimum bestimme man nun die Nullstellen von $\tilde{H}$:
+\begin{enumerate}
+\item[9.1.)] Für die Bestimmung der Nullstellen von $\tilde{H}$ gilt
+\[\begin{split}
+\tilde{H} \stackrel{!}{=} 0 &= - K_2(t) C_L^2(t) + K_1(t)C_L(t) \\\
+&= (- K_2(t) C_L(t) + K_1(t)) C_L(t) \\\
+0 &= K_1(t) - K_2(t)C_L(t) \\\
+C_L(t) &= \dfrac{K_1(t)}{K_2(t)}
+\end{split}\]
+So gilt $\tilde{H} = 0$ bei $C_L(t) = 0$ und $C_L(t) = \dfrac{K_1(t)}{K_2(t)}$ Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} < C_{L,\max}$, so gilt also $C_L(t) = C_{L, \max}$.
+%
+\item[9.2.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} > C_{L,\max}$, so gilt $C_L(t) = C_{L,\min}$.
+\item[9.3.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} = C_{L,\max}$, so gilt $C_L(t) = C_{L,\max} \vee C_{L,\min}$.
+\end{enumerate}
+\end{enumerate}
+Damit folgt für die Steuerfunktion des Auftriebsbeiwerts
+\[C_L(t) = \left\lbrace 
+\begin{array}{ll}
+C_{L, \min} & ,\text{falls Bedingung } 2,3,6 \text{ oder } 9.2 \text{ gilt} \\ 
+\text{beliebig} \in [C_{L, \min},C_{L, \max}] & ,\text{falls Bedingung } 5 \text{ gilt} \\ 
+\dfrac{K_1(t)}{2 K_2(t)} & ,\text{falls Bedingung } 1.1 \text{ gilt} \\ 
+C_{L, \max} & ,\text{falls Bedingung } 1.2,4,7,8 \text{ oder } 9.1 \text{ gilt} \\
+C_L(t) = C_{L,\max} \vee C_{L,\min} & ,\text{falls Bedingung } 9.3 \text{ gilt} \\ 
+\end{array} 
+\right.\]
+%
+\item \textbf{Adjungierte DGL:} Leitet man nach dem Zustandsvektor $X(t)$ ab, also $H_{X}(X^{\ast}(t),U^{\ast}(t),\lambda(t))$ so erhält man 
         \[\begin{split}
             \dfrac{\partial}{\partial h} H &= - \dfrac{\alpha \beta F e^{-\beta h(t)} C_L(t) v(t) \lambda_2(t)}{2m} + \dfrac{(C_{D_0}+k C_L^2(t)) \alpha \beta F e^{-\beta h(t)} v^2(t) \lambda_4(t)}{2m} \\\
             \dfrac{\partial}{\partial \gamma} H &= \cos(\gamma(t)) v(t) \lambda_1(t) + \dfrac{g \sin(\gamma(t)) \lambda_2(t)}{v(t)} - \sin(\gamma(t)) v(t) \lambda_3(t) - \cos(\gamma(t)) g \lambda_4(t) \\\
             \dfrac{\partial}{\partial x} H &= 0 \\\
             \dfrac{\partial}{\partial v} H &= \sin(\gamma(t)) \lambda_1(t) + \left( \dfrac{F \alpha e^{-\beta h(t)} C_L(t)}{2m} + \dfrac{g \cos(\gamma(t))}{v^2(t)} \right) \lambda_2(t) \\\
-            &\hspace{7mm} + \cos(\gamma(t)) \lambda_3(t) - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t) \lambda_4(t)}{m} \\\ 
+            &\hspace{7mm} + \cos(\gamma(t)) \lambda_3(t) - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t) \lambda_4(t)}{m}
         \end{split}\]
         wobei gilt 
         \[\dot{\lambda}(t)^T = - \dfrac{\partial}{\partial X} H = -H_{X} = \left( -\dfrac{\partial}{\partial h} H, -\dfrac{\partial}{\partial \gamma} H, -\dfrac{\partial}{\partial x} H, -\dfrac{\partial}{\partial v} H \right)\]
     %
-    \item \textbf{Transversalitätsbedingung:} Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung mit dem Vektor $\nu \in \R^r$ mit $(\lambda_0,\lambda(t),\nu) \neq 0$ für alle $t \in [t_0,t_f]$
+    \item \textbf{Transversalitätsbedingung:} Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung mit dem Vektor $\nu \in \R^{n_{\psi}}$ mit $(\lambda_0,\lambda(t),\nu) \neq 0$ für alle $t \in [t_0,t_f]$
         \[\begin{split}
             \lambda(t_f)^T &= \lambda_0 g_X(X^{\ast}(t_f)) + \nu^T \psi_X(X^{\ast}(t_f)) \\\
             &= \lambda_0 
@@ -182,7 +195,7 @@ Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontr
             \nu_1 & \nu_2 & -\lambda_0 & 0 
             \end{pmatrix}
         \end{split}\]
-    (ist $\lambda_{0} =1$ da $x(t_f)$ frei ist und $\psi_X(X^{\ast}(t_f))$ hat vollen Zeilenrang???) 
+%(ist $\lambda_{0} =1$ da $x(t_f)$ frei ist und $\psi_X(X^{\ast}(t_f))$ hat vollen Zeilenrang???) 
     %
     \item \textbf{Konstanz:} Für autonome Systeme gilt \[H(X^{\ast}(t),U^{\ast}(t), \lambda(t)) = const \ \in [t_0,t_f]\]
 \end{enumerate}
@@ -199,26 +212,26 @@ Damit lassen sich nun die Optimalitätsbedingungen des Minimumprinzips von Pontr
 
 
 
-\section{Zweipunkt-Randwertproblem und Beschränkungsuntersuchungen}
-Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem umgestellt werden.
-
-\begin{problem}[Zweipunkt-Randwertproblem]\label{prob:ZweiRand}
-Seien $G : [t_0,t_f] \times \R^{n_Z} \to \R^{n_Z}$ und $R : \R^{n_Z} \times \R^{n_Z} \to \R^{n_Z}$ gegeben. Gesucht ist eine Lösung $Z$ des Randwertproblems
-\begin{align}
-\dot{Z}(t) &= G(t,Z(t),U(t)) \\
-R(Z(t_0),Z(t_f)) &= 0_{n_Z}
-\end{align}
-im Intervall $[t_0,t_f]$.
-\end{problem}
-
-Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschränkung des Staudrucks $q(v(t),h(t)) \leq q_{\max}$, wie in Problem \ref{prob:MaxRF} gefordert. Untersuchungen der Ergebnisse aus den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} haben gezeigt, dass diese zu keinem Zeitpunkt den maximalen Wert $q_{\max}$ der Beschränkung erreicht haben (Abbildung \ref{img:test_1_1_staudruck}). Aus Vereinfachungsgründen, wird diese Beschränkung deshalb in diesem Kapitel nicht weiter berücksichtigt.
-
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
-\caption{Untersuchung, ob bei Versuch \ref{kap:Versuch11} der maximale Staudruck überschritten bzw. angenähert wird.}\label{img:test_1_1_staudruck}
-\end{center}
-\end{figure}
+%\section{Zweipunkt-Randwertproblem und Beschränkungsuntersuchungen}
+%Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem umgestellt werden.
+%
+%\begin{problem}[Zweipunkt-Randwertproblem]\label{prob:ZweiRand}
+%Seien $G : [t_0,t_f] \times \R^{n_Z} \to \R^{n_Z}$ und $R : \R^{n_Z} \times \R^{n_Z} \to \R^{n_Z}$ gegeben. Gesucht ist eine Lösung $Z$ des Randwertproblems
+%\begin{align}
+%\dot{Z}(t) &= G(t,Z(t),U(t)) \\
+%R(Z(t_0),Z(t_f)) &= 0_{n_Z}
+%\end{align}
+%im Intervall $[t_0,t_f]$.
+%\end{problem}
+%
+%Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschränkung des Staudrucks $q(v(t),h(t)) \leq q_{\max}$, wie in Problem \ref{prob:MaxRF} gefordert. Untersuchungen der Ergebnisse aus den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} haben gezeigt, dass diese zu keinem Zeitpunkt den maximalen Wert $q_{\max}$ der Beschränkung erreicht haben (Abbildung \ref{img:test_1_1_staudruck}). Aus Vereinfachungsgründen, wird diese Beschränkung deshalb in diesem Kapitel nicht weiter berücksichtigt.
+%
+%\begin{figure}[H]
+%\begin{center}
+%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
+%\caption{Untersuchung, ob bei Versuch \ref{kap:Versuch11} der maximale Staudruck überschritten bzw. angenähert wird.}\label{img:test_1_1_staudruck}
+%\end{center}
+%\end{figure}
 
 
 
@@ -237,7 +250,18 @@ Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschr�
 
 
 \section{Aufstellen des Zweipunkt-Randwertproblems}
-Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $G(t,Z(t),U(t))$ und $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ besteht:
+Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem umgestellt werden.
+
+\begin{problem}[Zweipunkt-Randwertproblem]\label{prob:ZweiRand}
+Seien $G : [t_0,t_f] \times \R^{n_Z} \to \R^{n_Z}$ und $R : \R^{n_Z} \times \R^{n_Z} \to \R^{n_Z}$ gegeben. Gesucht ist eine Lösung $Z$ des Randwertproblems
+\begin{align}
+\dot{Z}(t) &= G(t,Z(t),U(t)) \\
+R(Z(t_0),Z(t_f)) &= 0_{n_Z}
+\end{align}
+im Intervall $[t_0,t_f]$.
+\end{problem}
+
+Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $G(t,Z(t),U(t))$ und $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ für $n_Z = 8$ besteht:
 \begin{itemize}
 \item Für $G(t,Z(t),U(t))$ ergibt sich
 \begin{equation}
@@ -289,12 +313,12 @@ J_G^{(8,7)} &= \cos(\gamma(t)) \\
 J_G^{(8,8)} &= - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v(t)}{m} 
 \end{align}
 %
-\item Für $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ müssen zunächst die Endbedingungen mit gebildet aus
+\item Für $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ müssen zunächst die Endbedingungen mit
 \begin{align*}
-X_i(t_f) &= c_i & & (i=1,...,r=2) \\
-\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) & &(i=r+1,...,n=4)
+X_i(t_f) &= c_i & & (i=1,...,n_{\psi}=2) \\
+\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) & &(i=n_{\psi}+1,...,n_X=4)
 \end{align*}
-mit
+aus
 \begin{align*}
 c &= \begin{pmatrix} h_f & \gamma_f \end{pmatrix} \\
 g_{X}(X^{\ast}(t_f)) &= \begin{pmatrix} 0 & 0 & -1 & 0 \end{pmatrix}
@@ -347,7 +371,7 @@ mit
 
 
 
-\section{Versuche und Probleme}
+
 
 
 

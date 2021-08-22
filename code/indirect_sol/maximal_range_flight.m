@@ -87,13 +87,17 @@ classdef maximal_range_flight
             %
             b_7 = (K_1<0 && K_2>0);
             b_8 = (abs(K_1)<tol && K_2>0);
-            b_9 = (K_1>0 && K_2>0);
+            b_9_1 = (K_1>0 && K_2>0 && (K_1/K_2)<obj.C_L_max);
+            b_9_2 = (K_1>0 && K_2>0 && (K_1/K_2)>obj.C_L_max);
+            b_9_3 = (K_1>0 && K_2>0 && abs((K_1/K_2)-obj.C_L_max)<tol);
             %
-            if b_2 || b_3 || b_6 || b_9
+            if b_2 || b_3 || b_6 || b_9_2
                 C_L = obj.C_L_min;
             elseif b_1_1
                 C_L = K_1/(2*K_2);
-            elseif b_1_2 || b_4 || b_7 || b_8
+            elseif b_1_2 || b_4 || b_7 || b_8 || b_9_1
+                C_L = obj.C_L_max;
+            elseif b_9_3
                 C_L = obj.C_L_max;
             else
                 C_L = (obj.C_L_max-obj.C_L_min)/2;
@@ -341,7 +345,7 @@ classdef maximal_range_flight
         function Z = sol_func(obj,sol)
             for i = 1:length(sol)
                 [T,C_L] = control(obj,1,sol(i,:));
-                Z(i,:) = [sol(1,1:4),T,C_L];
+                Z(i,:) = [sol(i,1:4),T,C_L];
             end            
         end
         

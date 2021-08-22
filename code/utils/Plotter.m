@@ -52,12 +52,16 @@ classdef Plotter
                 test=sp.Position;
                 if i == 1
                     sp.Position=[test(1)+0.7,test(2)-0.3,test(3),test(4)]; % Steuerung 2
+                    ylim(sp,[0-1.48*0.05,1.48+1.48*0.05]);
+                    sp.YTick=0:0.37:1.48;
                 elseif i == 2
                     sp.Position=[test(1),test(2)-0.3,test(3),test(4)]; % Geschwindigkeit
                 elseif i == 3
                     sp.Position=[test(1)-0.7,test(2)-0.3,test(3),test(4)]; % Anstellwinkel
                 elseif i == 4
                     sp.Position=[test(1)+0.7,test(2)-0.5,test(3),test(4)]; % Steuerung 1
+                    ylim(sp,[0-1260000*0.05,1260000+1260000*0.05]);
+                    sp.YTick=0:180000:1260000;
                 elseif i == 5
                     sp.Position=[test(1),test(2)-0.5,test(3),test(4)]; % Flughöhe
                 else
@@ -108,7 +112,7 @@ classdef Plotter
             ylabel(fig_label,'FontSize',8)
             sp_axes = gca;
             sp_axes.YAxis.Exponent = 0;
-            ax.FontSize = 7; 
+            ax.FontSize = 7;
         end
         
         %%
@@ -134,7 +138,8 @@ classdef Plotter
             ylabel('$q(v(t),h(t))$');
             set(findall(gcf,'-property','FontSize'),'FontSize',8);
             legend('$q_{\max}$','$q(v(t),h(t))$','Interpreter','latex','Location','southoutside','FontSize',7,'Orientation','horizontal');
-            title(['Staudruck \"Ueberpr\"ufung (',num2str(nof_exc),' \"Uberschreitungen)'],'Interpreter','latex','FontSize',10);
+%             title(['Staudruck \"Ueberpr\"ufung (',num2str(nof_exc),' \"Uberschreitungen)'],'Interpreter','latex','FontSize',10);
+            title(['Staudruck \"Ueberpr\"ufung'],'Interpreter','latex','FontSize',10);
             set(fig,'defaulttextinterpreter','latex',...
                         'PaperUnits','centimeters','PaperSize',[FigW FigH],...
                         'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
