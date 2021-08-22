@@ -65,7 +65,7 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
             276800,... % m:     Leergewicht des A380 in [kg]
              44154];   % q_max: Maximaler Staudruck in [N/m^2]  
 
-prob = maximal_range_flight(eta_mehrsv,X_0,X_T,params);
+prob = MaximalRangeFlightIndirect(eta_mehrsv,X_0,X_T,params);
 
 %% Boxbeschränkungen
 h_min         = 1e-12;

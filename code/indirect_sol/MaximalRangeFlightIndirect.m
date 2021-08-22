@@ -5,7 +5,7 @@
 % Date:         27.08.2021
 % Author:       Gehring, Philipp / Karus, Heiko / Goetz, Felix
 
-classdef maximal_range_flight
+classdef MaximalRangeFlightIndirect
     properties
         %% Parameters for the optimal control problem
         t_0                 % Starting time in [s]
@@ -47,7 +47,7 @@ classdef maximal_range_flight
     end
     methods
         %% Constructor: Set initial conditions of the direct solver
-        function obj = maximal_range_flight(z_0,X_0,X_T,params)
+        function obj = MaximalRangeFlightIndirect(z_0,X_0,X_T,params)
             % Start vector fmincon
             obj.z_0 = z_0;
             % Parameters

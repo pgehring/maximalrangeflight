@@ -1,11 +1,11 @@
-% MaximalRangeFlight.m:
+% MaximalRangeFlightDirect.m:
 % Description:
 %   Class of the optimal control problem for an Airbus A380-800, and 
 %   functions for the Matlab function fmincon.
 % Date:         27.08.2021
 % Author:       Gehring, Philipp / Karus, Heiko / Goetz, Felix
 
-classdef MaximalRangeFlight
+classdef MaximalRangeFlightDirect
     properties
         %% Parameters for the optimal control problem
         t_0                 % Starting time in [s]
@@ -50,7 +50,7 @@ classdef MaximalRangeFlight
     end
     methods
         %% Constructor: Set initial conditions of the direct solver
-        function obj = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method)
+        function obj = MaximalRangeFlightDirect(N,t,z_0,X_0,X_T,params,lb,ub,ode_method)
             % Grid size
             obj.N = N;
             obj.t = t;

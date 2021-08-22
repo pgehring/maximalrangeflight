@@ -85,25 +85,12 @@ Zusammenbau in Schiessverfahren
 \section{Aufbau des Lösers}
 Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und einem indirekten Lösungsverfahren gelöst. Zudem wurden die Untersuchungen in \autoref{sec:num_ode} separat implementiert. Um viel Code wiederverwenden zu können, sind die Löser mit einer Klassenstruktur implementiert. Hierbei ist die Ausgabe über die Klasse \verb+Plotter+ für alle Verfahren wiederverwendbar.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{images/03_TechnischeUmsetzung/code_structure}
     \caption{Schematische Darstellung der Implementierten Verfahren. Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \texttt{Plotter}}
     \label{fig:code_structure}
 \end{figure}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 \section{Diskussion der numerischen Versuche und Ergebnisse mit direkten Lösungsverfahren}
@@ -122,16 +109,6 @@ Ergebnisse
 
 Gedanken wie der Verlauf aussehen könnte:\\
 Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
-
-
-
-
-
-
-
-
-
-
 
 
 
