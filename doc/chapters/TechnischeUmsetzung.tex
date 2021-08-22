@@ -74,17 +74,6 @@ FMINCON verlangt, dass die Zielfunktion und die Nebenbedingungsfunktion in getre
 \textit{MATLAB} bietet dem Benutzer die Möglichkeit, den Gradienten der Zielfunktion und die Nebenbedingungen parallel zu berechnen. Die Auswertungen der Zielfunktion und der Nebenbedingungen in dem Schema mit finiten Differenzen werden auf die Prozessoren verteilt. Weitere Informationen zur parallelen Implementierung finden Sie im MathWorks Optimization Toolbox User's Guide (2012).
 
 
-
-
-
-
-
-
-
-
-
-
-
 \section{Schiessverfahren}
 
 Was wird verwendet:
@@ -93,26 +82,14 @@ Sensitivitäts DGL
 Zusammenbau in Schiessverfahren
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 \section{Aufbau des Lösers}
 Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und einem indirekten Lösungsverfahren gelöst. Zudem wurden die Untersuchungen in \autoref{sec:num_ode} separat implementiert. Um viel Code wiederverwenden zu können, sind die Löser mit einer Klassenstruktur implementiert. Hierbei ist die Ausgabe über die Klasse \verb+Plotter+ für alle Verfahren wiederverwendbar.
 
 \begin{figure}
     \centering
-    \caption{Schematische Darstellung der Implementierten Verfahren. Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \verb+Plotter+}
+    \includegraphics[width=0.9\textwidth]{images/03_TechnischeUmsetzung/code_structure}
+    \caption{Schematische Darstellung der Implementierten Verfahren. Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \texttt{Plotter}}
+    \label{fig:code_structure}
 \end{figure}
 
 
