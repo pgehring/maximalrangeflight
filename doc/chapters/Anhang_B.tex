@@ -1,8 +1,8 @@
 \chapter{Algorithmenvergleich für die adjungierten Differentialgleichungen}\label{appendix:methods}
-Analog zu dem in \autoref{} erstellten Vergleich der Lösungsalgorithmen für die Zustandsdifferentialgleichung, wurde der Vergleich für die adjungierten Differentialgleichungen durchgeführt.
+Analog zu dem in \autoref{kap:TUNU} erstellten Vergleich der Lösungsalgorithmen für die Zustandsdifferentialgleichung, wurde der Vergleich für die adjungierten Differentialgleichungen durchgeführt.
 Hierbei hat sich gezeigt, dass das implizite Euler Verfahren und das RADAU-2A Verfahren nicht konvergierte. Diese Verfahren werden daher nciht in dem Vergleich aufgeführt.
 
-In Abbildung \autoref{} ist die Lösung der drei Verfahren gezeigt. Es ist zu erkennen, dass das explizite Vefahren deutlich Abweichungen hat. Die Laufzeit ist jedoch deutlicher kürzer als bei den Verfahren \verb+ode45+ und \verb+ode23s+.
+In Abbildung \autoref{fig:methods_indirect} ist die Lösung der drei Verfahren gezeigt. Es ist zu erkennen, dass das explizite Vefahren deutlich Abweichungen hat. Die Laufzeit ist jedoch deutlicher kürzer als bei den Verfahren \verb+ode45+ und \verb+ode23s+.
 
 \begin{figure}[htbp]
     \centering 
@@ -22,7 +22,7 @@ In Abbildung \autoref{} ist die Lösung der drei Verfahren gezeigt. Es ist zu er
     \qquad
     \subfloat[\label{fig:methods_i_l4}]{\includegraphics{../code/methods/results/methods_plot_i_l4.pdf}} \\
 
-    \caption{Lösung des Differentialgleichungsmodells. Die acht Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.}
+    \caption{Lösung des Differentialgleichungsmodells. Die acht Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.} \label{fig:methods_indirect}
     % \protect\subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \protect\subref{fig:methods_gamma} zeigt den Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \protect\subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges. \protect\subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.
 \end{figure}
 
@@ -31,12 +31,12 @@ In Abbildung \autoref{} ist die Lösung der drei Verfahren gezeigt. Es ist zu er
     \caption{Untersuchte Einschrittalgorithmen zur Lösung adjungierten Differentialgleichungen}
     \begin{tabularx}{.9\textwidth}{Zccc}
         \toprule
-        \textbf{Algorithmus}            & \textbf{Laufzeit} & \textbf{Laufzeitdifferenz } & \textbf{max. Fehler} \\
-                                        & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} & $\Delta y$ \\
+        \textbf{Algorithmus}            & \textbf{Laufzeit} & \textbf{Laufzeitdifferenz } \\
+                                        & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} \\
         \midrule
-        \textit{MATLAB} \verb+ode45+    &   0,499   &   0,490   &   ?\\
-        \textit{MATLAB} \verb+ode23s+   &   0,217   &   0,209   &   ?\\
-        explizites Euler Verfahren      &   0,00892 &   0       &   ?\\
+        \textit{MATLAB} \verb+ode45+    &   0,499   &   0,490 \\
+        \textit{MATLAB} \verb+ode23s+   &   0,217   &   0,209 \\
+        explizites Euler Verfahren      &   0,00892 &   0     \\
         \bottomrule
     \end{tabularx}
 \end{table}

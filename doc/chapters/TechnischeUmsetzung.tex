@@ -1,7 +1,7 @@
-\chapter{Technische Umsetzung und numerische Untersuchungen}\label{kap:TUNU}
+\chapter{Technische Umsetzung und numerische Untersuchungen} \label{kap:TUNU}
 Das in Gleichung \eqref{equ:mayer_problem} gezeigte Optimalsteuerungsproblem in \autoref{cha:optim} wird numerisch in \textit{MATLAB} implementiert und gelöst. Im Folgenden Kapitel werden Methoden zur Lösung des Differentialgleichungssystems (vgl. Gleichung \eqref{equ:state_space}) verglichen. Desweiteren werden Algortihmen zur Lösung von nichtlinearen Optimierungsproblemen erläutert. Die Implementierung der Lösung des Optimalsteuerungsproblems wird mit anhand eines Klassendiagrams visualisiert.
 
-\section{Numerische Lösung von gewöhnlichen Differentialgleichungen}
+\section{Numerische Lösung von gewöhnlichen Differentialgleichungen} \label{sec:num_ode}
 Das gezeigte Modell des Flugzeugs wurde durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell lösen zu können, werden Methoden von \textit{MATLAB} und eigens implementierte Methoden zur Integration verwendet.
 Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurden diese mit konstanten Werten für die Steuerfunktionen \(T\) und \(C_L\) gelöst. Hierbei wurden die Werte innerhalb ihres physikalisch sinnvollen Bereiches ausgewählt und konstante Werte dem Löser übergeben.
 
@@ -9,22 +9,22 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
 \newcolumntype{Z}{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}X}
 \begin{table}[htbp]
     \centering
-    \caption{Untersuchte Einschrittalgorithmen zur Lösung Zustandsdifferentialgleichung}
+    \caption{Untersuchte Einschrittalgorithmen zur Lösung der Zustandsdifferentialgleichung im Vergleich zum expliziten Euler Verfahren}
     \begin{tabularx}{.9\textwidth}{Zccc}
         \toprule
-        \textbf{Algorithmus}        & \textbf{Laufzeit} & \textbf{Laufzeitdifferenz } & \textbf{max. Fehler} \\
-                                    & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} & $\Delta y$ \\
+        \textbf{Algorithmus}        & \textbf{Laufzeit} & \textbf{Laufzeitdifferenz } \\
+                                    & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} \\
         \midrule
-        \textit{MATLAB} ode45       &   0,529   &   0,522   &   ?\\
-        \textit{MATLAB} ode23s      &   0,0914  &   0,0843  &   ?\\
-        explizites Euler Verfahren  &   0,00708 &   0       &   ?\\
-        implizites Euler Verfahren  &   0,0185  &   0,0115  &   ?\\
-        RADAU-2A Verafahren         &   1,36    &   1,35    &   ?\\
+        explizites Euler Verfahren  &   0,00708 &   0 \\
+        implizites Euler Verfahren  &   0,0185  &   0,0115\\
+        \textit{MATLAB} ode23s      &   0,0914  &   0,0843 \\
+        \textit{MATLAB} ode45       &   0,529   &   0,522 \\
+        RADAU-2A Verafahren         &   1,36    &   1,35 \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
-\begin{figure}[!htbp]
+\begin{figure}[htbp]
     \centering 
     \subfloat[\label{fig:methods_d_h}]{\includegraphics{../code/methods/results/methods_plot_d_h}}
     \qquad
@@ -41,27 +41,7 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
 
 
 \paragraph{Explizites Euler Verfahren}
-Die vorangeganenen Untersuchungen zeigen, dass sich das explizite Euler Verfahren am Besten mit Hinsicht auf die Laufzeit und die Genauigkeit zur Lösung des gegebenen Optimalsteuerungsproblems eignet. Das Verfahren wurde nach Algorithmus \ref{algo:expl_euler} in \textit{MATLAB} implementiert.
-
-\floatname{algorithm}{Algorithms}
-\begin{algorithm}[H]
-    \caption{Explizites Euler Verfahren}\label{algo:expl_euler}
-    \textbf{[$t, y $] = explicit\_euler($ f(t, y), {t_1,\,t_i,\,\dots,\,t_N}, y_0$)}
-    \begin{algorithmic}
-        \vspace{.2em}
-        \STATE $t \leftarrow {t_1,\,t_i,\,\dots,\,t_N}\,\text{mit}\,i = 1,\,\dots,\,N$
-        \vspace{.2em}
-        \STATE $h \leftarrow \frac{t_f-t_0}{N}$
-        \vspace{.2em}
-        \STATE $y \leftarrow y_0$
-        \vspace{.2em}
-        \FOR {$i = 1,\,\dots\,,N-1$}
-            \STATE $y_{i+1} \leftarrow y_i + h \cdot f(t_i, y_i) $
-        \ENDFOR
-        \vspace{.8em}
-    \end{algorithmic}
-\end{algorithm}
-
+Die vorangeganenen Untersuchungen zeigen, dass sich das explizite Euler Verfahren am Besten mit Hinsicht auf die Laufzeit und die Genauigkeit zur Lösung des gegebenen Optimalsteuerungsproblems eignet. Das Verfahren wurde nach \cite{Brokate2016} in \textit{MATLAB} implementiert.
 
 \section{Beschränkte nichtlineare Optimierungsverfahren}
 Bei den direkten Verfahren wird ein Trajektorienoptimierungsproblem durch Umwandlung in ein nichtlineares Programm (NLP) gelöst. Im vorliegenden Projekt wird dabei ein gradientenbasiertes lokales Verfahren verwendet, welches durch die \textit{Optimization Toolbox} von \textit{MATLAB} bereitgestellt wird. Wie der Name schon sagt, verwenden gradientenbasierte Methoden Ableitungen erster und zweiter Ordnung um lokale Minima zu finden. Zwei wichtige gradientenbasierte Methoden zur Lösung von beschränkten nichtlinearen Optimierungsproblemen sind die sequentielle quadratische Programmierung (SQP) und das Innere-Punkte-Verfahren (IP). Beide reduzieren dieses recht komplizierte Problem in einfachere Teilprobleme und lösen diese nacheinander, bis ein lokales Optimum gefunden ist.
