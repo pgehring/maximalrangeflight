@@ -35,7 +35,7 @@ params = [1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
               1.47];   % C_L_start in [1]
 params_cell = num2cell(params);
 
-MODEL = "d" % model switch  d: direct_model
+MODEL = "i" % model switch  d: direct_model
             %               i: indirect_model
             
 
@@ -126,7 +126,7 @@ set(0,'DefaultLineMarkerSize',4);
 set(0, 'DefaultLineLineWidth', 0.8);
 FigW=7.5;
 FigH=4;
-loc=["northwest","northeast","northwest","southeast","southwest","northwest","northwest","northwest"];
+loc=["northwest","southeast","northwest","southeast","southwest","southwest","northwest","northwest"];
 
 figures = [];
 for jj=1:length(titles)
@@ -137,7 +137,6 @@ for jj=1:length(titles)
             'PaperUnits','centimeters','PaperSize',[FigW FigH],...
                 'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
                 'Position',[0,0,FigW,FigH]);
-
     set(f, 'PaperPositionMode', 'manual');
     hold on
     for j = 1:length(solutions)
@@ -148,6 +147,7 @@ for jj=1:length(titles)
         ylabel(sprintf("%s\n%s", string(titles(jj)), labels(jj)),'FontSize',7)
         xlabel("Zeit $t$ in $s$",'FontSize',7)
     end
+    box on
     hold off
     set(findall(gcf,'-property','FontSize'),'FontSize',8);
     [lgd, objh] = legend(ode_labels, 'Interpreter','latex','Location',loc(jj),'FontSize',5,'Orientation','vertical');

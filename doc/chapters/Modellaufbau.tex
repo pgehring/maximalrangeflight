@@ -30,114 +30,119 @@ Die Kräfte lassen sich dann berechnen mit:
     \item Erdanziehungskraft: \[W = m \cdot g\]
 \end{itemize}
 
-Mit dem Newtonsschen Gesetz $F = m * a$ lässt sich die Differentialgleichungen für die Geschwindigkeit $v$ aufstellen:
-\[\begin{split}
-    F &:= m \cdot a \\\
-    \Rightarrow \dot{v}(t) &= a(t) = \dfrac{F(t)}{m} = \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}
-\end{split} \]
+Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichungen für die Geschwindigkeit $v$ aufstellen:
+\[F := m \cdot a \Rightarrow \dot{v}(t) = a(t) = \dfrac{F(t)}{m} = \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}\]
 Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichungen für den Ansstellwinkel $\gamma$ aufstellen:
-\[\begin{split}
-    F_{ZP} &:= \dfrac{m v^2}{r} \\\
-    \Rightarrow \dot{\gamma}(t) &:= \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}
-\end{split} \]
+\[F_{ZP} := \dfrac{m v^2}{r} \Rightarrow \dot{\gamma}(t) = \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}\]
 Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels Geschwindigkeit und Anstellwinkel bestimmen:
 \[\begin{split}
     \dot{x}(t) &= v(t) \cos(\gamma(t))\\\
     \dot{h}(t) &= v(t) \sin(\gamma(t))
 \end{split} \]
-Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}).
+%Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) mit dem Zustandsvektor
+%\begin{equation}
+%X(t) = (h(t),\gamma(t),x(t),v(t))^T
+%\end{equation}
+%und dem Steuervektor 
+%\begin{equation}
+%U(t) = (T(t),C_L(t))^T
+%\end{equation}
+%Für das Modell werden folgende Parameter aus Tabelle \ref{tab:ProblemPara} aus Anhang \ref{Anhang:ModellPara} verwendet.
+
+%\begin{problem}[Optimalsteuerungsproblem - Maximal-Range-Flight]\label{prob:MaxRF}
+%\begin{align*}
+%    \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) & & \\\
+%    \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} & & \\\
+%    \dot{\gamma}(t) &=  \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} & & \\\
+%    \dot{x}(t) &= v(t) \cos(\gamma(t)) & & \\\
+%    \dot{v}(t) &= \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m} & & \\\
+%    %
+%    (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
+%    (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
+%    %
+%    q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} & & \forall t \in [t_0,t_f]\\\
+%    T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\\
+%    C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
+%\end{align*}
+%\end{problem}
+
+Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) mit den Funktionen $g : \R^{n_X} \to \R$, $f_0 : \R^{n_X} \times \R^{n_U} \to \R$, $f : \R^{n_X} \times \R^{n_U} \to \R^{n_X}$ und $U : [t_0,t_f] \to \R^m$ für $0 \leq (n_{\psi} = 2) \leq (n_X = 4)$ und $n_U = 2$.
 
 \begin{problem}[Optimalsteuerungsproblem - Maximal-Range-Flight]\label{prob:MaxRF}
+Für das Optimalsteuerungsproblem ergibt sich mit dem Zustandsvektor
+\[X(t) = (h(t),\gamma(t),x(t),v(t))^T\]
+und der Steuerfunktion
+\[U(t) = (T(t),C_L(t))^T\]
+das Problem:
 \begin{align*}
-    \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) & & \\\
-    \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} & & \\\
-    \dot{\gamma}(t) &=  \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} & & \\\
-    \dot{x}(t) &= v(t) \cos(\gamma(t)) & & \\\
-    \dot{v}(t) &= \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m} & & \\\
-    %
-    (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
-    (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
-    %
-    q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} & & \forall t \in [t_0,t_f]\\\
-    T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\\
-    C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
+\min_{U} F(X,U) &:= g(X(t_f)) + \int_{t_0}^{t_f} f_0(X(t),U(t)) dt = -(x(t_f) - x_0) & & \\\
+\text{unter} \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T  & & \\\
+&= \begin{pmatrix}
+v(t) \sin(\gamma(t)) \\ 
+\dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} \\ 
+v(t) \cos(\gamma(t)) \\ 
+\dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}
+\end{pmatrix} & & \\\
+(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
+(h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
+q(v(t),h(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f]\\\
+U(t) &= (T(t),C_L(t))^T \in \mathcal{U} = \left[ \begin{matrix}
+[T_{\min},T_{\max}] \\ 
+[C_{L, \min},C_{L, \max}]
+\end{matrix} 
+\right] & & \forall t \in [t_0,t_f]
 \end{align*}
 \end{problem}
 
-Für das Modell werden folgende Parameter aus Tabelle \ref{tab:ProblemPara} verwendet.
-\begin{table}[H]
-    \centering
-    \caption{Problemparameter für das Flugzeug A380-800 der Firma Airbus.}\label{tab:ProblemPara}
-    \begin{tabularx}{.9\textwidth}{lXrl}
-        \toprule
-        \textbf{Parameter}   & \textbf{Bedeutung} & \textbf{Wert} & \textbf{Einheit} \\ 
-        \midrule
-        $t_0$       & Anfangszeitpunkt & $0$ & $s$ \\ 
-        $t_f$       & Endzeitpunkt & $1800$ & $s$ \\ 
-        \hline
-        $h_0$       & Anfangshöhe & $0$ & $m$ \\ 
-        $\gamma_0$  & Anfangsanstellwinkel & $0.27$ & $^{\circ}$ \\
-        $x_0$       & Anfangskoordinate & $0$ & $m$ \\ 
-        $v_0$       & Anfangsgeschwindigkeit & $100$ & $\frac{m}{s}$ \\ 
-        \hline
-        $h_f$       & Endhöhe & $10668$ & $m$ \\ 
-        $\gamma_f$  & Endanstellwinkel & $0$ & $^{\circ}$ \\
-        \hline
-        $\alpha$    &  & $1.247015$ & $1$\\ 
-        $\beta$     &  & $0.000104$ & $1$\\
-        $g$         & Erdbeschleunigung & $9.81$ & $\frac{m}{s^2}$ \\ 
-        $C_{D_0}$   & Nullluftwiderstandsbeiwert & $0.032$ & $1$\\ 
-        $AR$        & Streckung & $7.5$ & $1$\\ 
-        $e$         & Oswaldfaktor & $0.8$ & $1$\\ 
-        $F$         & wirksame Fläche & $845$ & $m^2$ \\ 
-        $m$         & Masse & $276800$ & $kg$ \\ 
-        $q_{\max}$  & maximaler Staudruck & $44154$ & $\frac{N}{m^2}$ \\
-        $T_{\min}$  & minimale Schubkraft & $0$ & $N$ \\  
-        $T_{\max}$  & maximale Schubkraft & $1260000$ & $N$ \\ 
-        $C_{L, \min}$ & minimaler Auftriebsbeiwert & $0$ & $1$ \\ 
-        $C_{L, \max}$ & maximaler Auftriebsbeiwert & $1.48$ & $1$ \\ 
-        \bottomrule
-    \end{tabularx} 
-\end{table}
+Des Weiteren sei $\psi : \R^{n_X} \to \R^{n_{\psi}}$ eine $C^1$-Funktion
+\[\psi(X(t_f)) = 
+\begin{pmatrix}
+    h(t_f) - h_f \\ 
+    \gamma(t_f) - \gamma_f
+\end{pmatrix} = 0_{n_{\psi}}\]
+Das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) stellt also ein autonomes Mayer-Problem der Form 
+\begin{equation} \label{equ:mayer_problem}
+    \begin{aligned}
+        \min F(X,U) &:= g(X(t_f)) & & \\
+        \text{unter}  \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) & & \forall t \in [t_0,t_f] \\
+        %
+        X(t_0) &= X_0 = (h_0,\gamma_0,x_0,v_0)^T & & \\
+        \psi(X(t_f)) &= 0_{n_{\psi}} & & \\
+        %
+        q(X(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f] \\
+        U(t) &= (T(t),C_L(t))^T \in \mathcal{U}  & & \forall t \in [t_0,t_f] 
+    \end{aligned}
+\end{equation}
+da, mit der zusätzlichen Beschränkung des Staudrucks $q(v(t),h(t))$ und der konkreten Funktion $f$
+\begin{equation} \label{equ:state_space}
+    f(X(t),U(t)) = \dot{X}(t) = \begin{pmatrix}
+        v(t) \sin(\gamma(t)) \\ 
+        \dfrac{F \alpha e^{-\beta h(t)} v(t) C_L(t)}{2m} - \dfrac{g \cos(\gamma(t))}{v(t)} \\ 
+        v(t) \cos(\gamma(t)) \\ 
+        \dfrac{T(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t))
+    \end{pmatrix}
+\end{equation}
+Für das Modell werden die Parameter aus Tabelle \ref{tab:ProblemPara} aus Anhang \ref{Anhang:ModellPara} verwendet.
 
 
 
-%\newpage
-%\section{Überprüfung der optimalen Steuerung}
-%Die Steuerung $T(t)$ (Schub) geht linear in die Hamilton-Funktion ein. Um die Hamilton-Funktion zu minimieren gilt für diese Bang-Bang Verhalten.
-%
-%Die Steuerung $C_L(t)$ geht nichtlinear in die Hamilton-Funktion ein.
-%
-%
-%
-%
-%
-%
-%\section{Überprüfung der Hinreichenden Optimalitätsbedingungen}
-%
-%
-%
-%
-%
-%
-%
-%\section{Aufstellen des Randwertproblems}
-%Muss also ein Mehrpunktrandwertproblem sein ???
-%
-%
-%Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $r(t,Z(t))$ und $r_0(Z(t_0),Z(t_f)) = 0$ besteht. Für $r(t,Z(t))$ ergibt sich \[r(t,Z(t)) = \dot{Z}(t) = \begin{pmatrix}
-%\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
-%\end{pmatrix}^T\] Für $r_0(Z(t_0),Z(t_f)) = 0$ müssen zunächst die Endbedingungen mit gebildet aus 
-%\[\begin{split}
-%X_i(t_f) &= c_i \hspace{25mm} (i=1,...,r) \\\
-%\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) \hspace{5mm} (i=r+1,...,n)
-%\end{split}\] gebildet werden. Es ergibt sich dann \[r_0(Z(t_0),Z(t_f)) = \begin{pmatrix}
-%h(t_0) - h_0 \\ 
-%\gamma(t_0) - \gamma_0 \\
-%x(t_0) - x_0 \\ 
-%v(t_0) - v_0 \\ 
-%h(t_f) - h_f \\ 
-%\gamma(t_f) - \gamma_f \\
-%\lambda_3(t_f) + \lambda_0 \\ 
-%\lambda_4(t_f) - 0
-%\end{pmatrix}\]
+
+
+
+%\begin{theo}[Optimalsteuerungsproblem - Maximal-Range-Flight]{thm:theorem1}
+%There exist two irrational numbers $x$, $y$ such that $x^y$ is rational.
+%\begin{align*}
+%    \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) & & \\\
+%    \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} & & \\\
+%    \dot{\gamma}(t) &=  \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} & & \\\
+%    \dot{x}(t) &= v(t) \cos(\gamma(t)) & & \\\
+%    \dot{v}(t) &= \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m} & & \\\
+%    %
+%    (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
+%    (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
+%    %
+%    q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} & & \forall t \in [t_0,t_f]\\\
+%    T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\\
+%    C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
+%\end{align*}
+%\end{theo}

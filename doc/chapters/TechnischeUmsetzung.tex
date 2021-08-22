@@ -1,4 +1,4 @@
-\chapter{Technische Umsetzung}
+\chapter{Technische Umsetzung und numerische Untersuchungen}\label{kap:TUNU}
 Das in Gleichung \eqref{equ:mayer_problem} gezeigte Optimalsteuerungsproblem in \autoref{cha:optim} wird numerisch in \textit{MATLAB} implementiert und gelöst. Im Folgenden Kapitel werden Methoden zur Lösung des Differentialgleichungssystems (vgl. Gleichung \eqref{equ:state_space}) verglichen. Desweiteren werden Algortihmen zur Lösung von nichtlinearen Optimierungsproblemen erläutert. Die Implementierung der Lösung des Optimalsteuerungsproblems wird mit anhand eines Klassendiagrams visualisiert.
 
 \section{Numerische Lösung von gewöhnlichen Differentialgleichungen}
@@ -87,8 +87,100 @@ Das Innere-Punkte-Verfahren erzeugt im Gegensatz zu SQP eine eine Folge von stre
 
 Der \textit{MATLAB Optimization User's Guide} enthält einige Empfehlungen, wann welcher Algorithmus verwendet werden sollte. Die erste Empfehlung lautet, das Innere-Punkte-Verfahren für sowohl große, dünn besetzte Probleme als auch kleine und dichte Probleme zu verwenden. Außerdem werden bei allen Iterationen Schranken gesetzt und \texttt{NaN}- und \texttt{Inf}-Ergebnisse verarbeitet. Für kleinere Probleme ist SQP schneller.
 
+Gradientenbasierte Methoden haben einige Einschränkungen. Das offensichtlichste Problem ist, dass sie voraussetzen, dass die Zielfunktion und die Nebenbedingungen kontinuierlich sind und kontinuierliche erste Ableitungen haben. Dies bedeutet im Wesentlichen, dass die Funktion keine logischen Verzweigungen haben darf, deterministisch sein muss und die Ausgaben gleichmäßig mit den Eingaben variieren müssen. 
+
+FMINCON verlangt, dass die Zielfunktion und die Nebenbedingungsfunktion in getrennten Funktionen vorliegen. Dies führt zu einer verlängerten Laufzeit, da sowohl die Nebenbedingungen als auch das Ziel die Dynamik an jedem Gitterpunkt bewerten müssen.
+
+\textit{MATLAB} bietet dem Benutzer die Möglichkeit, den Gradienten der Zielfunktion und die Nebenbedingungen parallel zu berechnen. Die Auswertungen der Zielfunktion und der Nebenbedingungen in dem Schema mit finiten Differenzen werden auf die Prozessoren verteilt. Weitere Informationen zur parallelen Implementierung finden Sie im MathWorks Optimization Toolbox User's Guide (2012).
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Schiessverfahren}
+
+Was wird verwendet:
+Anfangswert probleme mit einschritt verfahren explizit und implizit
+Sensitivitäts DGL
+Zusammenbau in Schiessverfahren
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Klassenstruktur des Problems}
 
 UML
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Diskussion der numerischen Versuche und Ergebnisse mit direkten Lösungsverfahren}
+Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit MATLAB umgesetzt. 
+
+Da mit den Grundeinstellungen des Optimalsteuerungsproblems \ref{prob:MaxRF} keine zufriedenstellende Ergebnisse erreicht werden konnten (siehe Versuch \ref{kap:Versuch0}), wurden verschiedene Versuche aufgestellt. In den nachfolgenden Versuchen \ref{kap:Versuch1}, \ref{kap:Versuch2}, \ref{kap:Versuch3} und \ref{kap:Versuch4} wurden verschiedene Parameter variiert, beziehungsweise neue Parameter und Beschränkungen eingeführt.
+
+Plausible Ergebnisse, nach dem Aspekt der physikalischen Möglichkeiten, wurden in den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} erreicht. Ausschlaggebender Parameter stellt die Endzeit $t_f$ dar, welche über die Qualität des Ergebnisses bestimmt.
+
+Wie ist der Code / technische Umsetzung 
+
+Versuche / Probleme 
+
+Ergebnisse
+
+
+Gedanken wie der Verlauf aussehen könnte:\\
+Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Diskussion der numerischen Versuche und Ergebnisse mit indirekten Lösungsverfahren}
+Jedoch behandelt das Zweipunkt-Randwertproblem keine Bedingungen wie die Beschränkung des Staudrucks $q(v(t),h(t)) \leq q_{\max}$, wie in Problem \ref{prob:MaxRF} gefordert. Untersuchungen der Ergebnisse aus den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} haben gezeigt, dass diese zu keinem Zeitpunkt den maximalen Wert $q_{\max}$ der Beschränkung erreicht haben (Abbildung \ref{img:test_1_1_staudruck}). Aus Vereinfachungsgründen, wird diese Beschränkung deshalb in diesem Kapitel nicht weiter berücksichtigt.
+
+
+
+
+Die Jacobimatrix F
+
+invertierbar ist. In der Losung y des Randwertproblems ist die Invertierbarkeit dieser Matrix eng verknupft mit der Mangasarian-Fromowitz-Regularitatsbedingung
+fur Optimalsteuerungsprobleme.

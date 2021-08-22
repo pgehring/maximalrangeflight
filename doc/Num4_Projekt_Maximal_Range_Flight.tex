@@ -179,7 +179,7 @@ bibliography=totoc,    % LV in IV
 {\medskip}
 
 % Umgebung "Problem":
-\usepackage{mdframed}
+\usepackage[framemethod=TikZ]{mdframed}
 \newenvironment{problem}[1][]
 {\begin{mdframed}
 \medskip\noindent \refstepcounter{umgnr}%
@@ -190,6 +190,41 @@ bibliography=totoc,    % LV in IV
 \end{mdframed}
 \medskip
 }
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Theorem
+
+%https://texblog.org/2015/09/30/fancy-boxes-for-theorem-lemma-and-proof-with-mdframed/
+
+\newcounter{theo}[section] \setcounter{theo}{0}
+\renewcommand{\thetheo}{\arabic{section}.\arabic{theo}}
+\newenvironment{theo}[2][]{%
+\refstepcounter{theo}%
+\ifstrempty{#1}%
+{\mdfsetup{%
+frametitle={%
+\tikz[baseline=(current bounding box.east),outer sep=20pt]
+\node[anchor=east,rectangle,fill=blue!20]
+{\strut Theorem~\thetheo};}}
+}%
+{\mdfsetup{%
+frametitle={%
+\tikz[baseline=(current bounding box.east),outer sep=20pt]
+\node[anchor=east,rectangle,fill=white!20]
+{\strut Theorem~\thetheo:~#1 \ \ };}}%
+}%
+\mdfsetup{innertopmargin=10pt,linecolor=black!20,%
+linewidth=1pt,topline=true,%
+frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+}
+\begin{mdframed}[]\relax%
+\label{#2}}{\end{mdframed}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 % Umgebung "Beweis":
 \newenvironment{beweis}[1][]
@@ -418,9 +453,9 @@ pdfborder=0 0 0	% keine Box um die Links!
 \mainmatter
 \input{chapters/MotivationUndZiel}
 \input{chapters/Modellaufbau}
-\input{chapters/TechnischeUmsetzung}
 \input{chapters/Direkte_Lsg_Verfahren}
 \input{chapters/Indirekte_Lsg_Verfahren}
+\input{chapters/TechnischeUmsetzung}
 \input{chapters/ZusammenfassungAusblick}
 
 %------------------------------------------------------------------------------
@@ -432,6 +467,7 @@ pdfborder=0 0 0	% keine Box um die Links!
 \stepcounter{SeitenzahlSpeicher}
 \setcounter{page}{\theSeitenzahlSpeicher}
 % hier Anhänge einbinden
+\input{chapters/Anhang_C}
 \input{chapters/Anhang_A}
 \input{chapters/Anhang_B}
 
