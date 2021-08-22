@@ -108,7 +108,7 @@ classdef Plotter
             xlim(ax,[0,max(t)]);
             ax.LineWidth = frame_prop;
             title(fig_title,'FontSize',9)
-            xlabel('$t$ in $[s]$','FontSize',8)
+            xlabel('$t$ in $s$','FontSize',8)
             ylabel(fig_label,'FontSize',8)
             sp_axes = gca;
             sp_axes.YAxis.Exponent = 0;
@@ -150,6 +150,53 @@ classdef Plotter
             test=fig_settings.Position;
             fig_settings.Position=[test(1),test(2)-0.35,test(3),test(4)];
             print(fig,'-dpdf','-r600',strcat('./results/',results_name,'_staudruck.pdf'));
+        end
+        
+        %%
+        function fig = plot_fmincon_opt_t_f(obj,t,sol,t_f,results_name,titles,labels,order,frame_prop,line_style)
+            obj.nfigures = obj.nfigures +1;
+            fig = create_fig(obj, obj.nfigures);
+            
+            FigW=16;
+            FigH=11;
+            set(fig,'defaulttextinterpreter','latex','PaperUnits','centimeters','PaperSize',[FigW FigH],...
+                'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
+                'Position',[0,0,FigW,FigH]);
+            set(fig, 'PaperPositionMode', 'auto');
+            
+            fig_title_str = strcat('Versuch: \, ','\verb|',results_name,'|',' (Optimale Endzeit $t_f = ',string(t_f),' \ s$)');
+            fig_title = sgtitle(fig,fig_title_str,'FontSize',12);
+            fig_title.Interpreter = 'latex';
+            
+            [r,c] = size(sol);
+            for i = [1:c]
+                sol_id = order(i);
+                sp = create_subplot(obj,t,sol(:,sol_id),[2, 3],i,titles(sol_id),labels(sol_id),frame_prop(sol_id),line_style(sol_id));
+            end
+            
+            subplots = findobj(fig,'type','axes');
+            for i = [1:c]
+                sp = subplots(i);
+                sp.Units = 'centimeters';
+                test=sp.Position;
+                if i == 1
+                    sp.Position=[test(1)+0.7,test(2)-0.3,test(3),test(4)]; % Steuerung 2
+                    ylim(sp,[0-1.48*0.05,1.48+1.48*0.05]);
+                    sp.YTick=0:0.37:1.48;
+                elseif i == 2
+                    sp.Position=[test(1),test(2)-0.3,test(3),test(4)]; % Geschwindigkeit
+                elseif i == 3
+                    sp.Position=[test(1)-0.7,test(2)-0.3,test(3),test(4)]; % Anstellwinkel
+                elseif i == 4
+                    sp.Position=[test(1)+0.7,test(2)-0.5,test(3),test(4)]; % Steuerung 1
+                    ylim(sp,[0-1260000*0.05,1260000+1260000*0.05]);
+                    sp.YTick=0:180000:1260000;
+                elseif i == 5
+                    sp.Position=[test(1),test(2)-0.5,test(3),test(4)]; % Flughöhe
+                else
+                    sp.Position=[test(1)-0.7,test(2)-0.5,test(3),test(4)]; % Strecke
+                end
+            end
         end
     end 
 end

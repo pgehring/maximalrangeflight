@@ -2,6 +2,8 @@
 
 % Versuchsaufbau:
 %   - Verändertes Startgewicht
+%   - Explizites Euler-Verfahren für ODE
+%   - SQP-Verfahren
 
 %% Speicher Parameter
 results_name = 'test_2_1';
@@ -63,5 +65,6 @@ ode_method = @ode_methods.explicit_euler;
 prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
-% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-12,'UseParallel',true);
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'StepTolerance',1e-12,'ConstraintTolerance',1e-8,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
+options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
+% options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.0e+03,'MaxIterations',4.0e+05);
