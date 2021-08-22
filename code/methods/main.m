@@ -35,7 +35,7 @@ params = [1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
               1.47];   % C_L_start in [1]
 params_cell = num2cell(params);
 
-MODEL = "i" % model switch  d: direct_model
+MODEL = "d"; % model switch  d: direct_model
             %               i: indirect_model
             
 
@@ -67,12 +67,12 @@ switch MODEL
         func = @indirect_model;
         names = ["methods_plot_i_h","methods_plot_i_gamma", "methods_plot_i_x", "methods_plot_i_v", "methods_plot_i_l1", "methods_plot_i_l2", "methods_plot_i_l3", "methods_plot_i_l4"];
         titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"ueckgelegte Streckte'},{'Geschwindigkeit'},{''},{''},{''},{''}];
-        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$","$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$", "$\lambda_1$", "$\lambda_2$", "$\lambda_3$", "$\lambda_4$"];
+        labels = ["$h_{sol}$ in $m$","$\gamma_{sol}$ in $^{\circ}$","$x_{sol}$ in $m$","$v_{sol}$ in $\frac{m}{s}$", "$\lambda_1$", "$\lambda_2$", "$\lambda_3$", "$\lambda_4$"];
     case "d"
         func = @direct_model;
         names = ["methods_plot_d_h","methods_plot_d_gamma", "methods_plot_d_x", "methods_plot_d_v"];
         titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"ueckgelegte Streckte'},{'Geschwindigkeit'}];
-        labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$","$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$"];
+        labels = ["$h_{sol}$ in $m$","$\gamma_{sol}$ in $^{\circ}$","$x_{sol}$ in $m$","$v_{sol}$ in $\frac{m}{s}$"];
               
         odemethods = {@ode45, @ode23s, @euler_expl, @euler_impl, @irk};
         ode_labels = ["ode45", "ode23s", "euler expl", "euler impl", "radau-2a"];
@@ -91,10 +91,11 @@ solutions = {};
 for i=1:length(odemethods)
     solver = odemethods{i};
     opts = odeset('RelTol',1e-3,'AbsTol',1e-5);
-    
+    %
     tic
     [~, X] = solver(func, t, X0, opts, params_cell);
     time_elapsed = toc;
+    %
     fprintf("solution took %fs to complete with %s\n", time_elapsed, ode_labels(i))
     solutions{i} = {X, time_elapsed, ode_labels(i)};
 end
@@ -104,17 +105,14 @@ ref_vector = solutions{ref_method_idx}{1};
 ref_time = solutions{ref_method_idx}{2};
 for i=1:length(odemethods)
     solution_vec = solutions{i}{1};
-    
     % state deviation
     deviation = solution_vec - ref_vector;
     y_max = max(abs(deviation))
-    
     % time performance
     time = solutions{i}{2};
     time_delta = time - ref_time
-    
+    %
     solutions{i} = [solutions{i}, {y_max, time_delta}];
-    
 end
 
 %% plotting
