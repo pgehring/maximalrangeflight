@@ -59,7 +59,7 @@ ub = [    inf,...
 %% Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 ode_methods = ode_methods();
 ode_method = @ode_methods.explicit_euler;
-prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
+prob = MaximalRangeFlightDirect(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
 options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);

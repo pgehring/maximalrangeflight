@@ -63,7 +63,7 @@ ode_methods = ode_methods();
 ode_method = @ode_methods.explicit_euler;
 % ode_method = @ode_methods.explicit_rk4;
 % ode_method = @ode_methods.implicit_rk_radau2A;
-prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
+prob = MaximalRangeFlightDirect(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 
 %% Optionen für fmincon von Matlab
 options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
