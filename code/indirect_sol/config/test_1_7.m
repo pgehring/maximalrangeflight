@@ -1,26 +1,31 @@
-% test_1_4.m
+% test_1_7.m
 
 % Versuchsaufbau:
 %   - Veränderte Endzeit
 
 %% Speicher Parameter
-results_name = 'test_1_4';
+results_name = 'test_1_7';
 
 %% Testparameter + Lösungsmethode der ODE und Objekt der Problemklasse erhalten
-z_0 = [-5.732440736775094e-17;0.270000000000000;0;100;7.842025122992616;1.145486668260562e+03;-1;-6.242151406637181];
-z_0 = [0.028019454974903;0.632328123755776;-6.883525059503436e-16;1.000134561046371e+02;11.408733692221102;1.144903630842599e+03;-0.903886575198159;-7.358110154112469];
-z_0 = [0.027950743602661;1.001868462525390;-5.184395014501834e-15;1.000160983759926e+02;16.619900713120284;1.144903630842599e+03;-0.904314993678545;-29.464517741834314];
+N = 3;
+direkt_sol = readmatrix(strcat('test_1_1','.txt'))';
+
+
+z_0 = [1.42507652388271,0.475382556030107,314.165065162526,107.494903804113,7.80602331112732,-1457.36355077900,-1,1.18612398450025e-05];
+z_0 = [1.427991284507836;0.464716901115848;3.031184444261582e+02;1.095857118235467e+02;64.016866089723800;-1.527037711974739e+03;-1;-1.322771359854147e+02];
+z_0 = [1.427991284532843;0.464716901138619;3.031184198633471e+02;1.095857107648142e+02;64.007933687835290;-1.527039943022338e+03;-1;-1.322673444184185e+02];
 
 X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
           0;           % x_0 in [m]
         100];          % v_0 in [m/s] (Benötigte Startgeschwindigkeit zum Abheben)
-
+X_0 = direkt_sol(1:4,2);
 X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
+X_T = direkt_sol(1:2,3);
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-               300,... % t_f:   Endzeitpunkt in [s]
+                 3,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -34,14 +39,14 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
 prob = MaximalRangeFlightIndirect(z_0,X_0,X_T,params);
 
 %% Boxbeschränkungen
-h_min         = 1e-6;
+h_min         = 1e-12;
 AbsTol        =  1e-8;
 RelTol        =  1e-8;
 StopTol       = 1e-12;
 StopTolArmijo = 1e-15;
-maxit = 20;
-flag = 'SensDGL';
-% flag = 'FinitDiff';
+maxit = 25;
+% flag = 'SensDGL';
+flag = 'FinitDiff';
 
 % ode_method = @ode45;
 ode_method = @ode23s;

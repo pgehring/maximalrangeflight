@@ -70,7 +70,7 @@ z_0 = [-5.856728397125160e-17;0.270000000000000;0;100;7.843401266990457;1.145487
 z_0 = [-5.732440736775094e-17;0.270000000000000;0;100;7.842025122992616;1.145486668260562e+03;-1;-6.242151406637181];
 z_0 = [-5.732440736775094e-17;0.270000000000000;0;100;7.842025122992616;1.145486668260562e+03;-1;-6.242151406637181];
 
-
+% z_0 = [-0.002153745838338;0.513018119226968;-8.411371082326570e-05;1.000006507417855e+02;-0.269765049798985;1.212630728103287e+03;-1.000079012119383;0.310326076308132];
 
 
 X_0 = [   0;           % h_0 in [m]
@@ -97,31 +97,16 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
 prob = MaximalRangeFlightIndirect(z_0,X_0,X_T,params);
 
 %% Boxbeschränkungen
-h_min         = 1e-12;
+h_min         = 1e-6;
 AbsTol        =  1e-8;
 RelTol        =  1e-8;
-
-
 StopTol       = 1e-12;
 StopTolArmijo = 1e-15;
 maxit = 50;
 % flag = 'SensDGL';
 flag = 'FinitDiff';
-lb = [   -inf,...
-         -inf,...
-         -inf,...
-         -inf,...
-          0.0,...      % T_min:   Minimale Schubkraft in [N]
-          0.0];        % C_L_min: Minimaler Auftriebsbeiwert in []
-      
-ub = [    inf,...
-          inf,...
-          inf,...
-          inf,...
-      1260000,...      % T_max:   Maximale Schubkraft in [N]
-         1.48];        % C_L_max: Maximaler Auftriebsbeiwert in []
 
 % ode_method = @ode45;
 ode_method = @ode23s;
-shooting_methods = shooting_methods(ode_method,h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag);
+shooting_methods = shooting_methods(ode_method,h_min,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag);
 shooting_method = @shooting_methods.Einfachschiessverfahren;
