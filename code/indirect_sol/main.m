@@ -20,7 +20,7 @@ addpath('./results');
 addpath('../direct_sol/results/');
 
 %% Loading the corresponding configuration file
-configs = ["test_1_6"];
+configs = ["test_1_3"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file

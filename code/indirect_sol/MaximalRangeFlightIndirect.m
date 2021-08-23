@@ -250,9 +250,10 @@ classdef MaximalRangeFlightIndirect
                  J_8_1,J_8_2,    0,J_8_4,J_8_5,J_8_6,J_8_7,J_8_8];
         end
 
-        function z = R(obj,z_0,z_f)
-            lambda_0 = 1; % Auszugehen von lambda_0 = 0 oder lambda_0 = 1
-            % 
+%         %% Ohne Konstanz der Hamilton-Funktion
+%         function z = R(obj,z_0,z_f)
+%             lambda_0 = 1; % Auszugehen von lambda_0 = 0 oder lambda_0 = 1
+%             %
 %             z = [z_0(1)-obj.X_0(1);
 %                  z_0(2)-obj.X_0(2);
 %                  z_0(3)-obj.X_0(3);
@@ -261,8 +262,34 @@ classdef MaximalRangeFlightIndirect
 %                  z_f(2)-obj.X_T(2);
 %                    z_f(7)+lambda_0;
 %                           z_f(8)-0];
-            
-            % Konstanz der Hamilton-Funktion
+%         end
+% 
+%         function z = R_Z_0(obj,z_0,z_f)
+%             z = [1,0,0,0,0,0,0,0;
+%                  0,1,0,0,0,0,0,0;
+%                  0,0,1,0,0,0,0,0;
+%                  0,0,0,1,0,0,0,0;
+%                  0,0,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,0,0];
+%         end
+% 
+%         function z = R_Z_f(obj,z_0,z_f)
+%             z = [0,0,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,0,0;
+%                  1,0,0,0,0,0,0,0;
+%                  0,1,0,0,0,0,0,0;
+%                  0,0,0,0,0,0,1,0;
+%                  0,0,0,0,0,0,0,1];
+%         end
+        
+        %% Mit der Konstanz der Hamilton-Funktion
+        function z = R(obj,z_0,z_f)
+            lambda_0 = 1; % Auszugehen von lambda_0 = 0 oder lambda_0 = 1
+            %
             [T_0,C_L_0] = control(obj,1,z_0);
             [T_f,C_L_f] = control(obj,1,z_f);
             H =@(u,z) + sind(z(2))*z(4)*z(5)...
@@ -282,19 +309,10 @@ classdef MaximalRangeFlightIndirect
                  z_f(2)-obj.X_T(2);
                    z_f(7)+lambda_0;
                           z_f(8)-0;
-                              diff];
+                              diff]; % Konstanz der Hamilton-Funktion
         end
 
         function z = R_Z_0(obj,z_0,z_f)
-%             z = [1,0,0,0,0,0,0,0;
-%                  0,1,0,0,0,0,0,0;
-%                  0,0,1,0,0,0,0,0;
-%                  0,0,0,1,0,0,0,0;
-%                  0,0,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,0,0];
-            
             z=z_0;
             [T,C_L] = control(obj,1,z_0);
             
@@ -331,15 +349,6 @@ classdef MaximalRangeFlightIndirect
         end
 
         function z = R_Z_f(obj,z_0,z_f)
-%             z = [0,0,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,0,0;
-%                  1,0,0,0,0,0,0,0;
-%                  0,1,0,0,0,0,0,0;
-%                  0,0,0,0,0,0,1,0;
-%                  0,0,0,0,0,0,0,1];
-            
             z=z_f;
             [T,C_L] = control(obj,1,z_f);
             

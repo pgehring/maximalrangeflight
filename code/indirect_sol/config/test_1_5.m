@@ -7,40 +7,11 @@
 results_name = 'test_1_5';
 
 %% Testparameter + Lösungsmethode der ODE und Objekt der Problemklasse erhalten
-z_0 = [ 10,...         % h_start in [m]
-       0.27,...        % gamma_start in [Grad]  
-         0,...         % x_start in [m]
-        100,...        % v_start in [m/s]
-          -25,...        % lambda_1
-          400,...        % lambda_2
-          10,...        % lambda_3
-          -850]';          % lambda_4   
-% z_0 = readmatrix(strcat('./results/',results_name,'_vec.txt'));
-
-% z_0 = [ 5000,...         % h_start in [m]
-%        25,...        % gamma_start in [Grad]  
-%          10000,...         % x_start in [m]
-%          300,...        % v_start in [m/s]
-%           1000,...        % lambda_1
-%           800000,...        % lambda_2
-%           33000,...        % lambda_3
-%           -20000]';          % lambda_4   
-% z_0 = readmatrix(strcat('./results/',results_name,'_vec.txt'));
-% 
-% z_0 = [ 0,...         % h_start in [m]
-%         0.27,...        % gamma_start in [Grad]  
-%          0,...         % x_start in [m]
-%          100,...        % v_start in [m/s]
-%           -0.01,...        % lambda_1
-%           -0.01,...        % lambda_2
-%           -0.001,...        % lambda_3
-%           -0.1]';          % lambda_4 
-      
 N = 5;
 direkt_sol = readmatrix(strcat('test_1_1','.txt'))';
 N_direkt_sol = size(direkt_sol,2);
 diff = floor(N_direkt_sol/(N+1));
-eta_mehrsv = zeros(length(z_0),N);
+eta_mehrsv = zeros(8,N);
 for k = 0:N-1
     eta_mehrsv(:,k+1) = [direkt_sol(1:4,(k*diff)+1);0.1;0.2;0.3;-0.1];
 end
@@ -67,7 +38,7 @@ X_T = [10668;          % h_t in [m]
 X_T = direkt_sol(1:2,2);
        
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-               3,... % t_f:   Endzeitpunkt in [s]
+                 3,... % t_f:   Endzeitpunkt in [s]
           1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
           0.000104,... % beta: 
               9.81,... % g:     Erdbeschleunigung in [N/s^2]
@@ -81,34 +52,12 @@ params = [       0,... % t_0:   Anfangszeitpunkt in [s]
 prob = MaximalRangeFlightIndirect(eta_mehrsv,X_0,X_T,params);
 
 %% Boxbeschränkungen
-h_min         = 1e-12;
 AbsTol        =  1e-8;
 RelTol        =  1e-8;
-
-% h_min         = 1e-8;
-% AbsTol        =  1e-3;
-% RelTol        =  1e-3;
-
 StopTol       = 1e-12;
 StopTolArmijo = 1e-15;
-maxit = 2;
-flag = 'FinitDiff';
-% flag = 'SensDGL';
-lb = [   -inf,...
-         -inf,...
-         -inf,...
-         -inf,...
-          0.0,...      % T_min:   Minimale Schubkraft in [N]
-          0.0];        % C_L_min: Minimaler Auftriebsbeiwert in []
-      
-ub = [    inf,...
-          inf,...
-          inf,...
-          inf,...
-      1260000,...      % T_max:   Maximale Schubkraft in [N]
-         1.48];        % C_L_max: Maximaler Auftriebsbeiwert in []
+maxit = 50;
 
-% ode_method = @ode45;
 ode_method = @ode23s;
-shooting_methods = shooting_methods(ode_method,h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag);
+shooting_methods = shooting_methods(ode_method,0,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,' ');
 shooting_method = @shooting_methods.Mehrfachschiessverfahren;

@@ -20,13 +20,10 @@ classdef shooting_methods
         flag;
         StopTol;
         StopTolArmijo;
-        % Box conditions
-        lb;
-        ub;
     end
     methods
         %% Constructor
-        function obj = shooting_methods(ode_method,h_min,lb,ub,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag)
+        function obj = shooting_methods(ode_method,h_min,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag)
             obj.ode_method = ode_method;
             % Step size control
             obj.armijo = true;
@@ -40,9 +37,6 @@ classdef shooting_methods
             obj.flag = flag;
             obj.StopTol = StopTol;
             obj.StopTolArmijo = StopTolArmijo;
-            % Box conditions
-            obj.lb = lb;
-            obj.ub = ub;
         end
         
         %% Single shooting method
@@ -72,17 +66,17 @@ classdef shooting_methods
                             break; % Abbruchbedingung
                         end
                         
-%                         % Berechnung der Jacobimatrix 
-%                         S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
-%                         sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
-%                         S_b(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
+                        % Berechnung der Jacobimatrix 
+                        S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
+                        sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
+                        S_b(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
                         
-                        % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
-                        for j=1:n_y
-                            odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
-                            [~,S] = obj.ode_method(odefun,tspan,S_a(:,j),obj.options); 
-                            S_b(:,j)=S(end,:)';
-                        end
+%                         % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
+%                         for j=1:n_y
+%                             odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
+%                             [~,S] = obj.ode_method(odefun,tspan,S_a(:,j),obj.options); 
+%                             S_b(:,j)=S(end,:)';
+%                         end
                         
                         F_jac = r_y_a(eta,y_t_eta(end,:)) + r_y_b(eta,y_t_eta(end,:))*S_b;
                         % Berechnung der Newton-Richtung d
