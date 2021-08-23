@@ -71,6 +71,11 @@ bibliography=totoc,    % LV in IV
 \usepackage{float} % um figure/Bild/Abbildung an bestimmte Stelle mit [H]
 \usepackage{framed}
 
+% Abbildungsbeschriftung mit langer und kurzer Beschreibung
+\newcommand{\MyCaption}[2]{%
+  \caption[#1]{\footnotesize \textbf{#1}. #2}%
+}
+
 %------------------------------------------------------------------------------
 % Literaturverzeichnis mit BibLKaTeX
 %------------------------------------------------------------------------------
@@ -452,6 +457,15 @@ pdfborder=0 0 0	% keine Box um die Links!
 \tableofcontents
 \addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
 \setcounter{SeitenzahlSpeicher}{\value{page}}
+% Abbildungsverzeichnis
+% \clearpage
+\listoffigures
+\addcontentsline{toc}{chapter}{\listfigurename}
+
+% Tabellenverzeichnis
+% \clearpage
+\listoftables
+\addcontentsline{toc}{chapter}{\listtablename}
 
 % Abkuerzungsverzeichnis
 %\clearpage
@@ -490,21 +504,10 @@ pdfborder=0 0 0	% keine Box um die Links!
 \clearpage
 \printbibliography
 
-% Auflistung aller verwendeter Progammcodes
-\clearpage
-\lstlistoflistings
-\addcontentsline{toc}{chapter}{Programmcodes Verzeichnis}
-
-
-% Abbildungsverzeichnis
-%\clearpage
-%\listoffigures
-%\addcontentsline{toc}{chapter}{\listfigurename}
-
-% Tabellenverzeichnis
-%\clearpage
-%\listoftables
-%\addcontentsline{toc}{chapter}{\listtablename}
+% % Auflistung aller verwendeter Progammcodes
+% \clearpage
+% \lstlistoflistings
+% \addcontentsline{toc}{chapter}{Programmcodes Verzeichnis}
 
 % Formelverzeichnis
 %\clearpage

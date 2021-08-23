@@ -33,7 +33,7 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, werd
     \subfloat[\label{fig:methods_d_x}]{\includegraphics{../code/methods/results/methods_plot_d_x}}
     \qquad
     \subfloat[\label{fig:methods_d_v}]{\includegraphics{../code/methods/results/methods_plot_d_v}}
-    \caption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space}). Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.} %
+    \MyCaption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space})}{Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.} %
     % \subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \subref{fig:methods_gamma} zeigt den %
     % Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges.} %
     % \subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.}
@@ -52,14 +52,14 @@ Die \textit{MATLAB}-Funktion \verb+fmincon+ verwendet zwei Varianten der SQP-Met
 
 Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine Folge von angenäherten Minimierungsproblemen. Der Ansatz besteht in der Umordnung des ursprünglichen Problems unter Verwendung einer Barrierefunktion, in der Regel einer logarithmischen oder inversen Funktion, und dann diese neue Merit-Funktion nach absteigendem $\mu$ zu lösen. Der Algorithmus \texttt{fmincon} verwendet eine logarithmische Barrierefunktion. Im Gegensatz zum SQP-Verfahren erzeugt das IP-Verfahren eine Folge von streng zulässigen Iterierten, die zu einer Lösung aus dem Inneren der zulässigen Menge konvergieren  \cite{Matlab2016}. Für weitere Details siehe \cite{Betts2010}.
 
-Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und Vergleich der Ergebnisse. Dabei wurden sowohl die Anzahl der Iterationen als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert sowohl schneller konvergiert als auch die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
+Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
 
 Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
-        \caption{Vergleich von IP- und SQP-Verfahren}\label{img:Vergleich_SQP_IP}
+        \MyCaption{Vergleich von IP- und SQP-Verfahren}{Vergleich des Funktionswertes über der Anzahl der Iterationen} \label{img:Vergleich_SQP_IP}
     \end{center}
 \end{figure}
 
@@ -77,7 +77,7 @@ Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und eine
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{images/03_TechnischeUmsetzung/code_structure}
-    \caption{Schematische Darstellung der Implementierten Verfahren. Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \texttt{Plotter}}
+    \MyCaption{Schematische Darstellung der implementierten Verfahren}{Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \texttt{Plotter}}
     \label{fig:code_structure}
 \end{figure}
 
