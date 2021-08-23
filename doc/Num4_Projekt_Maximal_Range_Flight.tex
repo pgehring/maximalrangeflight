@@ -250,11 +250,16 @@ frametitleaboveskip=\dimexpr-\ht\strutbox\relax
 % Tiefe, bis zu der Überschriften in das Inhaltsverzeichnis kommen
 \setcounter{tocdepth}{3}      % ist Standard
 
+% Workaround für Warnungen: Overfull \hbox (6.40776pt too wide) detected at line
+\setlength\headheight{15pt}
+
+
 %------------------------------------------------------------------------------
 % Quellcode
 %------------------------------------------------------------------------------
 %https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
 % Beispiele für Quellcode
+\usepackage{scrhack} % unterdrückt KOMA Warnungen
 \usepackage{listings}
 \lstdefinestyle{num_octave}{
   basicstyle=\scriptsize,        % the size of the fonts that are used for the code
@@ -447,6 +452,10 @@ pdfborder=0 0 0	% keine Box um die Links!
 \tableofcontents
 \addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
 \setcounter{SeitenzahlSpeicher}{\value{page}}
+
+% Abkuerzungsverzeichnis
+%\clearpage
+\input{chapters/Abkuerzungsverzeichnis}
 %------------------------------------------------------------------------------
 % Hauptteil
 %------------------------------------------------------------------------------
@@ -501,11 +510,6 @@ pdfborder=0 0 0	% keine Box um die Links!
 %\clearpage
 %\input{chapters/Formelverzeichnis}
 %%\addcontentsline{toc}{chapter}{Formelverzeichnis}
-
-% Abkuerzungsverzeichnis
-%\clearpage
-%\input{chapters/Abkuerzungsverzeichnis}
-%%\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis}
 
 %------------------------------------------------------------------------------
 % Eigenständigkeitserklärung
