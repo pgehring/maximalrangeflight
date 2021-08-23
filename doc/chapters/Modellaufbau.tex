@@ -1,6 +1,6 @@
 \chapter{Optimalsteuerungsproblem} \label{cha:optim}
 
-Modelliert werden soll das Flugzeug A380-800 der Firma Airbus. Dabei seien:
+Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien:v
 \begin{itemize}
     \item $x(t)$: $x$-Koordinate des Massenschwerpunktes $S$
     %
@@ -14,11 +14,11 @@ Modelliert werden soll das Flugzeug A380-800 der Firma Airbus. Dabei seien:
     %
     \item $C_L(t)$: Auftriebsbeiwert, Steuerung
 \end{itemize}
-Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden folgende Hilfsgrößen benötigt:
+Neben Gewicht, Auftrieb und Luftwiderstand, wird auch der Schub als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden, aber sie führen zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden folgende Hilfsgrößen benötigt:
 \begin{itemize}
-    \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet.
+    \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
     %
-    \item Luftdichte: \[\rho(h(t)) := \alpha \cdot e^{-\beta \cdot h(t)}\] %https://wind-data.ch/tools/luftdichte.php
+    \item Luftdichte: \[\rho(h(t)) := \alpha \cdot e^{-\beta \cdot h(t)}\]  wobei für die Berechnung der höhenabhängigen Luftdichte ein einfaches Exponentialmodell verwendet wird%https://wind-data.ch/tools/luftdichte.php
     %
     \item Staudruck: \[q(v(t), h(t)) := \dfrac{\rho(h(t)) \cdot v^2(t)}{2} \]
 \end{itemize}
