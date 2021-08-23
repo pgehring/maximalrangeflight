@@ -19,47 +19,35 @@ addpath('./config');
 addpath('./results');
 addpath('../direct_sol/results/');
 
-diary off
-if exist('console.log', 'file')
-    delete('console.log')
-end
-
 %% Loading the corresponding configuration file
-configs = ["test_1_4"];
+configs = ["test_1_6"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
     run(configs(i))
-    
-    % Initialize logging
-%     diary console.log
-%     fprintf('started script %s (%d of %d) at %s\n', configs(i), i, length(configs), datestr(datetime))
-    
+    % Solving the control problem with a shooting method
     try
-        % Solving the control problem with fmincon
         tic;
-        [t_sol,prob_sol,~,eta,i_sol,Norm_F] = shooting_method( prob.tspan,...
-                                                        prob.z_0,...
-                                                         @prob.G,...
-                                                       @prob.G_Z,...
-                                                         @prob.R,...
-                                                     @prob.R_Z_0,...
-                                                     @prob.R_Z_f);
-                                                 
-%         [t_sol,prob_sol,i_sol,eta,Norm_F] = MSchiessverfahren(prob.tspan,...
-%                                                             prob.z_0,...
-%                                                              @prob.G,...
-%                                                            @prob.G_Z,...
-%                                                              @prob.R,...
-%                                                          @prob.R_Z_0,...
-%                                                          @prob.R_Z_f,ode_method,AbsTol,RelTol,StopTol,maxit);
-
+        [t_sol,prob_sol,eta,i_sol,Norm_F] = shooting_method( prob.tspan,...
+                                                               prob.z_0,...
+                                                                @prob.G,...
+                                                              @prob.G_Z,...
+                                                                @prob.R,...
+                                                            @prob.R_Z_0,...
+                                                            @prob.R_Z_f);
         duration_time = toc;
+        %
         fprintf('Duration time for solving the Problem: %4.2f [min]\n',duration_time/60);
         fprintf('Required iterations: %4.2f \n',i_sol);
-        % fprintf('Required iterations: %4.2f \n',output.iterations);
-        % fprintf('Required function evaluations: %4.2f \n',output.funcCount);
-        % solutions{i} = {results_name, prob, prob_sol, options};
+        if isfile(strcat('./results/',results_name,'_fmincon.txt'))
+            fmincon_sol = readmatrix(strcat('./results/',results_name,'_fmincon.txt'));
+            fmincon_sol(end+1,:) = [duration_time,i_sol,Norm_F(end)];
+            writematrix(fmincon_sol,strcat('./results/',results_name,'_fmincon.txt'));
+        else
+            fmincon_sol = [duration_time,i_sol,Norm_F(end)];
+            writematrix(fmincon_sol,strcat('./results/',results_name,'_fmincon.txt'));
+        end
+        %
         solutions{i} = {results_name,prob,prob_sol,shooting_methods.options};
     catch ME
         fprintf('Error occured while solving control problem with config %s\nContinuing with next file..\n', configs(i))
@@ -70,63 +58,47 @@ end
 
 %% Plot the solution and saving the results
 plotter = Plotter();
-titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-          "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
-          "\textbf{Steuerung 2: Auftriebsbeiwert}"];
-labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
-          "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$",...
-          "$T_{sol}$ in $[N]$","$C_{L_{sol}}$ in $[1]$"];
+titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"uckgelegte Streckte'},...
+          {'Geschwindigkeit'},{'\textbf{Steuerung 1: Schub}'},...
+          {'\textbf{Steuerung 2: Auftriebsbeiwert}'}];
+labels = ["$h_{sol}$ in $m$","$\gamma_{sol}$ in $^{\circ}$",...
+          "$x_{sol}$ in $m$","$v_{sol}$ in $\frac{m}{s}$",...
+          "$T_{sol}$ in $N$","$C_{L_{sol}}$ in $1$"];
 frame_prop = [0.5,0.5,0.5,0.5,2,2];
 line_style = ["b-","b-","b-","b-","r-","r-"];
 order = [3,1,5,2,4,6];
 
+labels_lambda = ["$\lambda_1$ in $1$","$\lambda_2$ in $1$",...
+                 "$\lambda_3$ in $1$","$\lambda_4$ in $1$"];
+frame_prop_lambda = [0.5,0.5,0.5,0.5];
+line_style_lambda = ["b-","b-","b-","b-"];
+order_lambda = [1,2,3,4];      
+
 for j=1:length(solutions)
-    
     solution = solutions{j};
     [results_name, prob, prob_sol, options] = solution{:};
     writematrix(prob_sol(1,:),strcat('./results/',results_name,'_vec.txt'));
     
-    % Plot lambdas
-    figure(3)
-    subplot(2,2,1);
-    plot(t_sol,prob_sol(:,5),'-b');
-    ylabel("$\lambda_1$");
-    xlabel('$t$ in $[s]$');
-    subplot(2,2,2);
-    plot(t_sol,prob_sol(:,6),'-b');
-    ylabel("$\lambda_2$");
-    xlabel('$t$ in $[s]$');
-    subplot(2,2,3);
-    plot(t_sol,prob_sol(:,7),'-b');
-    ylabel("$\lambda_3$");
-    xlabel('$t$ in $[s]$');
-    subplot(2,2,4);
-    plot(t_sol,prob_sol(:,8),'-b')
-    ylabel("$\lambda_4$");
-    xlabel('$t$ in $[s]$');
-    
     % Plot solution
-    prob_sol = prob.sol_func(prob_sol);
-    fig = plotter.plot_fmincon(t_sol,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
+    prob_sol_steu = prob.sol_func(prob_sol);
+    fig = plotter.plot_fmincon(t_sol,prob_sol_steu,results_name,titles,labels,order,frame_prop,line_style);
+    fig_lambda = plotter.plot_lambda(t_sol,prob_sol(:,5:8),results_name,labels_lambda,order_lambda,frame_prop_lambda,line_style_lambda);
 
     % Save the graphics
     fprintf('Saving the graphics ...\n');
+    print(fig,'-dpdf','-r600',strcat('./results/',results_name,'.pdf'));
     savefig(fig,strcat('./results/',results_name,'.fig'));
-    saveas(fig,strcat('./results/',results_name,'.png'));
-    % saveas(fig,strcat('./results/',results_name,'.svg'));
+    print(fig_lambda,'-dpdf','-r600',strcat('./results/',results_name,'_lambda.pdf'));
+    savefig(fig_lambda,strcat('./results/',results_name,'_lambda.fig'));
+    
+    figure(3)
+    plot(linspace(1,i_sol,length(Norm_F)),Norm_F);
+    xlabel('Iterationen')
+    ylabel('$\Vert F \Vert$')
 
     % Save the data
     fprintf('Saving the data ...\n');
     writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
+    writematrix(prob_sol_steu,strcat('./results/',results_name,'_steu.txt'));
 end
-
-figure(2)
-x = linspace(1,i_sol,length(Norm_F));
-y = Norm_F;
-plot(x,y);
-xlabel('Iterationen')
-ylabel('$\Vert F \Vert$')
-
 fprintf('All done!\n');
-% diary off
-% movefile("console.log", sprintf("./results/%s_console.log", datestr(datetime, 30)))

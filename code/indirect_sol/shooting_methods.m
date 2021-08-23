@@ -46,7 +46,7 @@ classdef shooting_methods
         end
         
         %% Single shooting method
-        function [t_out,y_out,S_b,eta,i,Norm_F] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+        function [t_out,y_out,eta,i,Norm_F] = Einfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
             eta = eta_0(:);
             n_y = length(eta_0);
             n_r = length(r(eta,eta));
@@ -59,6 +59,7 @@ classdef shooting_methods
                 case 'SensDGL'
                     %% Benötigten Ableitungen mit Sensitivitätsdifferentialgleichung lösen
                     S_a = eye(n_y); % Einheitsmatrix als Startwert für Sensitivitäts-DGL
+                    S_b = zeros(n_y);
                     while (i < obj.maxit)
                         % Lösen des Anfangwertproblems
                         sol_y = obj.ode_method(g,tspan,eta,obj.options);
@@ -70,10 +71,19 @@ classdef shooting_methods
                         if (norm(F) < obj.StopTol)
                             break; % Abbruchbedingung
                         end
-                        % Berechnung der Jacobimatrix 
-                        S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
-                        sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
-                        S_b = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
+                        
+%                         % Berechnung der Jacobimatrix 
+%                         S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
+%                         sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
+%                         S_b(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
+                        
+                        % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
+                        for j=1:n_y
+                            odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
+                            [~,S] = obj.ode_method(odefun,tspan,S_a(:,j),obj.options); 
+                            S_b(:,j)=S(end,:)';
+                        end
+                        
                         F_jac = r_y_a(eta,y_t_eta(end,:)) + r_y_b(eta,y_t_eta(end,:))*S_b;
                         % Berechnung der Newton-Richtung d
                         d = - F_jac \ F;
@@ -143,50 +153,64 @@ classdef shooting_methods
                     fprintf(2,'ERROR: Falsches Verfahren für die Berechnung der Jacobimatrix!\n');
                     return;
             end
-%             if i == obj.maxit
-%                 disp('Warning: Max iterations reached!');
-%             end
+            if i == obj.maxit
+                disp('Warning: Max iterations reached!');
+            end
             % Rückgabewerte
             t_out = sol_y.x';
             y_out = y_t_eta;
         end
         
         %% Multiple shooting method
-        function [t_out,y_out,N,eta,i,Norm_F] = Mehrfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+        function [t_out,y_out,eta,i,Norm_F] = Mehrfachschiessverfahren(obj,tspan,eta_0,g,g_y,r,r_y_a,r_y_b)
+            % Parameter und Einstellungen
             N = size(eta_0,2);
+            eta = eta_0;
             % Zeitinterval
             t = linspace(tspan(1),tspan(2),N+1)';
+            Norm_F = [];
+
             % Problemgröße
             n_y = size(eta_0,1);
-            % Parameter und Einstellungen
-            eta = eta_0;
-            %
-            Norm_F = [];
-            %
-            obj.flag = 'SensDGL';
-            
-            % Funkntion zum auswerten der Funktionen F und F_jac
-            function [F,F_jac] = F_Fjac_func(eta)
+            n_r = length(r(eta_0,eta_0));
+            % Allokate Memory
+            F = zeros((N-1)*n_y+n_r,1);
+            F_jac = zeros((N-1)*n_y+n_r,N*n_y);
+            S_a = eye(n_y); % Einheitsmatrix als Startwert für Sensitivitäts-DGL
+            S_b_AWP = zeros(n_y);
+            S_b = zeros(n_y);
+
+            function F_Fjac_func(eta)
                 % Zurücksetzen der alten Werte
                 t_out = [];
                 y_out = [];
-                F = [];
-                F_jac = [];
                 % AWP lösen und aufstellen von F(eta) und der Jacobimatrix
                 for j = 1:N
-                    % Lösung für gegebenes eta berechnen. Nicht die beste Lösung 
-                    % für ein anderes eta lösen, deshalb maxit=1!!!
-                    [t_AWP,y_AWP,S_b_AWP,~,~,~] = obj.Einfachschiessverfahren([t(j),t(j+1)],eta(:,j),g,g_y,r,r_y_a,r_y_b);
+                    % ODE und Sensitivitäts DGL lösen 
+                    sol_y = obj.ode_method(g,[t(j),t(j+1)],eta(:,j),obj.options);
+                    y_AWP = sol_y.y';
+                    t_AWP = sol_y.x';
+
+                    S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
+                    sol_S = obj.ode_method(S_t,[t(j),t(j+1)],reshape(S_a,[],1),obj.options);
+                    S_b_AWP(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
+
+%                     % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
+%                     for k=1:n_y
+%                         odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
+%                         [~,S] = obj.ode_method(odefun,[t(j),t(j+1)],S_a(:,k),obj.options); 
+%                         S_b_AWP(:,k)=S(end,:)';
+%                     end
+                    
                     % Bilden von F(eta) und der Jacobimatrix
                     if j ~= N
                         F_jac(((j*n_y)-(n_y-1)):(j*n_y),((j*n_y)-(n_y-1)):(j*n_y)) = S_b_AWP;
                         F(((j*n_y)-(n_y-1)):(j*n_y),1)= y_AWP(end,:)' - eta(:,j+1);
                         F_jac(((j*n_y)-(n_y-1)):(j*n_y),(((j+1)*n_y)-(n_y-1)):((j+1)*n_y)) = - eye(n_y);
                     else
-                        r_vec = r(eta(:,1),y_AWP(end,:));
-                        F((end+1):(end+length(r_vec)),:) = r_vec;
-                        F_jac(((j*n_y)-(n_y-1)):((j-1)*n_y)+length(r_vec),((j*n_y)-(n_y-1)):(j*n_y)) = r_y_b(eta(:,1),y_AWP(end,:)) * S_b_AWP;
-                        F_jac((end-length(r_vec)+1):end,1:n_y) = r_y_a(eta(:,1),y_AWP(end,:));
+                        F((end-n_r+1):end,:) = r(eta(:,1),y_AWP(end,:));
+                        F_jac(((j*n_y)-(n_y-1)):((j-1)*n_y)+n_r,((j*n_y)-(n_y-1)):(j*n_y)) = r_y_b(eta(:,1),y_AWP(end,:)) * S_b_AWP;
+                        F_jac((end-n_r+1):end,1:n_y) = r_y_a(eta(:,1),y_AWP(end,:));
                     end
                     % Ausgabe abspeichern
                     t_out((end+1):(end+size(t_AWP,1)),:) = t_AWP;
@@ -198,7 +222,7 @@ classdef shooting_methods
             i = 0;
             while (i < obj.maxit)
                 % AWP lösen und aufstellen von F(eta) und der Jacobimatrix
-                [F,F_jac] = F_Fjac_func(eta);
+                F_Fjac_func(eta);
                 % Abbruchbedingung
                 Norm_F(i+1) = norm(F);
                 if (norm(F) <= obj.StopTol)
@@ -209,10 +233,10 @@ classdef shooting_methods
                 d_r = reshape(d,n_y,N);
                 % Armijo-Regel zur Schrittweitensteuerung
                 t_armijo = 1; % initial t
-                [F_armijo,F_jac_armijo] = F_Fjac_func(eta + t_armijo * d_r);
-                while (F_armijo > (F_armijo + obj.sigma * t_armijo * F_jac_armijo * d))
+                F_Fjac_func(eta + t_armijo * d_r);
+                while (F > (F + obj.sigma * t_armijo * F_jac * d))
                     t_armijo = obj.beta*t_armijo;
-                    [F_armijo,F_jac_armijo] = F_Fjac_func(eta + t_armijo * d_r);
+                    F_Fjac_func(eta + t_armijo * d_r);
                 end
                 % Neue Werte eta und i
                 eta = eta + t_armijo*d_r;
