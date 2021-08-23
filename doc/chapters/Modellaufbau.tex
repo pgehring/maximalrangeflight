@@ -1,6 +1,6 @@
 \chapter{Optimalsteuerungsproblem} \label{cha:optim}
 
-Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien:v
+Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien
 \begin{itemize}
     \item $x(t)$: $x$-Koordinate des Massenschwerpunktes $S$
     %
@@ -14,7 +14,7 @@ Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien:v
     %
     \item $C_L(t)$: Auftriebsbeiwert, Steuerung
 \end{itemize}
-Neben Gewicht, Auftrieb und Luftwiderstand, wird auch der Schub als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden, aber sie führen zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden folgende Hilfsgrößen benötigt:
+Neben Gewicht \(W\), Auftrieb \(L\) und Luftwiderstand \(D\), wird auch der Schub \(T\) als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden. Wie jedoch gezeigt werden konnte, führen zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Um die Kräfte welche auf das Flugzeug einwirken, berechnen zu können, werden folgende Hilfsgrößen benötigt:
 \begin{itemize}
     \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
     %
@@ -30,11 +30,13 @@ Die Kräfte lassen sich dann berechnen mit:
     \item Erdanziehungskraft: \[W = m \cdot g\]
 \end{itemize}
 
-Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichungen für die Geschwindigkeit $v$ aufstellen:
+Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichungen
 \[F := m \cdot a \Rightarrow \dot{v}(t) = a(t) = \dfrac{F(t)}{m} = \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}\]
-Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichungen für den Ansstellwinkel $\gamma$ aufstellen:
+für die Geschwindigkeit $v$ aufstellen.
+Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichungen
 \[F_{ZP} := \dfrac{m v^2}{r} \Rightarrow \dot{\gamma}(t) = \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}\]
-Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels Geschwindigkeit und Anstellwinkel bestimmen:
+für den Ansstellwinkel $\gamma$ aufstellen.
+Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels der Geschwindigkeit und des Anstellwinkels bestimmen.
 \[\begin{split}
     \dot{x}(t) &= v(t) \cos(\gamma(t))\\\
     \dot{h}(t) &= v(t) \sin(\gamma(t))

@@ -20,7 +20,7 @@ Für die Diskretisierung wird daher zunächst ein Gitter erzeugt, welches das Pr
 \[\mathbb{G}_h := \lbrace t_0 < t_1 < ... < t_{N-1} = t_f \rbrace\]
 mit den Schrittweiten 
 \[h_i = t_{i+1} - t_i \ \ \ \ \forall i = 0,...,N-2\]
-muss dabei nicht notwendig äquidistant unterteilt sein. Es stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
+muss dabei nicht zwingend äquidistant unterteilt sein. Es stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
 \begin{itemize}
 \item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
 %
@@ -39,7 +39,7 @@ h_N(t_f) - h_f \\
 \end{pmatrix}\] formuliert. Die Beschränkung des Staudrucks $q(v(t),h(t))$ wird in der reinen Zustandsbeschränkungsfunktion $s : \mathbb{G}_h \times \R^{n_X} \to \R^{n_s}$ mit $n_s = 1$
 \[s(t_i,X_i) = q(v_i(t_i),h_i(t_i)) - q_{max} \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] formuliert.
 \end{itemize}
-Somit geht das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) in das diskretisierte Optimalsteuerungsproblem (Problem \ref{prob:VolldisOpt}) über.
+Somit geht das Optimalsteuerungsproblem (Problem~\ref{prob:MaxRF}) in das diskretisierte Optimalsteuerungsproblem (Problem \ref{prob:VolldisOpt}) über.
 
 \begin{problem}[Vollständig diskretisiertes Optimalsteuerungsproblem]\label{prob:VolldisOpt}
     Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\] sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
@@ -108,7 +108,7 @@ Dieses diskretisierte Optimalsteuerungsproblem lässt sich dann mit einem geeign
         \min_{z \in S} F(z) &:= \varphi(X_0,X_{N-1}) & & \\
         \text{unter} \hspace{10mm} G(z) &\leq 0_{n_s \cdot N} & &  \text{(Ungleichungsnebenbedingungen)} \\
         H(z) &= 0_{n_X \cdot (N-1) + n_{\psi}} & & \text{(Gleichungsnebenbedingungen)}\\
-        z &\in S := \R^{n_X \cdot N} \times [U_{\min},U_{\max}]^{N} & &  \text{(Zulässigemenge)}
+        z &\in S := \R^{n_X \cdot N} \times [U_{\min},U_{\max}]^{N} & &  \text{(Zulässige Menge)}
     \end{align*}
     mit der Optimierungsvariable
     \begin{equation}
