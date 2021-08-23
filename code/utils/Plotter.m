@@ -104,6 +104,9 @@ classdef Plotter
                 y_min = y_min + y_min*p;
                 y_max = y_max + y_min*p;
             end
+            if abs(y_min-y_max) < 1
+                y_max = y_max+1;
+            end
             ylim(ax,[y_min,y_max]);
             xlim(ax,[0,max(t)]);
             ax.LineWidth = frame_prop;
@@ -138,7 +141,6 @@ classdef Plotter
             ylabel('$q(v(t),h(t))$');
             set(findall(gcf,'-property','FontSize'),'FontSize',8);
             legend('$q_{\max}$','$q(v(t),h(t))$','Interpreter','latex','Location','southoutside','FontSize',7,'Orientation','horizontal');
-%             title(['Staudruck \"Ueberpr\"ufung (',num2str(nof_exc),' \"Uberschreitungen)'],'Interpreter','latex','FontSize',10);
             title(['Staudruck \"Ueberpr\"ufung'],'Interpreter','latex','FontSize',10);
             set(fig,'defaulttextinterpreter','latex',...
                         'PaperUnits','centimeters','PaperSize',[FigW FigH],...
@@ -197,6 +199,53 @@ classdef Plotter
                     sp.Position=[test(1)-0.7,test(2)-0.5,test(3),test(4)]; % Strecke
                 end
             end
+        end
+        
+        %%
+        function fig = plot_lambda(obj,t,sol,results_name,labels,order,frame_prop,line_style)
+            obj.nfigures = obj.nfigures+1;
+            fig = create_fig(obj, obj.nfigures);
+            
+            FigW=12;
+            FigH=11;
+            set(fig,'defaulttextinterpreter','latex','PaperUnits','centimeters','PaperSize',[FigW FigH],...
+                'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
+                'Position',[0,0,FigW,FigH]);
+            set(fig, 'PaperPositionMode', 'auto');
+            
+            fig_title_str = strcat('Versuch: \, ','\verb|',results_name,'|');
+            fig_title = sgtitle(fig,fig_title_str,'FontSize',12);
+            fig_title.Interpreter = 'latex';
+            
+            [r,c] = size(sol);
+            for i = [1:c]
+                sol_id = order(i);
+                sp = create_subplot(obj,t,sol(:,sol_id),[2,2],i,' ',labels(sol_id),frame_prop(sol_id),line_style(sol_id));
+            end
+            
+            subplots = findobj(fig,'type','axes');
+%             for i = [1:c]
+%                 sp = subplots(i);
+%                 sp.Units = 'centimeters';
+%                 test=sp.Position;
+%                 if i == 1
+%                     sp.Position=[test(1)+0.7,test(2)-0.3,test(3),test(4)]; % Steuerung 2
+%                     ylim(sp,[0-1.48*0.05,1.48+1.48*0.05]);
+%                     sp.YTick=0:0.37:1.48;
+%                 elseif i == 2
+%                     sp.Position=[test(1),test(2)-0.3,test(3),test(4)]; % Geschwindigkeit
+%                 elseif i == 3
+%                     sp.Position=[test(1)-0.7,test(2)-0.3,test(3),test(4)]; % Anstellwinkel
+%                 elseif i == 4
+%                     sp.Position=[test(1)+0.7,test(2)-0.5,test(3),test(4)]; % Steuerung 1
+%                     ylim(sp,[0-1260000*0.05,1260000+1260000*0.05]);
+%                     sp.YTick=0:180000:1260000;
+%                 elseif i == 5
+%                     sp.Position=[test(1),test(2)-0.5,test(3),test(4)]; % Flughöhe
+%                 else
+%                     sp.Position=[test(1)-0.7,test(2)-0.5,test(3),test(4)]; % Strecke
+%                 end
+%             end
         end
     end 
 end
