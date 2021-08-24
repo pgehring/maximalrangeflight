@@ -254,34 +254,36 @@ C_L(t) = C_{L,\max} \vee C_{L,\min} & ,\text{falls Bedingung } 9.3 \text{ gilt} 
 Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem umgestellt werden.
 
 \begin{problem}[Zweipunkt-Randwertproblem]\label{prob:ZweiRand}
-Seien $G : [t_0,t_f] \times \R^{n_Z} \to \R^{n_Z}$ und $R : \R^{n_Z} \times \R^{n_Z} \to \R^{n_Z}$ gegeben. Gesucht ist eine Lösung $Z$ des Randwertproblems
-\begin{align}
-\dot{Z}(t) &= G(t,Z(t),U(t)) \\
-R(Z(t_0),Z(t_f)) &= 0_{n_Z}
-\end{align}
-im Intervall $[t_0,t_f]$.
+    Seien $G : [t_0,t_f] \times \R^{n_Z} \to \R^{n_Z}$ und $R : \R^{n_Z} \times \R^{n_Z} \to \R^{n_Z}$ gegeben. Gesucht ist eine Lösung $Z$ des Randwertproblems
+    \begin{align}
+        \dot{Z}(t) &= G(t,Z(t),U(t)) \\
+        R(Z(t_0),Z(t_f)) &= 0_{n_Z}
+    \end{align}
+    im Intervall $[t_0,t_f]$.
 \end{problem}
 
 Mit den Optimalitätsbedingungen des Minimumprinzips von Pontryagin lässt sich das Steuerungsproblem in ein Randwertproblem überführen, welches aus den beiden Funktionen $G(t,Z(t),U(t))$ und $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ für $n_Z = 8$ besteht:
 \begin{itemize}
 \item Für $G(t,Z(t),U(t))$ ergibt sich
-\begin{equation}
-\dot{Z}(t) = G(t,Z(t),U(t)) = \begin{pmatrix}
-\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
-\end{pmatrix}^T
+\begin{equation} 
+    \dot{Z}(t) = G(t,Z(t),U(t)) = 
+    \begin{pmatrix}
+        \dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t),\dot{\lambda}_1(t),\dot{\lambda}_2(t),\dot{\lambda}_3(t),\dot{\lambda}_4(t)
+    \end{pmatrix}^T
 \end{equation}
 und für die Ableitung die Matrix
 \begin{equation}
-\dfrac{\partial G(t,Z(t),U(t))}{\partial Z} = \begin{pmatrix}
-0 & J_G^{(1,2)} & 0 & J_G^{(1,4)} & 0 & 0 & 0 & 0 \\ 
-J_G^{(2,1)} & J_G^{(2,2)} & 0 & J_G^{(2,4)} & 0 & 0 & 0 & 0 \\ 
-0 & J_G^{(3,2)} & 0 & J_G^{(3,4)} & 0 & 0 & 0 & 0 \\ 
-J_G^{(4,1)} & J_G^{(4,2)} & 0 & J_G^{(4,4)} & 0 & 0 & 0 & 0 \\
-J_G^{(5,1)} & 0 & 0 & J_G^{(5,4)} & 0 & J_G^{(5,6)} & 0 & J_G^{(5,8)} \\
-0 & J_G^{(6,2)} & 0 & J_G^{(6,4)} & J_G^{(6,5)} & J_G^{(6,6)} & J_G^{(6,7)} & J_G^{(6,8)} \\
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-J_G^{(8,1)} & J_G^{(8,2)} & 0 & J_G^{(8,4)} & J_G^{(8,5)} & J_G^{(8,6)} & J_G^{(8,7)} & J_G^{(8,8)}
-\end{pmatrix}
+    \dfrac{\partial G(t,Z(t),U(t))}{\partial Z} = 
+    \begin{pmatrix}
+        0 & J_G^{(1,2)} & 0 & J_G^{(1,4)} & 0 & 0 & 0 & 0 \\ 
+        J_G^{(2,1)} & J_G^{(2,2)} & 0 & J_G^{(2,4)} & 0 & 0 & 0 & 0 \\ 
+        0 & J_G^{(3,2)} & 0 & J_G^{(3,4)} & 0 & 0 & 0 & 0 \\ 
+        J_G^{(4,1)} & J_G^{(4,2)} & 0 & J_G^{(4,4)} & 0 & 0 & 0 & 0 \\
+        J_G^{(5,1)} & 0 & 0 & J_G^{(5,4)} & 0 & J_G^{(5,6)} & 0 & J_G^{(5,8)} \\
+        0 & J_G^{(6,2)} & 0 & J_G^{(6,4)} & J_G^{(6,5)} & J_G^{(6,6)} & J_G^{(6,7)} & J_G^{(6,8)} \\
+        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+        J_G^{(8,1)} & J_G^{(8,2)} & 0 & J_G^{(8,4)} & J_G^{(8,5)} & J_G^{(8,6)} & J_G^{(8,7)} & J_G^{(8,8)}
+    \end{pmatrix}
 \end{equation}
 mit den Einträgen \(J_G^{(i,j)}\), welche die parteiellen Ableitungen von \(G\) nach jeder Komponente von \(Z\) enthalten (vgl. \autoref{Anhang:Jacobi}).
 %
