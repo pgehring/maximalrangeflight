@@ -10,7 +10,7 @@ Für das Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren wurd
 %
 \item \texttt{maximalrangeflight.m}: In dieser Klasse (Programmcode \ref{code:direct_maximalrangeflight}) sind alle Parameter und Funktionen des Problems beziehungsweise Funktionen für das Lösen mit der Matlab Funktion \texttt{fmincon} definiert. 
 %
-\item \texttt{ode\_methods}: Diese Klasse (Programmcode \ref{code:direct_odemethods}) stellt explizite und implizite Algorithmen zum lösen von gewöhnlichen Differentialgleichungen zur Verfügung. Diese werden in der Problemklasse \texttt{maximalrangeflight.m} benötigt.
+\item \texttt{ode\_methods}: Diese Klasse (Programmcode \ref{code:direct_odemethods}) stellt explizite und implizite Algorithmen zum Lösen von gewöhnlichen Differentialgleichungen zur Verfügung. Diese werden in der Problemklasse \texttt{maximalrangeflight.m} benötigt.
 \end{itemize}
 
 Allgemein wird für die Matlab Funktion \verb|fmincon| die Startmatrix  \verb|prob.z_0| 
@@ -243,14 +243,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
-\caption{Versuch 1 - Ergebnis 1}\label{img:test_0_1}
+\MyCaption{Versuch 1 - Ergebnis 1}{} \label{img:test_0_1}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_0_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_0_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -271,14 +271,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2}
-\caption{Versuch 1 - Ergebnis 2}\label{img:test_0_2}
+\MyCaption{Versuch 1 - Ergebnis 2}{} \label{img:test_0_2}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch02} dem maximalen Staudruck annähert.}\label{img:test_0_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch02} dem maximalen Staudruck annähert.}\label{img:test_0_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -310,14 +310,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1}
-\caption{Versuch 1 - Ergebnis 1}\label{img:test_1_1}
+\MyCaption{Versuch 1 - Ergebnis 1}{} \label{img:test_1_1}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch11} dem maximalen Staudruck annähert.}\label{img:test_1_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch11} dem maximalen Staudruck annähert.}\label{img:test_1_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -338,14 +338,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2}
-\caption{Versuch 1 - Ergebnis 2}\label{img:test_1_2}
+\MyCaption{Versuch 1 - Ergebnis 2}{} \label{img:test_1_2}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch12} dem maximalen Staudruck annähert.}\label{img:test_1_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch12} dem maximalen Staudruck annähert.}\label{img:test_1_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -366,14 +366,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_3}
-\caption{Versuch 1 - Ergebnis 3}\label{img:test_1_3}
+\MyCaption{Versuch 1 - Ergebnis 3}{} \label{img:test_1_3}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_3_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch13} dem maximalen Staudruck annähert.}\label{img:test_1_3_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch13} dem maximalen Staudruck annähert.}\label{img:test_1_3_staudruck}
 \end{center}
 \end{figure}
 
@@ -410,14 +410,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1}
-\caption{Versuch 2 - Ergebnis 1}\label{img:test_2_1}
+\MyCaption{Versuch 2 - Ergebnis 1}{} \label{img:test_2_1}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch21} dem maximalen Staudruck annähert.}\label{img:test_2_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch21} dem maximalen Staudruck annähert.}\label{img:test_2_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -439,14 +439,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2}
-\caption{Versuch 2 - Ergebnis 3}\label{img:test_2_2}
+\MyCaption{Versuch 2 - Ergebnis 3}{} \label{img:test_2_2}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch22} dem maximalen Staudruck annähert.}\label{img:test_2_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch22} dem maximalen Staudruck annähert.}\label{img:test_2_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -468,14 +468,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_3}
-\caption{Versuch 2 - Ergebnis 3}\label{img:test_23}
+\MyCaption{Versuch 2 - Ergebnis 3}{} \label{img:test_23}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_3_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch23} dem maximalen Staudruck annähert.}\label{img:test_2_3_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch23} dem maximalen Staudruck annähert.}\label{img:test_2_3_staudruck}
 \end{center}
 \end{figure}
 
@@ -510,14 +510,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1}
-\caption{Versuch 3 - Ergebnis 1}\label{img:test_3_1}
+\MyCaption{Versuch 3 - Ergebnis 1}{} \label{img:test_3_1}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch31} dem maximalen Staudruck annähert.}\label{img:test_3_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch31} dem maximalen Staudruck annähert.}\label{img:test_3_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -539,14 +539,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2}
-\caption{Versuch 3 - Ergebnis 2}\label{img:test_3_2}
+\MyCaption{Versuch 3 - Ergebnis 2}{} \label{img:test_3_2}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch32} dem maximalen Staudruck annähert.}\label{img:test_3_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch32} dem maximalen Staudruck annähert.}\label{img:test_3_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -568,14 +568,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_3}
-\caption{Versuch 3 - Ergebnis 3}\label{img:test_3_3}
+\MyCaption{Versuch 3 - Ergebnis 3}{} \label{img:test_3_3}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_3_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch33} dem maximalen Staudruck annähert.}\label{img:test_3_3_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch33} dem maximalen Staudruck annähert.}\label{img:test_3_3_staudruck}
 \end{center}
 \end{figure}
 
@@ -635,14 +635,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1}
-\caption{Versuch 4 - Ergebnis 1}\label{img:test_4_1}
+\MyCaption{Versuch 4 - Ergebnis 1}{} \label{img:test_4_1}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch41} dem maximalen Staudruck annähert.}\label{img:test_4_1_staudruck}
+\MyCaption{}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch41} dem maximalen Staudruck annähert.}\label{img:test_4_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -664,14 +664,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2}
-\caption{Versuch 4 - Ergebnis 2}\label{img:test_4_2}
+\MyCaption{Versuch 4 - Ergebnis 2}{} \label{img:test_4_2}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch42} dem maximalen Staudruck annähert.}\label{img:test_4_2_staudruck}
+\MyCaption{}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch42} dem maximalen Staudruck annähert.}\label{img:test_4_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -693,14 +693,14 @@ Es folgt das Ergebnis
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_3}
-\caption{Versuch 4 - Ergebnis 3}\label{img:test_4_3}
+\MyCaption{Versuch 4 - Ergebnis 3}{} \label{img:test_4_3}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_3_staudruck}
-\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch43} dem maximalen Staudruck annähert.}\label{img:test_4_3_staudruck}
+\MyCaption{}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch43} dem maximalen Staudruck annähert.}\label{img:test_4_3_staudruck}
 \end{center}
 \end{figure}
 

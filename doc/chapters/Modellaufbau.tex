@@ -1,27 +1,23 @@
 \chapter{Optimalsteuerungsproblem} \label{cha:optim}
 
-Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien:v
+Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien
 \begin{itemize}
     \item $x(t)$: $x$-Koordinate des Massenschwerpunktes $S$
-    %
     \item $h(t)$: $h$-Koordinate des Massenschwerpunktes $S$
-    %
     \item $v(t)$: Geschwindigkeit
-    %
     \item $\gamma(t)$: Anstellwinkel
-    %
     \item $T(t)$: Schub, Steuerung
-    %
     \item $C_L(t)$: Auftriebsbeiwert, Steuerung
 \end{itemize}
-Neben Gewicht, Auftrieb und Luftwiderstand, wird auch der Schub als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden, aber sie führen zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Um die Kräfte welche auf das Flugzeug einwirken berechnen zu können, werden folgende Hilfsgrößen benötigt:
+Neben Gewicht \(W\), Auftrieb \(L\) und Luftwiderstand \(D\), wird auch der Schub \(T\) als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden. Wie jedoch gezeigt werden konnte, führen zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Um die Kräfte welche auf das Flugzeug einwirken, berechnen zu können, werden folgende Hilfsgrößen benötigt:
 \begin{itemize}
     \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
-    %
+    
     \item Luftdichte: \[\rho(h(t)) := \alpha \cdot e^{-\beta \cdot h(t)}\]  wobei für die Berechnung der höhenabhängigen Luftdichte ein einfaches Exponentialmodell verwendet wird%https://wind-data.ch/tools/luftdichte.php
-    %
+
     \item Staudruck: \[q(v(t), h(t)) := \dfrac{\rho(h(t)) \cdot v^2(t)}{2} \]
 \end{itemize}
+
 Die Kräfte lassen sich dann berechnen mit:
 \begin{itemize}
     \item Auftriebskraft: \[L(v(t), h(t), C_L(t)) := F \cdot C_L(t) \cdot q(v(t), h(t))\] wobei $F$ die wirksame Fläche, d.h. die von der Luft angeströmte Fläche, ist.
@@ -30,68 +26,46 @@ Die Kräfte lassen sich dann berechnen mit:
     \item Erdanziehungskraft: \[W = m \cdot g\]
 \end{itemize}
 
-Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichungen für die Geschwindigkeit $v$ aufstellen:
+Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichungen
 \[F := m \cdot a \Rightarrow \dot{v}(t) = a(t) = \dfrac{F(t)}{m} = \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}\]
-Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichungen für den Ansstellwinkel $\gamma$ aufstellen:
+für die Geschwindigkeit $v$ aufstellen.
+Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichungen
 \[F_{ZP} := \dfrac{m v^2}{r} \Rightarrow \dot{\gamma}(t) = \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}\]
-Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels Geschwindigkeit und Anstellwinkel bestimmen:
+für den Ansstellwinkel $\gamma$ aufstellen.
+Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels der Geschwindigkeit und des Anstellwinkels bestimmen.
 \[\begin{split}
     \dot{x}(t) &= v(t) \cos(\gamma(t))\\\
     \dot{h}(t) &= v(t) \sin(\gamma(t))
 \end{split} \]
-%Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) mit dem Zustandsvektor
-%\begin{equation}
-%X(t) = (h(t),\gamma(t),x(t),v(t))^T
-%\end{equation}
-%und dem Steuervektor 
-%\begin{equation}
-%U(t) = (T(t),C_L(t))^T
-%\end{equation}
-%Für das Modell werden folgende Parameter aus Tabelle \ref{tab:ProblemPara} aus Anhang \ref{Anhang:ModellPara} verwendet.
-
-%\begin{problem}[Optimalsteuerungsproblem - Maximal-Range-Flight]\label{prob:MaxRF}
-%\begin{align*}
-%    \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) & & \\\
-%    \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} & & \\\
-%    \dot{\gamma}(t) &=  \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} & & \\\
-%    \dot{x}(t) &= v(t) \cos(\gamma(t)) & & \\\
-%    \dot{v}(t) &= \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m} & & \\\
-%    %
-%    (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
-%    (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
-%    %
-%    q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} & & \forall t \in [t_0,t_f]\\\
-%    T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\\
-%    C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
-%\end{align*}
-%\end{problem}
 
 Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) mit den Funktionen $g : \R^{n_X} \to \R$, $f_0 : \R^{n_X} \times \R^{n_U} \to \R$, $f : \R^{n_X} \times \R^{n_U} \to \R^{n_X}$ und $U : [t_0,t_f] \to \R^m$ für $0 \leq (n_{\psi} = 2) \leq (n_X = 4)$ und $n_U = 2$.
 
 \begin{problem}[Optimalsteuerungsproblem - Maximal-Range-Flight]\label{prob:MaxRF}
-Für das Optimalsteuerungsproblem ergibt sich mit dem Zustandsvektor
-\[X(t) = (h(t),\gamma(t),x(t),v(t))^T\]
-und der Steuerfunktion
-\[U(t) = (T(t),C_L(t))^T\]
-das Problem:
-\begin{align*}
-\min_{U} F(X,U) &:= g(X(t_f)) + \int_{t_0}^{t_f} f_0(X(t),U(t)) dt = -(x(t_f) - x_0) & & \\\
-\text{unter} \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T  & & \\\
-&= \begin{pmatrix}
-v(t) \sin(\gamma(t)) \\ 
-\dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} \\ 
-v(t) \cos(\gamma(t)) \\ 
-\dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}
-\end{pmatrix} & & \\\
-(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
-(h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
-q(v(t),h(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f]\\\
-U(t) &= (T(t),C_L(t))^T \in \mathcal{U} = \left[ \begin{matrix}
-[T_{\min},T_{\max}] \\ 
-[C_{L, \min},C_{L, \max}]
-\end{matrix} 
-\right] & & \forall t \in [t_0,t_f]
-\end{align*}
+    Für das Optimalsteuerungsproblem ergibt sich mit dem Zustandsvektor
+    \[X(t) = (h(t),\gamma(t),x(t),v(t))^T\]
+    und der Steuerfunktion
+    \[U(t) = (T(t),C_L(t))^T\]
+    das Problem:
+    \begin{align*}
+        \min_{U} F(X,U) &:= g(X(t_f)) + \int_{t_0}^{t_f} f_0(X(t),U(t)) dt = -(x(t_f) - x_0) & & \\\
+        \text{unter} \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T  & & \\\
+        &= 
+        \begin{pmatrix}
+            v(t) \sin(\gamma(t)) \\ 
+            \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} \\ 
+            v(t) \cos(\gamma(t)) \\ 
+            \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}
+        \end{pmatrix} & & \\\
+        (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
+        (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
+        q(v(t),h(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f]\\\
+        U(t) &= (T(t),C_L(t))^T \in \mathcal{U} = \left[ 
+        \begin{matrix}
+            [T_{\min},T_{\max}] \\ 
+            [C_{L, \min},C_{L, \max}]
+        \end{matrix} 
+        \right] & & \forall t \in [t_0,t_f]
+    \end{align*}
 \end{problem}
 
 Des Weiteren sei $\psi : \R^{n_X} \to \R^{n_{\psi}}$ eine $C^1$-Funktion
@@ -122,27 +96,4 @@ da, mit der zusätzlichen Beschränkung des Staudrucks $q(v(t),h(t))$ und der ko
         \dfrac{T(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t))
     \end{pmatrix}
 \end{equation}
-Für das Modell werden die Parameter aus Tabelle \ref{tab:ProblemPara} aus Anhang \ref{Anhang:ModellPara} verwendet.
-
-
-
-
-
-
-%\begin{theo}[Optimalsteuerungsproblem - Maximal-Range-Flight]{thm:theorem1}
-%There exist two irrational numbers $x$, $y$ such that $x^y$ is rational.
-%\begin{align*}
-%    \min_{T, C_L} F(h,\gamma,x,v,T,C_L) &:= -(x(t_f) - x_0) & & \\\
-%    \text{unter} \hspace{20mm} \dot{h}(t) &= v(t) \sin(\gamma(t)) \hspace{27mm} & & \\\
-%    \dot{\gamma}(t) &=  \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} & & \\\
-%    \dot{x}(t) &= v(t) \cos(\gamma(t)) & & \\\
-%    \dot{v}(t) &= \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m} & & \\\
-%    %
-%    (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
-%    (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
-%    %
-%    q(v(t),h(t)) &\leq q_{\max} \hspace{19.5mm} & & \forall t \in [t_0,t_f]\\\
-%    T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\\
-%    C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
-%\end{align*}
-%\end{theo}
+Für das Modell werden die Parameter aus Tabelle \ref{tab:ProblemPara} in Anhang \ref{Anhang:ModellPara} verwendet.

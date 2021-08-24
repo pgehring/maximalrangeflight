@@ -1,9 +1,9 @@
 \chapter{Technische Umsetzung und numerische Untersuchungen} \label{kap:TUNU}
-Das in Gleichung \eqref{equ:mayer_problem} gezeigte Optimalsteuerungsproblem in \autoref{cha:optim} wird numerisch in \textit{MATLAB} implementiert und gelöst. Im Folgenden Kapitel werden Methoden zur Lösung des Differentialgleichungssystems (vgl. Gleichung \eqref{equ:state_space}) verglichen. Desweiteren werden Algortihmen zur Lösung von nichtlinearen Optimierungsproblemen erläutert. Die Implementierung der Lösung des Optimalsteuerungsproblems wird mit anhand eines Klassendiagrams visualisiert.
+Das in Gleichung \eqref{equ:mayer_problem} gezeigte Optimalsteuerungsproblem in \autoref{cha:optim} wird numerisch in \textit{MATLAB} implementiert und gelöst. Im Folgenden Kapitel werden Methoden zur Lösung des Differentialgleichungssystems (vgl. Gleichung \eqref{equ:state_space}) verglichen. Desweiteren werden Algorithmen zur Lösung von nichtlinearen Optimierungsproblemen erläutert. Die Implementierung der Lösung des Optimalsteuerungsproblems wird anhand eines Klassendiagramms visualisiert.
 
 \section{Numerische Lösung von gewöhnlichen Differentialgleichungen} \label{sec:num_ode}
-Das gezeigte Modell des Flugzeugs wurde durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell lösen zu können, werden Methoden von \textit{MATLAB} und eigens implementierte Methoden zur Integration verwendet.
-Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurden diese mit konstanten Werten für die Steuerfunktionen \(T\) und \(C_L\) gelöst. Hierbei wurden die Werte innerhalb ihres physikalisch sinnvollen Bereiches ausgewählt und konstante Werte dem Löser übergeben.
+Das gezeigte Modell des Flugzeugs ist durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell lösen zu können, werden Methoden von \textit{MATLAB} und eigens implementierte Methoden zur Integration verwendet.
+Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, werden diese mit konstanten Werten für die Steuerfunktionen \(T\) und \(C_L\) gelöst. Hierbei werden die Werte innerhalb ihres definierten Intervalls ausgewählt und konstante Werte dem Löser übergeben.
 
 % define new column for ragged right content
 \newcolumntype{Z}{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}X}
@@ -17,9 +17,9 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
         \midrule
         explizites Euler Verfahren  &   0,00708 &   0 \\
         implizites Euler Verfahren  &   0,0185  &   0,0115\\
-        \textit{MATLAB} ode23s      &   0,0914  &   0,0843 \\
-        \textit{MATLAB} ode45       &   0,529   &   0,522 \\
-        RADAU-2A Verafahren         &   1,36    &   1,35 \\
+        \textit{MATLAB} \texttt{ode23s}      &   0,0914  &   0,0843 \\
+        \textit{MATLAB} \texttt{ode45}       &   0,529   &   0,522 \\
+        RADAU-2A Verfahren         &   1,36    &   1,35 \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -33,7 +33,7 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
     \subfloat[\label{fig:methods_d_x}]{\includegraphics{../code/methods/results/methods_plot_d_x}}
     \qquad
     \subfloat[\label{fig:methods_d_v}]{\includegraphics{../code/methods/results/methods_plot_d_v}}
-    \caption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space}). Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.} %
+    \MyCaption{Lösung des Differentialgleichungsmodells (vgl. \eqref{equ:state_space})}{Die vier Zustandgrößen des Vektors wurden mit kontanten Steuerfunktionen \(T\,=\,1259999\,N\) und \(C_L\,=\,1,49\) gelöst.} %
     % \subref{fig:methods_h} zeigt die gleichmäßig steigende Flughöhe mit kleiner Abweichung zwischend en Methoden. \subref{fig:methods_gamma} zeigt den %
     % Anstellwinkel des Flugzeuges mit deutlicher Abweichung zwischen den Algorithmen. \subref{fig:methods_x} zeigt die zurückgelegte Strecke des Flugzeuges.} %
     % \subref{fig:methods_v} zeigt die Geschwindigkeit des Flugzeuges.}
@@ -44,31 +44,31 @@ Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, wurd
 Die vorangeganenen Untersuchungen zeigen, dass sich das explizite Euler Verfahren am Besten mit Hinsicht auf die Laufzeit und die Genauigkeit zur Lösung des gegebenen Optimalsteuerungsproblems eignet. Das Verfahren wurde nach \cite{Brokate2016} in \textit{MATLAB} implementiert.
 
 \section{Beschränkte nichtlineare Optimierungsverfahren}
-Bei den direkten Verfahren wird ein Trajektorienoptimierungsproblem durch Umwandlung in ein nichtlineares Programm (NLP) gelöst. Im vorliegenden Projekt wird dabei ein gradientenbasiertes lokales Verfahren verwendet, welches durch die \textit{Optimization Toolbox} von \textit{MATLAB} bereitgestellt wird. Wie der Name schon sagt, verwenden gradientenbasierte Methoden Ableitungen erster und zweiter Ordnung um lokale Minima zu finden. Zwei wichtige gradientenbasierte Methoden zur Lösung von beschränkten nichtlinearen Optimierungsproblemen sind die sequentielle quadratische Programmierung (SQP) und das Innere-Punkte-Verfahren (IP). Beide reduzieren dieses Problem in einfachere Teilprobleme und lösen diese nacheinander, bis ein lokales Optimum gefunden ist \cite{Betts2010}.
+Bei den direkten Verfahren wird ein Trajektorienoptimierungsproblem durch Umwandlung in ein nichtlineares Programm (NLP) gelöst. Im vorliegenden Projekt wird in \autoref{cha:direct} dabei ein gradientenbasiertes lokales Verfahren verwendet, welches durch die \textit{Optimization Toolbox} von \textit{MATLAB} bereitgestellt wird. Zwei wichtige gradientenbasierte Methoden zur Lösung von beschränkten nichtlinearen Optimierungsproblemen sind die sequentielle quadratische Programmierung (SQP) und das Innere-Punkte-Verfahren (IP). Beide reduzieren dieses Problem in einfachere Teilprobleme und lösen diese nacheinander, bis ein lokales Optimum gefunden ist \cite{Betts2010}.
 
 SQP-Verfahren lösen eine Folge von quadratischen Programmen (QP), um die Abstiegsrichtung zu finden, daher der Name sequentielle quadratische Programmierung. Das Minimum ist erreicht, wenn die Karush-Kuhn-Tucker (KKT)-Bedingungen erfüllt sind \cite{Matlab2016}.
 
-Die \textit{MATLAB}-Funktion fmincon verwendet zwei Varianten der SQP-Methode namens \textit{active-set} und sqp. Diese beiden Algorithmen sind sich sehr ähnlich und verwenden eine Quasi-Newton-Methode, um sich einer Lösung zu nähern, die die KKT-Bedingungen erfüllt. Es handelt sich um ein Quasi-Newton-Verfahren, da die Hesse-Matrix nicht exakt berechnet, sondern durch Approximation, in diesem Fall einer BFGS-Update, angenähert wird. Diese Approximation wird vorgenommen, da die Hesse-Matrix oft nicht vorliegt. Sowohl \textit{active-set} als auch sqp stellen sicher, dass die Hesse-Matrix positiv definit ist, indem sie die BFGS-Methode mit einer positiv definitiven Matrix initialisieren. Diese Eigenschaft der Hesse-Matrix wird dadurch aufrechterhalten, dass der Algorithmus während des BFGS-Updates verschiedene Matrixoperationen verwendet. Die Bedingung, dass die Hesse-Matrix positiv definit ist, ist zusammen mit den Optimalitätsbedingungen erster Ordnung, die durch die KKT-Bedingungen beschrieben werden, eine notwendige und hinreichende Bedingung für ein Minimum \cite{Matlab2016}. 
+Die \textit{MATLAB}-Funktion \verb+fmincon+ verwendet zwei Varianten der SQP-Methode namens \textit{active-set} und \textit{sqp}. Diese beiden Algorithmen sind sich sehr ähnlich und verwenden eine Quasi-Newton-Methode, um sich einer Lösung zu nähern, die die KKT-Bedingungen erfüllt. Es handelt sich um ein Quasi-Newton-Verfahren, da die Hesse-Matrix nicht exakt berechnet, sondern durch Approximation, in diesem Fall einer BFGS-Update, angenähert wird. Diese Approximation wird vorgenommen, da die Hesse-Matrix oft nicht vorliegt. Sowohl \textit{active-set} als auch \textit{sqp} stellen sicher, dass die Hesse-Matrix positiv definit ist, indem sie die BFGS-Methode mit einer positiv definitiven Matrix initialisieren. Diese Eigenschaft der Hesse-Matrix wird dadurch aufrechterhalten, dass der Algorithmus während des BFGS-Updates verschiedene Matrixoperationen verwendet. Die Bedingung, dass die Hesse-Matrix positiv definit ist, ist zusammen mit den Optimalitätsbedingungen erster Ordnung, die durch die KKT-Bedingungen beschrieben werden, eine notwendige und hinreichende Bedingung für ein Minimum \cite{Matlab2016}. 
 
-Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine Folge von angenäherten Minimierungsproblemen. Der Ansatz besteht in der Umordnung des ursprünglichen Problems unter Verwendung einer Barrierefunktion, in der Regel einer logarithmischen oder inversen Funktion, und dann diese neue Merit-Funktion nach absteigendem $\mu$ zu lösen. \texttt{Fmincon} verwendet eine logarithmische Barrierefunktion. Im Gegensatz zum SQP-Verfahren erzeugt das IP-Verfahren eine Folge von streng zulässigen Iterierten, die zu einer Lösung aus dem Inneren der zulässigen Menge konvergieren  \cite{Matlab2016}. Für weitere Details siehe \cite{Betts2010}.
+Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine Folge von angenäherten Minimierungsproblemen. Der Ansatz besteht in der Umordnung des ursprünglichen Problems unter Verwendung einer Barrierefunktion, in der Regel einer logarithmischen oder inversen Funktion, und dann diese neue Merit-Funktion nach absteigendem $\mu$ zu lösen. Der Algorithmus \texttt{fmincon} verwendet eine logarithmische Barrierefunktion. Im Gegensatz zum SQP-Verfahren erzeugt das IP-Verfahren eine Folge von streng zulässigen Iterierten, die zu einer Lösung aus dem Inneren der zulässigen Menge konvergieren  \cite{Matlab2016}. Für weitere Details siehe \cite{Betts2010}.
 
-Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und Vergleich der Ergebnisse. Dabei wurden sowohl die Anzahl der Iterationen als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert sowohl schneller konvergiert als auch die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
+Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
 
 Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
-        \caption{Vergleich von IP- und SQP-Verfahren}\label{img:Vergleich_SQP_IP}
+        \MyCaption{Vergleich von IP- und SQP-Verfahren}{Vergleich des Funktionswertes über der Anzahl der Iterationen} \label{img:Vergleich_SQP_IP}
     \end{center}
 \end{figure}
 
-\section{Schiessverfahren}
+\section{Schießverfahren}
 
 Was wird verwendet:
 Anfangswert probleme mit einschritt verfahren explizit und implizit
 Sensitivitäts DGL
-Zusammenbau in Schiessverfahren
+Zusammenbau in Schießverfahren
 
 
 \section{Aufbau des Lösers}
@@ -77,13 +77,13 @@ Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und eine
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{images/03_TechnischeUmsetzung/code_structure}
-    \caption{Schematische Darstellung der Implementierten Verfahren. Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \texttt{Plotter}}
+    \MyCaption{Schematische Darstellung der implementierten Verfahren}{Es wurde ein direktes und ein indirektes Lösungsverfahren implementiert. Alle Verfahren verwenden eine gemeinsame Ausgabe über die Klasse \texttt{Plotter}}
     \label{fig:code_structure}
 \end{figure}
 
 
 \section{Diskussion der numerischen Versuche und Ergebnisse mit direkten Lösungsverfahren}
-Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit MATLAB umgesetzt. 
+Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit \textit{MATLAB} umgesetzt. 
 
 Da mit den Grundeinstellungen des Optimalsteuerungsproblems \ref{prob:MaxRF} keine zufriedenstellende Ergebnisse erreicht werden konnten (siehe Versuch \ref{kap:Versuch0}), wurden verschiedene Versuche aufgestellt. In den nachfolgenden Versuchen \ref{kap:Versuch1}, \ref{kap:Versuch2}, \ref{kap:Versuch3} und \ref{kap:Versuch4} wurden verschiedene Parameter variiert, beziehungsweise neue Parameter und Beschränkungen eingeführt.
 

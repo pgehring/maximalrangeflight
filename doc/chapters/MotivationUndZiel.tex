@@ -3,7 +3,7 @@ Die Berechnung von Flugtrajektorien zur Reichweitenmaximierung haben eine lange 
 
 Eine besonders einfache Lösung für den entfernungsoptimalen Flug ist für den Fall des Horizontalflug bekannt, siehe z.B. \cite{Peckham1974}. Sie folgt aus der Maximierung des Verhältnisses $\sqrt{C_{L}/C_{D}}$ der Auftriebs- und Widerstandskoeffizienten, was zu einer Geschwindigkeit führt, die um den Faktor $\sqrt{4/3}$ größer ist als die Geschwindigkeit zur Maximierung des Verhältnisses von Auftrieb zu Widerstand $C_{L}/C_{D}$ \cite{Schaback2017}.  
 
-Diese Projektarbeit bietet eine Erweiterung auf den allgemeinen nicht-horizontalen Flug und konzentriert sich auf numerische Standardmethoden, die lediglich Systeme gewöhnlicher Differentialgleichungen lösen. Modelliert wird ein 2-dimensionaler Flug eines Flugzeugs in der $x$-$h$-Ebene (Abbildung \ref{img:Flugzeug}), bei dem man den Auftriebsbeiwert $C_L(t)$ und den Schub $T(t)$ steuern kann. Diese Steuerungen sind jedoch in ihrer Möglichkeit beschränkt. Ebenfalls darf während des Fluges ein maximaler Staudruck nicht überschritten werden. Das Ziel ist es, das Flugzeug von einer gegebenen Anfangsposition so zu steuern, dass eine vorgegebene Reisehöhe $h_f = 10668\ m$ und Anstellwinkel $\gamma_f = 0\ ^{\circ}$ in einer Flugzeit von $1800 \ s$ erreicht  wird, wobei die zurückgelegte Strecke maximal wird.
+Diese Projektarbeit bietet eine Erweiterung auf den allgemeinen nicht-horizontalen Flug und konzentriert sich auf numerische Standardmethoden, die lediglich Systeme gewöhnlicher Differentialgleichungen lösen. Modelliert wird ein 2-dimensionaler Flug eines Flugzeugs in der $x$-$h$-Ebene (Abbildung \ref{img:Flugzeug}), bei dem man den Auftriebsbeiwert $C_L(t)$ und den Schub $T(t)$ steuern kann. Diese Steuerungen sind jedoch bestimmte Intervalle beschränkt. Ebenfalls darf während des Fluges ein maximaler Staudruck nicht überschritten werden. Das Ziel ist es, das Flugzeug von einer gegebenen Anfangsposition so zu steuern, dass eine vorgegebene Reisehöhe $h_f = 10668\ m$ und Anstellwinkel $\gamma_f = 0\ ^{\circ}$ in einer Flugzeit von $1800 \ s$ erreicht  wird, wobei die zurückgelegte Strecke maximal wird.
 
 
 Beginnend mit der Herleitung der Gleichungen für den quasi-statischen Flug in \autoref{cha:optim}, folgt die Formulierung des Optimalsteuerungsproblems für direkte (\autoref{cha:direct}) und indirekte (\autoref{cha:indirect}) Lösungsverfahren. Anschließend folgt die numerische Umsetzung und Lösungs des Optimalssteuerungsproblems und die Diskussion der Ergebnisse.
@@ -13,7 +13,7 @@ Alle Modellrechnungen wurden für den Airbus A380-800 \cite{A380Tech} durchgefü
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=\textwidth]{images/01_Modellaufbau/Flugzeug.pdf}
-        \caption{2D-Skizze eines Flugzeuges in der $x$-$h$-Ebene mit angreifenden Kräften $L$ (Auftriebskraft), $D$ (Luftwiederstand), $W$ (Erdanziehungskraft) und $T$ (Schub) am Schwerpunkt $S$. Des Weiteren beschreibt $v$ die Geschwindigkeit und $\gamma$ den Anstellwinkel.}\label{img:Flugzeug}
+        \MyCaption{2D-Skizze eines Flugzeuges in der $x$-$h$-Ebene}{mit angreifenden Kräften $L$ (Auftriebskraft), $D$ (Luftwiederstand), $W$ (Erdanziehungskraft) und $T$ (Schub) am Schwerpunkt $S$. Des Weiteren beschreibt $v$ die Geschwindigkeit und $\gamma$ den Anstellwinkel.}\label{img:Flugzeug}
     \end{center}
 \end{figure}
 
