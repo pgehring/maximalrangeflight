@@ -48,13 +48,31 @@ Bei den direkten Verfahren wird ein Trajektorienoptimierungsproblem durch Umwand
 
 SQP-Verfahren lösen eine Folge von quadratischen Programmen (QP), um die Abstiegsrichtung zu finden, daher der Name sequentielle quadratische Programmierung. Das Minimum ist erreicht, wenn die Karush-Kuhn-Tucker (KKT)-Bedingungen erfüllt sind \cite{Matlab2016}.
 
-Die \textit{MATLAB}-Funktion \verb+fmincon+ verwendet zwei Varianten der SQP-Methode namens \textit{active-set} und \textit{sqp}. Diese beiden Algorithmen sind sich sehr ähnlich und verwenden eine Quasi-Newton-Methode, um sich einer Lösung zu nähern, die die KKT-Bedingungen erfüllt. Es handelt sich um ein Quasi-Newton-Verfahren, da die Hesse-Matrix nicht exakt berechnet, sondern durch Approximation, in diesem Fall einer BFGS-Update, angenähert wird. Diese Approximation wird vorgenommen, da die Hesse-Matrix oft nicht vorliegt. Sowohl \textit{active-set} als auch \textit{sqp} stellen sicher, dass die Hesse-Matrix positiv definit ist, indem sie die BFGS-Methode mit einer positiv definitiven Matrix initialisieren. Diese Eigenschaft der Hesse-Matrix wird dadurch aufrechterhalten, dass der Algorithmus während des BFGS-Updates verschiedene Matrixoperationen verwendet. Die Bedingung, dass die Hesse-Matrix positiv definit ist, ist zusammen mit den Optimalitätsbedingungen erster Ordnung, die durch die KKT-Bedingungen beschrieben werden, eine notwendige und hinreichende Bedingung für ein Minimum \cite{Matlab2016}. 
+Die \textit{MATLAB}-Funktion \texttt{fmincon} verwendet zwei Varianten der SQP-Methode namens \textit{active-set} und \textit{sqp}. Diese beiden Algorithmen sind sich sehr ähnlich und verwenden eine Quasi-Newton-Methode, um sich einer Lösung zu nähern, die die KKT-Bedingungen erfüllt. Es handelt sich um ein Quasi-Newton-Verfahren, da die Hesse-Matrix nicht exakt berechnet, sondern durch Approximation, in diesem Fall einer BFGS-Update, angenähert wird. Diese Approximation wird vorgenommen, da die Hesse-Matrix oft nicht vorliegt. Sowohl \textit{active-set} als auch \textit{sqp} stellen sicher, dass die Hesse-Matrix positiv definit ist, indem sie die BFGS-Methode mit einer positiv definitiven Matrix initialisieren. Diese Eigenschaft der Hesse-Matrix wird dadurch aufrechterhalten, dass der Algorithmus während des BFGS-Updates verschiedene Matrixoperationen verwendet. Die Bedingung, dass die Hesse-Matrix positiv definit ist, ist zusammen mit den Optimalitätsbedingungen erster Ordnung, die durch die KKT-Bedingungen beschrieben werden, eine notwendige und hinreichende Bedingung für ein Minimum \cite{Matlab2016}. 
 
 Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine Folge von angenäherten Minimierungsproblemen. Der Ansatz besteht in der Umordnung des ursprünglichen Problems unter Verwendung einer Barrierefunktion, in der Regel einer logarithmischen oder inversen Funktion, und dann diese neue Merit-Funktion nach absteigendem $\mu$ zu lösen. Der Algorithmus \texttt{fmincon} verwendet eine logarithmische Barrierefunktion. Im Gegensatz zum SQP-Verfahren erzeugt das IP-Verfahren eine Folge von streng zulässigen Iterierten, die zu einer Lösung aus dem Inneren der zulässigen Menge konvergieren  \cite{Matlab2016}. Für weitere Details siehe \cite{Betts2010}.
 
-Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
+\begin{table}[htbp]
+    \centering
+    \caption{Exit Flags der \textit{MATLAB}-Funktion \texttt{fmincon} }  \label{tab:Exitflag}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Exit Flag}  & \textbf{Bedeutung} \\
+        \midrule
+	-2        & Kein zulässiger Punkt gefunden \\
+	-1 &  Gestoppt durch Ausgabefunktion oder Plot-Funktion\\
+	0 &  Maximale Anzahl an Iterationen erreicht  \\
+	1 &  Optimalitätsmaß erster Ordnung kleiner als vorgegeben \\
+	2 & Änderung von $x$ kleiner als die vorgegebene Toleranz\\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
-Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}.
+Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Ein wichtige Rolle spielte hierbei der Rückgabewert \texttt{exitflag} der Funktion \texttt{fmincon} (Tabelle \ref{tab:Exitflag}). Bei Werten größer null kann von einem lokalen Minimum ausgegangen werden und bei Werten gleich null sollte die Anzahl der Iterationen erhöht werden. Werte kleiner null zeugen von numerischen Problemen oder Abbrüchen.
+
+ Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
+
+Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fern hält \cite{Matlab2016}. Daneben zeigte sich, dass das SQP-Verfahren robuster ist. So hatte die Wahl des Startwertes einen nicht so starken Einfluss wie beim IP-Verfahren und erleichterte die Durchführung der numerischen Experimente. 
 
 \begin{figure}[H]
     \begin{center}
