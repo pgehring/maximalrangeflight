@@ -1,5 +1,12 @@
-\chapter{Technische Umsetzung und numerische Untersuchungen} \label{kap:TUNU}
+\chapter{Numerische Untersuchungen und technische Umsetzung} \label{kap:TUNU}
 Das in Gleichung \eqref{equ:mayer_problem} gezeigte Optimalsteuerungsproblem in \autoref{cha:optim} wird numerisch in \textit{MATLAB} implementiert und gelöst. Im Folgenden Kapitel werden Methoden zur Lösung des Differentialgleichungssystems (vgl. Gleichung \eqref{equ:state_space}) verglichen. Desweiteren werden Algorithmen zur Lösung von nichtlinearen Optimierungsproblemen erläutert. Die Implementierung der Lösung des Optimalsteuerungsproblems wird anhand eines Klassendiagramms visualisiert.
+
+\section{Steifigkeitsuntersuchungen}
+Die Steifigkeit einer Differentialgleichung beschreibt eine numerische Eigenschaft, die eine Ausgage über die Schrittweite der Lösung erlaubt. Eine Differentialgleichung wird als steif bezeichnet, wenn in einem Bereich der Lösung, die benötigte Schrittweite sehr viel kleiner ist, als es die Krümmung der Lösung erfordert. Dieses Erfordernis kommt mit erheblichem Rechenaufwand.
+
+Um die Steifigkeit der Zustandsdifferentialgleichung des Optimalsteuerungsproblems (vgl. \eqref{equ:state_space}) bewerten zu können, wird ein Steifigkeitskoeffizient der Eigenwerte gebildet.
+
+
 
 \section{Numerische Lösung von gewöhnlichen Differentialgleichungen} \label{sec:num_ode}
 Das gezeigte Modell des Flugzeugs ist durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell lösen zu können, werden Methoden von \textit{MATLAB} und eigens implementierte Methoden zur Integration verwendet.
