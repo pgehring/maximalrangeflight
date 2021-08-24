@@ -13,11 +13,11 @@ N = 100;               % Anzahl an Diskretisierungen
 
 z_0 = [   9000,...     % h_start in [m]
              5,...     % gamma_start in [Grad]  
-        80000,...     % x_start in [m]
+         80000,...     % x_start in [m]
            250,...     % v_start in [m/s]
        1259999,...     % T_start in [N]
            1.4];       % C_L_start in []
-z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
+% z_0 = readmatrix(strcat('./results/',results_name,'.txt')); % Falls Daten geladen werden möchten     
 
 X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [Grad]  (Steigflug mit Neigungswinkel von cs 20°)
@@ -64,4 +64,3 @@ prob = MaximalRangeFlightDirect(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 %% Optionen für fmincon von Matlab
 options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
 % options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
-options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',1.0e+03,'MaxIterations',4.0e+05);

@@ -64,4 +64,3 @@ prob = MaximalRangeFlightDirect(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
 %% Optionen für fmincon von Matlab
 options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
 % options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',6000.0e+03,'MaxIterations',4.0e+05,'ConstraintTolerance',1e-8,'UseParallel',true);
-options = optimoptions('fmincon','Display','iter','Algorithm','interior-point','MaxFunctionEvaluations',1.0e+03,'MaxIterations',4.0e+05);

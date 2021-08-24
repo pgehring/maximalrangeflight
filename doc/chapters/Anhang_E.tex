@@ -1,0 +1,115 @@
+\chapter{Programmcode indirekte Lösungsverfahren und Versuchsprotokolle}\label{Anhang:IndirektV}
+
+
+
+\section{Versuch 0}\label{kap:Versuch0}
+Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
+
+\subsection{Ergebnis 1}\label{kap:Versuch01}
+Verwendet wird:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
+\caption{Versuch 1 - Ergebnis 1}\label{img:test_0_1}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1_staudruck}
+\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_0_1_staudruck}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Versuch 1}\label{kap:Versuch1}
+Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält. %$z_0 = (20,9,6000,90,1259999,1.47)$
+
+\subsection{Ergebnis 1}\label{kap:Versuch11}
+Verwendet wird:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 300 \ [s]$
+\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+%
+\item SQP-Verfahren
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1}
+\caption{Versuch 1 - Ergebnis 1}\label{img:test_1_1}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
+\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch11} dem maximalen Staudruck annähert.}\label{img:test_1_1_staudruck}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Versuch 2}\label{kap:Versuch2}
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich die Starthöhe des Flugzeuges angepasst.
+
+\subsection{Ergebnis 1}\label{kap:Versuch21}
+Verwendet werden:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Reduzierte Endzeit: $t_f = 250 \ [s]$
+\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
+\item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL
+%
+\item SQP-Verfahren
+\end{itemize}
+Es folgt das Ergebnis
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1}
+\caption{Versuch 2 - Ergebnis 1}\label{img:test_2_1}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1_staudruck}
+\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch21} dem maximalen Staudruck annähert.}\label{img:test_2_1_staudruck}
+\end{center}
+\end{figure}

@@ -66,21 +66,22 @@ classdef shooting_methods
                             break; % Abbruchbedingung
                         end
                         
-                        % Berechnung der Jacobimatrix 
-                        S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
-                        sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
-                        S_b(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
-                        
-%                         % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
-%                         for j=1:n_y
-%                             odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
-%                             [~,S] = obj.ode_method(odefun,tspan,S_a(:,j),obj.options); 
-%                             S_b(:,j)=S(end,:)';
-%                         end
+%                         % Berechnung der Jacobimatrix 
+%                         S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
+%                         sol_S = obj.ode_method(S_t,tspan,reshape(S_a,[],1),obj.options);
+%                         S_b(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
+%                         
+                        % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
+                        for j=1:n_y
+                            odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
+                            [~,S] = obj.ode_method(odefun,tspan,S_a(:,j),obj.options); 
+                            S_b(:,j)=S(end,:)';
+                        end
                         
                         F_jac = r_y_a(eta,y_t_eta(end,:)) + r_y_b(eta,y_t_eta(end,:))*S_b;
                         % Berechnung der Newton-Richtung d
                         d = - F_jac \ F;
+%                         [d,nit_gs,sr_gs,res_gs] = obj.iterationMethod(-F_jac,F,ones(8,1),1e-12,10000);
                         % Armijo Schrittweiten steuerung
                         while obj.armijo
                             if norm(d) < obj.StopTolArmijo
@@ -124,6 +125,7 @@ classdef shooting_methods
                         end
                         % Berechnung der Newton-Richtung d 
                         d = - F_jac \ F;
+%                         [d,nit_gs,sr_gs,res_gs] = obj.iterationMethod(-F_jac,F,d,1e-12,10000);
                         % Armijo Schrittweitensteuerung
                         while obj.armijo
                             if norm(d) < obj.StopTolArmijo
@@ -185,16 +187,16 @@ classdef shooting_methods
                     y_AWP = sol_y.y';
                     t_AWP = sol_y.x';
 
-                    S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
-                    sol_S = obj.ode_method(S_t,[t(j),t(j+1)],reshape(S_a,[],1),obj.options);
-                    S_b_AWP(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
+%                     S_t =@(t,S) reshape(g_y(t,deval(sol_y,t))*reshape(S,n_y,n_y),[],1); % Marix-Matrix-Produnkt und zurück in Spaltenvektor 
+%                     sol_S = obj.ode_method(S_t,[t(j),t(j+1)],reshape(S_a,[],1),obj.options);
+%                     S_b_AWP(:,:) = reshape(sol_S.y(:,end)',n_y,n_y); % Spaltenvektor zu Matrix
 
-%                     % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
-%                     for k=1:n_y
-%                         odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
-%                         [~,S] = obj.ode_method(odefun,[t(j),t(j+1)],S_a(:,k),obj.options); 
-%                         S_b_AWP(:,k)=S(end,:)';
-%                     end
+                    % Berechnung der Jacobimatrix: SCHNELLER, GIBT aber eine Differenz im Bereich 1e-4
+                    for k=1:n_y
+                        odefun = @(time,x) g_y(time,deval(sol_y,time))*x;
+                        [~,S] = obj.ode_method(odefun,[t(j),t(j+1)],S_a(:,k),obj.options); 
+                        S_b_AWP(:,k)=S(end,:)';
+                    end
                     
                     % Bilden von F(eta) und der Jacobimatrix
                     if j ~= N
@@ -236,6 +238,27 @@ classdef shooting_methods
                 eta = eta + t_armijo*d_r;
                 i = i + 1;
             end
+        end
+        
+        %%
+        function [x, nit, sr, res] = iterationMethod(obj,A,b,x0,tol,maxit,method)
+            nit = 0; %Felix: Anzahl an Iterationen
+            x = x0; %Felix: der Startwert wird zu beginn uebergeben    
+            D = diag(diag(A)); %Felix: die Hauptdiagonale von A wird an D uebergeben
+            L = tril(A,-1); %Felix: die untere Dreiecksmatrix von A wird L
+            R = triu(A,1); %Felix: die obere Dreiecksmatrix von A wird R
+            %Felix: Bezueglich der Methode Gauss-Seidel-Verfahren
+            d = inv(L+D) * b;
+            C = - inv(L + D) * R;
+            %Felix: berechnen des iterativen Verfahrens
+            res = norm(A * x - b);%Felix: Wert des Residuums
+            while((nit < maxit) && (res >= tol))
+                x = C * x + d;
+                res = norm(A * x - b);
+                nit = nit + 1;
+            end
+            %Felix: Ausgabe des Spektralradius
+            sr = max(abs(eig(C)));
         end
     end
 end

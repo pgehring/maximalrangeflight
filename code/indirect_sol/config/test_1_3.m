@@ -1,10 +1,10 @@
-% test_1_4.m
+% test_1_3.m
 
 % Versuchsaufbau:
 %   - Veränderte Endzeit
 
 %% Speicher Parameter
-results_name = 'test_1_4';
+results_name = 'test_1_3';
 
 %% Testparameter + Lösungsmethode der ODE und Objekt der Problemklasse erhalten
 z_0 = [-5.732440736775094e-17;0.270000000000000;0;100;7.842025122992616;1.145486668260562e+03;-1;-6.242151406637181];
@@ -43,7 +43,7 @@ maxit = 20;
 flag = 'SensDGL';
 % flag = 'FinitDiff';
 
-% ode_method = @ode45;
-ode_method = @ode23s;
+ode_method = @ode45;
+% ode_method = @ode23s;
 shooting_methods = shooting_methods(ode_method,h_min,AbsTol,RelTol,StopTol,StopTolArmijo,maxit,flag);
 shooting_method = @shooting_methods.Einfachschiessverfahren;

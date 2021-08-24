@@ -83,21 +83,44 @@ Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und eine
 
 
 \section{Diskussion der numerischen Versuche und Ergebnisse mit direkten Lösungsverfahren}
-Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit \textit{MATLAB} umgesetzt. 
+Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit \textit{MATLAB} umgesetzt (siehe Kapitel \ref{kap:Versuch0}). Dabei wurden zunächst beide Optimierungsverfahren aus Kapitel \ref{kap:OptVerfahren} auf das Problem angewendet. Während das SQP-Verfahren in Versuch \ref{Versuch01} ein Ergebnis berechnet, welches plausibel erscheint, liefert das Innere-Punkte-Verfahren in Versuch \ref{kap:Versuch02} ein stark oszilierendes, nicht plausibles Ergebnis. Daher wurden zunächst eine die numerische Untersuchungen der beiden Optimierungsverfahren durchgeführt. Es wurden sowohl die Anzahl der Iterationen als auch die Funktionswerte im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert sowohl schneller konvergiert als auch einen kleineren Funktionswert besitzt. Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}. In den nachfolgenden numerischen Untersuchungen wird deshalb stets das SQP-Verfahren verwendet.
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
+        \caption{Vergleich von IP- und SQP-Verfahren}\label{img:Vergleich_SQP_IP}
+    \end{center}
+\end{figure}
+Trotz alle dem stellt Versuch \ref{kap:Versuch01} kein zufriedenstellendes Ergebnis da. Es konnte kein globales Optmimum erreicht werden (nur Exitflag 2) und auch physikalisch ist diese Lösung für das Flugzeug A380-800 nicht plausibel. Die Steuerstrategie liegt in einer Art Parabelflug, da die Trajektorie der Höhe einer Parabel gleicht (Abbildung \ref{img:Versuch_01}). Das Flugzeug wird möglichst schnell auf eine maximale Höhe gesteuert, um von diesem Punkt aus dann auf die Endhöhe $h_f$ zu segeln. Die physikalischen Grenzen von den berechneten Höhen und Geschwindigkeiten werden dabei deutlich überschritten.
 
-Da mit den Grundeinstellungen des Optimalsteuerungsproblems \ref{prob:MaxRF} keine zufriedenstellende Ergebnisse erreicht werden konnten (siehe Versuch \ref{kap:Versuch0}), wurden verschiedene Versuche aufgestellt. In den nachfolgenden Versuchen \ref{kap:Versuch1}, \ref{kap:Versuch2}, \ref{kap:Versuch3} und \ref{kap:Versuch4} wurden verschiedene Parameter variiert, beziehungsweise neue Parameter und Beschränkungen eingeführt.
+Der Hauptgrund für dieses Problem liegt in der gegebenen festes Endzeit $t_f$ und den fehlenden physikalischen Beschränkungen des Flugzeuges A380-800. Vor allem die fest gegebene Endzeit $t_f$ wirft zunächst die Frage auf, ob für diese Zeitdauer das Steuerungsproblem überhaupt lösbar ist. Um diese Frage zu beantworten wurde das Optimalsteuerungsproblem \ref{prob:MaxRF} und deren Zielfunktion wie in Anhang {kap:OptTf} transformiert auf das Optimalsteuerungsproblem \ref{prob:MaxRFEndzeit}, bei welchem die optimale = minimale Endzeit $t_f$ unter Einhaltung der Start- und Endbedingungen bestimmt wird. Es ergeben sich aus den Versuchen \ref{kap:Versuch0_OptTf} und \ref{kap:Versuch1_OptTf} die optimalen Endzeiten $t_f = ...$ und $t_f = ...$. Da diese kleiner sind als als die gegebene Endzeit $t_f = 1800 \ s$, ist das Steuerungsproblem demnach lösbar.
 
-Plausible Ergebnisse, nach dem Aspekt der physikalischen Möglichkeiten, wurden in den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} erreicht. Ausschlaggebender Parameter stellt die Endzeit $t_f$ dar, welche über die Qualität des Ergebnisses bestimmt.
+Um nun zufriedenstellende Ergebnisse zu erreichen werden verschiedene Versuche aufgestellt, in welchen verschiedene Parameter und die gegebene Endzeit $t_f$ variieren, beziehungsweise neue Parameter und Beschränkungen eingeführt sind. 
 
-Wie ist der Code / technische Umsetzung 
+In Versuch \ref{kap:Versuch1} wird die gegebenen Endzeit $t_f$ von $1800 \ s$ einmal auf $t_f = 300$ (Versuch \ref{kap:Versuch11}) und einmal auf $t_f = 350$ (Versuch \ref{kap:Versuch12}) reduziert. 
 
-Versuche / Probleme 
+In Versuch \ref{kap:Versuch3} wird das Startgewicht $m$ und die Endzeit $t_f$ angepasst. Damit wird das Startgewicht einem real vorkommenden Startgewicht $m = 500.000 \ kg$ für das Flugzeug A380-800 angepasst. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert. 
 
-Ergebnisse
+In Versuch \ref{kap:Versuch4} werden zum angepassten Startgewicht $m = 500.000 \ kg$ und der angepassten Endzeit $t_f$ auch noch zusätzliche physikalische Boxschranken gesetzt, die das Problem und das Flugzeug betreffen. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert.
 
 
-Gedanken wie der Verlauf aussehen könnte:\\
-Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
+
+
+
+
+
+
+%Plausible Ergebnisse, nach dem Aspekt der physikalischen Möglichkeiten, wurden in den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} erreicht. Ausschlaggebender Parameter stellt die Endzeit $t_f$ dar, welche über die Qualität des Ergebnisses bestimmt.
+%
+%Wie ist der Code / technische Umsetzung 
+%
+%Versuche / Probleme 
+%
+%Ergebnisse
+%
+%diskretisierung N=100 mehr bedeutet deutlich größeren Aufwand 
+%
+%Gedanken wie der Verlauf aussehen könnte:\\
+%Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
 
 
