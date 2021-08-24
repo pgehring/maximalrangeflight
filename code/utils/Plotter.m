@@ -224,28 +224,6 @@ classdef Plotter
             end
             
             subplots = findobj(fig,'type','axes');
-%             for i = [1:c]
-%                 sp = subplots(i);
-%                 sp.Units = 'centimeters';
-%                 test=sp.Position;
-%                 if i == 1
-%                     sp.Position=[test(1)+0.7,test(2)-0.3,test(3),test(4)]; % Steuerung 2
-%                     ylim(sp,[0-1.48*0.05,1.48+1.48*0.05]);
-%                     sp.YTick=0:0.37:1.48;
-%                 elseif i == 2
-%                     sp.Position=[test(1),test(2)-0.3,test(3),test(4)]; % Geschwindigkeit
-%                 elseif i == 3
-%                     sp.Position=[test(1)-0.7,test(2)-0.3,test(3),test(4)]; % Anstellwinkel
-%                 elseif i == 4
-%                     sp.Position=[test(1)+0.7,test(2)-0.5,test(3),test(4)]; % Steuerung 1
-%                     ylim(sp,[0-1260000*0.05,1260000+1260000*0.05]);
-%                     sp.YTick=0:180000:1260000;
-%                 elseif i == 5
-%                     sp.Position=[test(1),test(2)-0.5,test(3),test(4)]; % Flughöhe
-%                 else
-%                     sp.Position=[test(1)-0.7,test(2)-0.5,test(3),test(4)]; % Strecke
-%                 end
-%             end
         end
     end 
 end

@@ -73,6 +73,8 @@ z_0 = [-5.732440736775094e-17;0.270000000000000;0;100;7.842025122992616;1.145486
 % z_0 = [-0.002153745838338;0.513018119226968;-8.411371082326570e-05;1.000006507417855e+02;-0.269765049798985;1.212630728103287e+03;-1.000079012119383;0.310326076308132];
 
 
+
+
 X_0 = [   0;           % h_0 in [m]
        0.27;           % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
           0;           % x_0 in [m]
@@ -81,6 +83,19 @@ X_0 = [   0;           % h_0 in [m]
 X_T = [10668;          % h_t in [m]
            0];         % gamma_t  in [Grad]
 X_T = direkt_sol(1:2,2);
+
+
+%% Neuer Tets 
+z_0 = [4.973268980726038e-04;0.127554953285594;-9.203637018941822e-09;1.000001065401315e+02;5.060018146152018;1.289768689846557e+03;-1.000000110703994;-1.836106932374042];
+
+z_0 = [0;0.00471;0;100;20;100;35;-100];
+
+X_0 = [   0;           % h_0 in [m]
+       0.00471;        % gamma_0 in [rad]  (Steigflug mit Neigungswinkel von cs 20°)
+          0;           % x_0 in [m]
+        100];          % v_0 in [m/s] (Benötigte Startgeschwindigkeit zum Abheben)
+X_T = [1.4;          % h_t in [m]
+           0.0082];         % gamma_t  in [Grad]
 
 params = [       0,... % t_0:   Anfangszeitpunkt in [s]
                  3,... % t_f:   Endzeitpunkt in [s]
@@ -98,11 +113,11 @@ prob = MaximalRangeFlightIndirect(z_0,X_0,X_T,params);
 
 %% Boxbeschränkungen
 h_min         = 1e-6;
-AbsTol        =  1e-8;
-RelTol        =  1e-8;
+AbsTol        = 1e-10;
+RelTol        = 1e-10;
 StopTol       = 1e-12;
 StopTolArmijo = 1e-15;
-maxit = 50;
+maxit = 300;
 % flag = 'SensDGL';
 flag = 'FinitDiff';
 
