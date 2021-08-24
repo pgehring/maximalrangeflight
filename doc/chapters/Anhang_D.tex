@@ -1,0 +1,145 @@
+\chapter{Bestimmung der optimalen Endzeit des Modells}\label{kap:OptTf}
+Bei Problem \ref{prob:MaxRF} ist das Ziel die Zurückgelegte Strecke $x(t)$ zu maximieren. Dieses Problem lässt sich aber auch in ein Problem tansformieren, bei welchem die Endzeit $t_f$, unter Einhaltung der Start- und Endbedingungen, minimiert werden soll. Hierfür müssen die Funktionen $g$ und $f_0$ angepasst werden, um anschließend das Problem mit freier Endzeit auf ein Probleme mit fester Endzeit zu transformieren.
+
+Für die Funktionen $g : \R^{n_X} \to \R$ und $f_0 : \R^{n_X} \times \R^{n_U} \to \R$ ergibt sich somit
+\begin{itemize}
+\item $g(X(t_f)) \equiv 0$
+%
+\item $f_0(X(t),U(t)) = 1$ 
+\end{itemize}
+Anschließend wird eine neue feste Endzeit $\tilde{t}_f = 1$, sowie eine neue Zeitvariable $s \in [t_0,\tilde{t}_f]$ mit der Transformation $t = s \cdot t_f$ definiert. Für die neue Zeitvariable gilt nun
+\[\begin{split}
+\tilde{X}(s) &= x(s \cdot t_f) \\\
+\tilde{U}(s) &= u(s \cdot t_f)
+\end{split}\] 
+Nun wird nach der Zeitvariablen $s$ differenziert:
+\[\dfrac{d \tilde{X}(s)}{ds} = \dfrac{d X(s \cdot t_f)}{ds} = t_f \dfrac{d x(s \cdot t_f)}{dt} = t_f f(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) \]
+Damit lässt sich das Zielfunktional folgendermaßen um schreiben. Aus
+\[\begin{split}
+F(X,U) &= g(x(t_f)) + \int^{t_f}_{t_0} f_0(t,X(t),U(t)) dt \\\
+\Rightarrow F(\tilde{X},\tilde{U}) &= g(\tilde{X}(\tilde{t}_f)) + t_f \int^{\tilde{t}_f = 1}_{t_0 = 0} f_0(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) ds 
+\end{split}\]
+Zusätzlich benötigt man eine neue Zustandsvariable $\tilde{X}_5(s) \equiv t_f$, für die gilt: \[\dfrac{d \tilde{X}_5(s)}{ds} = 0 \ \ \ \ \tilde{X}_5(t_0) =\ \text{frei} \ \ \ \ \tilde{X}_5(\tilde{t}_f) =\ \text{frei}\] sodass die Endzeit $t_f$ minimiert wird. Somit ergibt sich das neue autonome Lagrange-Problem (Problem \ref{prob:MaxRFEndzeit}) mit den Funktionen $f_0 : \R^{n_{\tilde{X}}} \times \R^{n_{\tilde{U}}} \to \R$, $f : \R^{n_{\tilde{X}}} \times \R^{n_{\tilde{U}}} \to \R^{n_{\tilde{X}}}$ und $\tilde{U} : [t_0,\tilde{t}_f] \to \R^m$ für $0 \leq (n_{\psi} = 2) \leq (n_{\tilde{X}} = 5)$ und $n_{\tilde{U}} = 2$.
+
+\begin{problem}[Angepasstes Optimalsteuerungsproblem - Maximal-Range-Flight]\label{prob:MaxRFEndzeit}
+Für das Optimalsteuerungsproblem ergibt sich mit dem Zustandsvektor
+\[\tilde{X}(s) = (h(s),\gamma(s),x(s),v(s),t_f)^T\]
+und der Steuerfunktion
+\[\tilde{U}(s) = (T(s),C_L(s))^T\]
+das Problem:
+\begin{align*}
+\min_{U} F(\tilde{X},\tilde{U}) &:= t_f \int^{\tilde{t}_f = 1}_{t_0 = 0} f_0(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) ds = t_f & & \\\
+\text{unter} \hspace{10mm} \dot{\tilde{X}}(t) &= t_f f(s \cdot t_f,\tilde{X}(s),\tilde{U}(s))\\\
+&= \begin{pmatrix}
+t_f v(t) \sin(\gamma(t)) \\ 
+t_f \left( \dfrac{F \alpha e^{-\beta h(t)} v(t) C_L(t)}{2m} - \dfrac{g \cos(\gamma(t))}{v(t)} \right) \\ 
+t_f v(t) \cos(\gamma(t)) \\ 
+t_f \left( \dfrac{T(t)}{m} - \dfrac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t)) \right) \\
+0
+\end{pmatrix} & & \\\
+(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
+(h,\gamma)(\tilde{t}_f) &= (h_f,\gamma_f) & & \\\
+q(v(s),h(s)) &\leq q_{\max} & & \forall s \in [t_0,\tilde{t}_f]\\\
+U(s) &= (T(s),C_L(s))^T \in \mathcal{U} & & \forall s \in [t_0,\tilde{t}_f]
+\end{align*}
+Des Weiteren sei $\psi : \R^{n_{\tilde{X}}} \to \R^{n_{\psi}}$ eine $C^1$-Funktion
+\[\psi(X(\tilde{t}_f)) = 
+\begin{pmatrix}
+    h(\tilde{t}_f) - h_f \\ 
+    \gamma(\tilde{t}_f) - \gamma_f
+\end{pmatrix} = 0_{n_{\psi}}\]
+\end{problem}
+
+
+
+
+
+
+
+
+
+
+\section{Versuch 0}\label{kap:Versuch0_OptTf}
+Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
+
+Verwendet werden die Parameter aus Tabelle \ref{tab:ProblemPara}:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Startvektor: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL.
+\item SQP-Verfahren zum lösen des Optimierungsproblems.
+\end{itemize}
+Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:test_0_1_OptTf} erreicht werden. Der technische Aufwand für dieses Ergebnis ist in Tabelle \ref{tab:test_0_1} festgehalten. Trotz dieses Aufwandes konnte also kein Optimum des Problems gefunden werden. Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_staudruck_OptTf} dargestellt.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0_1}
+\caption{Versuch 1 - Ergebnis 1}\label{img:test_0_1_OptTf}
+\end{center}
+\end{figure}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Technischer Aufwand Versuch 1.1 und Stop-Kriterium.}\label{tab:test_0_1}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Iterationen} & \textbf{Laufzeit} & \textbf{Exitflag} \\
+        \textbf{in \text{[$1$]}} & \textbf{in \text{[$s$]}} &  \\
+        \midrule
+        1231      &   0,00892 &   -2     \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0_1_staudruck}
+\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_0_1_staudruck_OptTf}
+\end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+\section{Versuch 1}\label{kap:Versuch1_OptTf}
+Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
+
+Verwendet werden die Parameter aus Tabelle \ref{tab:ProblemPara}:
+\begin{itemize}
+\item Anzahl an Diskretisierungen: $N = 100$ 
+\item Startvektor: $z_0 = (9000,5,800000,250,1259999,1.4)$
+\item Explizites Euler Verfahren zum Lösen der DGL.
+\item SQP-Verfahren zum lösen des Optimierungsproblems.
+\end{itemize}
+Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:test_0_1_OptTf} erreicht werden. Der technische Aufwand für dieses Ergebnis ist in Tabelle \ref{tab:test_0_1} festgehalten. Trotz dieses Aufwandes konnte also kein Optimum des Problems gefunden werden. Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_staudruck_OptTf} dargestellt.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0_1}
+\caption{Versuch 1 - Ergebnis 1}\label{img:test_0_1_OptTf}
+\end{center}
+\end{figure}
+
+\begin{table}[htbp]
+    \centering
+    \caption{Technischer Aufwand Versuch 1.1 und Stop-Kriterium.}\label{tab:test_0_1}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Iterationen} & \textbf{Laufzeit} & \textbf{Exitflag} \\
+        \textbf{in \text{[$1$]}} & \textbf{in \text{[$s$]}} &  \\
+        \midrule
+        1231      &   0,00892 &   -2     \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0_1_staudruck}
+\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_0_1_staudruck_OptTf}
+\end{center}
+\end{figure}
