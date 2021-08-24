@@ -5,6 +5,13 @@
   \setbeamercovered{transparent}
   \setbeamertemplate{navigation symbols}{} % no navigation bar
   \setbeamersize{sidebar width left=1.17cm}
+
+  \setbeamercolor{block body alerted}{bg=alerted text.fg!10}
+  \setbeamercolor{block title alerted}{bg=alerted text.fg!20}
+  \setbeamercolor{block body}{bg=structure!10}
+  \setbeamercolor{block title}{bg=structure!20}
+  \setbeamercolor{block body example}{bg=green!10}
+  \setbeamercolor{block title example}{bg=green!20}
 }
 
 \usepackage[ngerman]{babel}
@@ -15,6 +22,9 @@
 \usepackage{fancyvrb}
 \usepackage{array}
 \usepackage{colortbl}
+\usepackage[framemethod=TikZ]{mdframed}
+
+
 
 % Anfang der Titelfolie
 % Anpassung von: Titel, Untertitel, Autor, Datum und Institut
@@ -36,7 +46,7 @@
 % Das Datum wird oben geändert: unter \presdatum{}!
 
 \newcommand{\zwischentitel}{Projektpräsentation}
-\newcommand{\leitthema}{Maximal Range Flight}
+\newcommand{\leitthema}{\insertsection}
 % Ende der Kopfzeile
 
 % Anfang der Folien
@@ -55,18 +65,58 @@
 % 1. Folie
 \section{Problemformulierung}
 \begin{frame}
-  \frametitle{Modellskizze}
-\vspace{-2.6cm}
+  \frametitle{Maximal Range Flight}
+  \vspace{1em}
   \begin{itemize}
-    \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
-    \item Aufz\"{a}hlung 2
-    \item Aufz\"{a}hlung 3
+    \item Maximieren der Reichweite eines Steigfluges
   \end{itemize}
 \end{frame}
+
+
+\begin{frame}
+  \frametitle{Modellskizze}
+  \vspace{1em}
+  \includegraphics[scale=.75]{images/Flugzeug.pdf}
+\end{frame}
+
+
+\begin{frame}
+  % \frametitle{Optimalsteuerungsproblem}
+  \begin{block}{Optimalsteuerungsproblem - Maximal-Range-Flight}
+    \tiny    
+    Für das Optimalsteuerungsproblem ergibt sich mit dem Zustandsvektor
+    $X(t) = (h(t),\gamma(t),x(t),v(t))^T$
+    und der Steuerfunktion
+    $U(t) = (T(t),C_L(t))^T$
+    das Problem
+    \begin{align*}
+        \min_{U} F(X,U) &:= g(X(t_f)) + \int_{t_0}^{t_f} f_0(X(t),U(t)) dt = -(x(t_f) - x_0) & & \\\
+        \text{unter} \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T  & & \\\
+        &= 
+        \begin{pmatrix}
+            v(t) \sin(\gamma(t)) \\ 
+            \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} \\ 
+            v(t) \cos(\gamma(t)) \\ 
+            \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}
+        \end{pmatrix} & & \\\
+        (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
+        (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
+        q(v(t),h(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f]\\\
+        U(t) &= (T(t),C_L(t))^T \in \mathcal{U} = \left[ 
+        \begin{matrix}
+            [T_{\min},T_{\max}] \\ 
+            [C_{L, \min},C_{L, \max}]
+        \end{matrix} 
+        \right] & & \forall t \in [t_0,t_f]
+    \end{align*}
+  \end{block}
+\end{frame}
+
 
 % 2. Folie
 \section{Lösung mit direktem Verfahren}
 \begin{frame}
+  % TODO: section title aus
   \frametitle{Vollständige Diskretisierung}
 \vspace{-2.6cm}
   \begin{itemize}
@@ -88,30 +138,5 @@
   \end{itemize}
 \end{frame}
 
-% 5. Folie
-\section{Die Uni-Farben im \"{U}berblick}
-\begin{frame}
- \frametitle{Die Uni-Farben im \"{U}berblick}
- \vspace{-0.1cm}
-\hspace{-0.75cm}  \tiny{Mathematik/Wirtschaftswissenschaften sRGB 100\%: 86-170-28, Prozentwert von 100\% - 10\% in 10er-Schritten} \\
-\hspace{-0.7cm}  \colorbox{farbwert-mawi}{}{} \\
- \vspace{0.5cm}
-\hspace{-0.7cm}  \tiny{Ingenieurwissenschaften/Informatik sRGB 100\%: 163-38-56, Prozentwerte von 100\% - 10\% in 10er-Schritten} \\
-\hspace{-0.7cm}  \colorbox{farbwert-inwiin}{}{} \\
-  \vspace{0.5cm}
-\hspace{-0.7cm}  \tiny{Naturwissenschaften sRGB 100\%: 163-38-56, Prozentwerte von 100\% - 10\% in 10er-Schritten} \\
-\hspace{-0.7cm}  \colorbox{farbwert-nawi}{}{} \\
-   \vspace{0.5cm}
-   \hspace{-0.7cm}  \tiny{Medizin sRGB 100\%: 38-84-124, Prozentwerte von 100\% - 10\% in 	       10er-Schritten} \\
-\hspace{-0.7cm}  \colorbox{farbwert-med-blau}{}{}  \\
-  \vspace{0.5cm}
-\hspace{-0.7cm}  \tiny{Farbwerte Uni-Blau sRGB 100\%: 125-154-170, Prozentwerte von 100\% - 10\% in 	       10er-Schritten} \\
-\hspace{-0.7cm}  \colorbox{farbwert-blau}{}{}  \\
-  \vspace{0.5cm}
-  \hspace{-0.7cm}  \tiny{Farbwert Beige sRGB 100\%: 169-162-141, Prozentwerte von 100\% - 10\% in 10er-Schritten} \\
-\hspace{-0.7cm}  \colorbox{farbwert-beige}{}{} \\
-  \vspace{0.5cm}
-\end{frame}
-%Ende der Folien
 
 \end{document}
