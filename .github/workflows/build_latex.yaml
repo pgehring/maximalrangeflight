@@ -1,0 +1,16 @@
+name: Build LaTeX document
+on: [push]
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      - name: Compile LaTeX documentation
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: doc/Num4_Projekt_Maximal_Range_Flight.tex
+      - name: Compile LaTeX slides
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: slides/slides_maximal_range_flight.tex
