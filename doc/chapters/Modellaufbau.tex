@@ -1,35 +1,35 @@
 \chapter{Optimalsteuerungsproblem} \label{cha:optim}
 
-Modelliert wird das Flugzeug A380-800 der Firma Airbus. Dabei seien
+Im folgenden wird ein Differentialgleichungssystem für den quasi-statischen Flug hergeleitet. Modelliert wird das Flugzeug A380-800 der Firma Airbus bei einem Steigflug. Es wird sowohl die Dynamik in vertikaler ($y$-Achse) als auch in horizontaler ($h$-Achse) Richtung berücksichtigt. Dabei seien
 \begin{itemize}
     \item $x(t)$: $x$-Koordinate des Massenschwerpunktes $S$
     \item $h(t)$: $h$-Koordinate des Massenschwerpunktes $S$
     \item $v(t)$: Geschwindigkeit
     \item $\gamma(t)$: Anstellwinkel
-    \item $T(t)$: Schub, Steuerung
-    \item $C_L(t)$: Auftriebsbeiwert, Steuerung
+    \item $T(t)$: Schub (Steuerung)
+    \item $C_L(t)$: Auftriebsbeiwert (Steuerung)
 \end{itemize}
-Neben Gewicht \(W\), Auftrieb \(L\) und Luftwiderstand \(D\), wird auch der Schub \(T\) als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden. Wie jedoch gezeigt werden konnte, führen zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Um die Kräfte welche auf das Flugzeug einwirken, berechnen zu können, werden folgende Hilfsgrößen benötigt:
+Um die Kräfte welche auf das Flugzeug einwirken, berechnen zu können, werden folgende Hilfsgrößen benötigt:
 \begin{itemize}
     \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
     
-    \item Luftdichte: \[\rho(h(t)) := \alpha \cdot e^{-\beta \cdot h(t)}\]  wobei für die Berechnung der höhenabhängigen Luftdichte ein einfaches Exponentialmodell verwendet wird%https://wind-data.ch/tools/luftdichte.php
+    \item Luftdichte: \[\rho(h(t)) := \alpha \cdot e^{-\beta \cdot h(t)}\]  wobei für die Berechnung der höhenabhängigen Luftdichte ein einfaches Exponentialmodell verwendet wird.%https://wind-data.ch/tools/luftdichte.php
 
     \item Staudruck: \[q(v(t), h(t)) := \dfrac{\rho(h(t)) \cdot v^2(t)}{2} \]
 \end{itemize}
 
-Die Kräfte lassen sich dann berechnen mit:
+Neben Gewichtskraft \(W\), Auftrieb \(L\) und Luftwiderstand \(D\) wird auch der Schub \(T\) als Kraft betrachtet. Daneben wird der Einfluss von Klappen, Spoiler und ausgefahrenen Fahrwerken vernachlässigt. Die nachfolgenden Gleichungen beziehen sich auf kurze Zeitintervalle, in denen die Geschwindigkeit $v$ und der Anstellwinkel $\gamma$ als konstant angesehen werden. Wie jedoch gezeigt wurde, führen sie zu nützlichen Gleichungen, die die langfristigen Änderungen von $v$ und $\gamma$ beschreiben. Die am Flugzeug angreifenden Kräfte lassen sich wie folgt berechnen:
 \begin{itemize}
     \item Auftriebskraft: \[L(v(t), h(t), C_L(t)) := F \cdot C_L(t) \cdot q(v(t), h(t))\] wobei $F$ die wirksame Fläche, d.h. die von der Luft angeströmte Fläche, ist.
     %
     \item Luftwiderstand: \[D(v(t), h(t), C_L(t)) := F \cdot C_D(C_L(t)) \cdot q(v(t), h(t))\]
-    \item Erdanziehungskraft: \[W = m \cdot g\]
+    \item Gewichtskraft: \[W = m \cdot g\] wobei $m$ die Masse des Flugzeugs und $g$ die Gravitationskonstante darstellt.
 \end{itemize}
 
-Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichungen
+Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleichung
 \[F := m \cdot a \Rightarrow \dot{v}(t) = a(t) = \dfrac{F(t)}{m} = \dfrac{T(t) - D(v(t),h(t),C_L(t)) - W \sin(\gamma(t))}{m}\]
 für die Geschwindigkeit $v$ aufstellen.
-Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichungen
+Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichung
 \[F_{ZP} := \dfrac{m v^2}{r} \Rightarrow \dot{\gamma}(t) = \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}\]
 für den Ansstellwinkel $\gamma$ aufstellen.
 Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels der Geschwindigkeit und des Anstellwinkels bestimmen.
@@ -48,8 +48,14 @@ Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) mit
     das Problem:
     \begin{align*}
         \min_{U} F(X,U) &:= g(X(t_f)) + \int_{t_0}^{t_f} f_0(X(t),U(t)) dt = -(x(t_f) - x_0) & & \\\
-        \text{unter} \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) = (\dot{h}(t),\dot{\gamma}(t),\dot{x}(t),\dot{v}(t))^T  & & \\\
-        &= 
+        \text{unter} \hspace{20mm} \dot{X}(t) &= f(X(t),U(t)) =     
+         \begin{pmatrix}
+         \dot{h}(t)  \\ 
+         \dot{\gamma}(t)  \\ 
+         \dot{x}(t)  \\ 
+         \dot{v}(t)   \\ 
+	 \end{pmatrix} 
+        = 
         \begin{pmatrix}
             v(t) \sin(\gamma(t)) \\ 
             \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{mv(t)} \\ 
@@ -58,13 +64,13 @@ Es ergibt sich somit das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) mit
         \end{pmatrix} & & \\\
         (h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) & & \\\
         (h,\gamma)(t_f) &= (h_f,\gamma_f) & & \\\
-        q(v(t),h(t)) &\leq q_{\max} & & \forall t \in [t_0,t_f]\\\
+        q(v(t),h(t)) &\leq q_{\max}  \forall t \in [t_0,t_f]\\\
         U(t) &= (T(t),C_L(t))^T \in \mathcal{U} = \left[ 
         \begin{matrix}
             [T_{\min},T_{\max}] \\ 
             [C_{L, \min},C_{L, \max}]
         \end{matrix} 
-        \right] & & \forall t \in [t_0,t_f]
+        \right]  \forall t \in [t_0,t_f]
     \end{align*}
 \end{problem}
 
@@ -77,7 +83,7 @@ Des Weiteren sei $\psi : \R^{n_X} \to \R^{n_{\psi}}$ eine $C^1$-Funktion
 Das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) stellt also ein autonomes Mayer-Problem der Form 
 \begin{equation} \label{equ:mayer_problem}
     \begin{aligned}
-        \min F(X,U) &:= g(X(t_f)) & & \\
+        \min F(X,U) :&= g(X(t_f))  \\
         \text{unter}  \hspace{10mm} \dot{X}(t) &= f(X(t),U(t)) & & \forall t \in [t_0,t_f] \\
         %
         X(t_0) &= X_0 = (h_0,\gamma_0,x_0,v_0)^T & & \\
