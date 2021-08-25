@@ -20,7 +20,7 @@ classdef Plotter
             set(0,'defaulttextinterpreter','latex');
             set(0,'defaultAxesTickLabelInterpreter','latex');
             set(0,'DefaultLineMarkerSize',4);
-            set(0, 'DefaultLineLineWidth', 1);
+            set(0,'DefaultLineLineWidth', 1);
         end
         
         %%
@@ -29,7 +29,7 @@ classdef Plotter
             fig = create_fig(obj, obj.nfigures);
             
             FigW=16;
-            FigH=11;
+            FigH=10;
             set(fig,'defaulttextinterpreter','latex','PaperUnits','centimeters','PaperSize',[FigW FigH],...
                 'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
                 'Position',[0,0,FigW,FigH]);
@@ -97,12 +97,12 @@ classdef Plotter
             y_min = min(y);
             y_max = max(y);
             p = 0.05;
-            if abs(y_min) < abs(y_max)
+            if abs(y_min*p) < abs(y_max*p)
                 y_min = y_min - y_max*p;
                 y_max = y_max + y_max*p;
             else
                 y_min = y_min + y_min*p;
-                y_max = y_max + y_min*p;
+                y_max = y_max - y_min*p;
             end
             if abs(y_min-y_max) < 1
                 y_max = y_max+1;
@@ -119,7 +119,7 @@ classdef Plotter
         end
         
         %%
-        function fig = plot_staudruck(obj,sol,prob,results_name)
+        function fig = plot_staudruck(obj,t,sol,prob,results_name)
             % Berechnung des Staudrucks
             N = size(sol,1);
             qmax_q_diff = zeros(N,3);
@@ -131,17 +131,19 @@ classdef Plotter
                     nof_exc = nof_exc + 1;
                 end
             end
-            x = linspace(0,N-1,N);
             % Plot
-            fig = figure();
+            obj.nfigures = obj.nfigures +1;
+            fig = create_fig(obj, obj.nfigures);
             FigW=16;
-            FigH=7;
-            plot(x,qmax_q_diff(:,1),'r',x,qmax_q_diff(:,2),'b--');
-            xlabel('Diskretisierungspunkte');
-            ylabel('$q(v(t),h(t))$');
+            FigH=5;
+            plot(t,qmax_q_diff(:,1),'r',t,qmax_q_diff(:,2),'b--');
+            ylim([0,prob.q_max+prob.q_max*0.05]);
+            xlabel('$t$ in $s$','FontSize',8)
+            ylabel('$q(v(t),h(t))$ in $\frac{N}{m^2}$');
+            sp_axes = gca;
+            sp_axes.YAxis.Exponent = 0;
             set(findall(gcf,'-property','FontSize'),'FontSize',8);
-            legend('$q_{\max}$','$q(v(t),h(t))$','Interpreter','latex','Location','southoutside','FontSize',7,'Orientation','horizontal');
-            title(['Staudruck \"Ueberpr\"ufung'],'Interpreter','latex','FontSize',10);
+            legend('$q_{\max}$','$q(v(t),h(t))$','Interpreter','latex','Location','Northoutside','FontSize',7,'Orientation','horizontal');
             set(fig,'defaulttextinterpreter','latex',...
                         'PaperUnits','centimeters','PaperSize',[FigW FigH],...
                         'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
@@ -150,7 +152,7 @@ classdef Plotter
             fig_settings = findobj(fig, 'type', 'axes');
             fig_settings.Units = 'centimeters';
             test=fig_settings.Position;
-            fig_settings.Position=[test(1),test(2)-0.35,test(3),test(4)];
+            fig_settings.Position=[test(1),test(2),test(3),test(4)];
             print(fig,'-dpdf','-r600',strcat('./results/',results_name,'_staudruck.pdf'));
         end
         
@@ -160,7 +162,7 @@ classdef Plotter
             fig = create_fig(obj, obj.nfigures);
             
             FigW=16;
-            FigH=11;
+            FigH=10;
             set(fig,'defaulttextinterpreter','latex','PaperUnits','centimeters','PaperSize',[FigW FigH],...
                 'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
                 'Position',[0,0,FigW,FigH]);
@@ -206,8 +208,8 @@ classdef Plotter
             obj.nfigures = obj.nfigures+1;
             fig = create_fig(obj, obj.nfigures);
             
-            FigW=12;
-            FigH=11;
+            FigW=16;
+            FigH=10;
             set(fig,'defaulttextinterpreter','latex','PaperUnits','centimeters','PaperSize',[FigW FigH],...
                 'PaperPosition',[0,0,FigW,FigH],'Units','centimeters',...
                 'Position',[0,0,FigW,FigH]);

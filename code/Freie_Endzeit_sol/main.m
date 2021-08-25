@@ -19,12 +19,11 @@ addpath('./config');
 addpath('./results');
 
 %% Loading the corresponding configuration file
-configs = ["test_1_1","test_2_1","test_3_1"];
+configs = ["test_0","test_1"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
     run(configs(i))
-    
     try
         % Solving the control problem with fmincon
         tic;
@@ -49,8 +48,8 @@ for i = 1:length(configs)
         continue % with next config
     end
 end
-%% Plot the solution and saving the results
 
+%% Plot the solution and saving the results
 plotter = Plotter();
 titles = [{'Flugh\"ohe'},{'Anstellwinkel'},{'Zur\"uckgelegte Streckte'},...
           {'Geschwindigkeit'},{'\textbf{Steuerung 1: Schub}'},...
@@ -68,14 +67,22 @@ for j=1:length(solutions)
     new_sol = [prob_sol(:,1:4),prob_sol(:,6:7)];
     % Plot solution
     fig = plotter.plot_fmincon_opt_t_f(prob.t,new_sol,prob_sol(1,5),results_name,titles,labels,order,frame_prop,line_style);
-    plotter.plot_staudruck(new_sol,prob,results_name);
+    plotter.plot_staudruck(prob.t,new_sol,prob,results_name);
     % Save the graphics
     fprintf('Saving the graphics ...\n');
     print(fig,'-dpdf','-r600',strcat('./results/',results_name,'.pdf'));
     savefig(fig,strcat('./results/',results_name,'.fig'));
+    %
+    fmincon_gesamt = readmatrix(strcat('./results/',results_name,'_fmincon.txt'));
+    Aufwand(1,1) = strcat("Funktionswert: ",string(fmincon_gesamt(end,1)));
+    Aufwand(2,1) = strcat("Exitflag: ",string(fmincon_gesamt(end,2)));
+    Aufwand(3,1) = strcat("Berechnungsdauer in Minuten: ",string(sum(fmincon_gesamt(:,3))/60));
+    Aufwand(4,1) = strcat("Anzahl Funktionsauswertungen: ",string(sum(fmincon_gesamt(:,5))));
+    Aufwand(5,1) = strcat("Anzahl Iterationen: ",string(sum(fmincon_gesamt(:,4))));
+    Aufwand(6,1) = strcat("Optimalitaetsmass: ",string(fmincon_gesamt(end,6)));
+    writematrix(Aufwand,strcat('./results/',results_name,'_Aufwand.txt'));
     % Save the data
     fprintf('Saving the data ...\n');
     writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
 end
-
 fprintf('All done!\n');
