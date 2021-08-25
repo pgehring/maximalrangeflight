@@ -1,4 +1,6 @@
 \chapter{Bestimmung der optimalen Endzeit des Modells}\label{kap:OptTf}
+
+\section{Transformation des gegebenen Optimalsteuerungsproblems}
 Bei Problem \ref{prob:MaxRF} ist das Ziel die Zurückgelegte Strecke $x(t)$ zu maximieren. Dieses Problem lässt sich aber auch in ein Problem tansformieren, bei welchem die Endzeit $t_f$, unter Einhaltung der Start- und Endbedingungen, minimiert werden soll. Hierfür müssen die Funktionen $g$ und $f_0$ angepasst werden, um anschließend das Problem mit freier Endzeit auf ein Probleme mit fester Endzeit zu transformieren.
 
 Für die Funktionen $g : \R^{n_X} \to \R$ und $f_0 : \R^{n_X} \times \R^{n_U} \to \R$ ergibt sich somit
@@ -59,41 +61,72 @@ Des Weiteren sei $\psi : \R^{n_{\tilde{X}}} \to \R^{n_{\psi}}$ eine $C^1$-Funkti
 
 
 
-\section{Versuch 0}\label{kap:Versuch0_OptTf}
-Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
 
-Verwendet werden die Parameter aus Tabelle \ref{tab:ProblemPara}:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Startvektor: $z_0 = (9000,5,800000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL.
-\item SQP-Verfahren zum lösen des Optimierungsproblems.
-\end{itemize}
-Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:test_1_1_OptTf} erreicht werden. Der technische Aufwand für dieses Ergebnis ist in Tabelle \ref{tab:test_1_1} festgehalten. Trotz dieses Aufwandes konnte also kein Optimum des Problems gefunden werden. Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_1_1_staudruck_OptTf} dargestellt.
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_1_1}
-\MyCaption{Versuch 1 - Ergebnis 1}{} \label{img:test_1_1_OptTf}
-\end{center}
-\end{figure}
-
-\begin{table}[htbp]
+\section{Versuche}
+Bei diesem Versuch wird das neu aufgestellte Problem \ref{prob:MaxRFEndzeit} mit den Parametern aus Tabelle {tab:ProblemPara} gelöst, wobei bei Versuch \ref{kap:Versuch1_OptTf} das Startgewicht angepasst wird. Es ergeben sich somit für die beiden Versuche die folgenden Einstellungen aus Tabelle \ref{tab:Versuche_OptTf}.
+\begin{table}[H]
     \centering
-    \caption{Technischer Aufwand Versuch 1.1 und Stop-Kriterium.}\label{tab:test_1_1}
+    \caption{Einstellungen von Versuch 0 und 1.}\label{tab:Versuche_OptTf}
     \begin{tabularx}{.9\textwidth}{Zccc}
         \toprule
-        \textbf{Iterationen} & \textbf{Laufzeit} & \textbf{Exitflag} \\
-        \textbf{in \text{[$1$]}} & \textbf{in \text{[$s$]}} &  \\
+        \textbf{Einstellungen} & \textbf{Versuch 0} & \textbf{Versuch 1} \\
         \midrule
-        1231      &   0,00892 &   -2     \\
+        Angepasstes Startgewicht &  & $m = 500000 \ kg$ \\
+        Anzahl Diskretisierungen & $N = 100$ & $N = 100$ \\
+        Lösungsverfahren der DGL & Explizites Euler Verfahren & Explizites Euler Verfahren \\
+        Optimierungsverfahren & SQP-Verfahren & SQP-Verfahren \\
+        Startvektor & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        800000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix} $ & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        800000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix}$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+Für die Ergebnisse von Versuch 0 (Kapitel \ref{kap:Versuch0_OptTf}) und Versuch 1 (Kapitel \ref{kap:Versuch1_OptTf}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch_TA}) benötigt.
+\begin{table}[H]
+    \centering
+    \caption{Technischer Aufwand von Versuch 0 und 1.}\label{tab:Versuch_TA}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+         & \textbf{Versuch 0} & \textbf{Versuch 1} \\
+        \midrule
+        Funktionswert der Zielfunktion & $279.2052$ & $-70301.9291$ \\
+        Anzahl Iterationen & $1259$ & $4699$ \\
+        Anzahl Funktionsauswertungen & $771293$ & $2826056$ \\
+        Exit Flag von \textit{MATLAB} & $1$ & $2$ \\
+        Optimalität des Ergebnis & $116.9551$ & $0.0004094$ \\
+        Berechnungsdauer & $398.7814 \ min$ & $20.6724 \ min$ \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
+
+
+
+\subsection{Ergebnis Versuch 0}\label{kap:Versuch0_OptTf}
+In Versuch 0 wird das Ergebnis in Abbildung \ref{img:test_0_OptTf} erreicht. Dies stellt aufgrund der Exit Flag $1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist, als vorgegeben.
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_1_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.} \label{img:test_1_1_staudruck_OptTf}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0}
+\MyCaption{Ergebnis von Versuch 0.}{} \label{img:test_0_OptTf}
+\end{center}
+\end{figure}
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_staudruck_OptTf} dargestellt.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 0.}{} \label{img:test_0_staudruck_OptTf}
 \end{center}
 \end{figure}
 
@@ -101,45 +134,18 @@ Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:tes
 
 
 
-
-
-
-
-
-\section{Versuch 1}\label{kap:Versuch1_OptTf}
-Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
-
-Verwendet werden die Parameter aus Tabelle \ref{tab:ProblemPara}:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Startvektor: $z_0 = (9000,5,800000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL.
-\item SQP-Verfahren zum lösen des Optimierungsproblems.
-\end{itemize}
-Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:test_2_1_OptTf} erreicht werden. Der technische Aufwand für dieses Ergebnis ist in Tabelle \ref{tab:test_2_1} festgehalten. Trotz dieses Aufwandes konnte also kein Optimum des Problems gefunden werden. Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_2_1_staudruck_OptTf} dargestellt.
+\subsection{Ergebnis Versuch 1}\label{kap:Versuch1_OptTf}
+In Versuch 1 wird das Ergebnis in Abbildung \ref{img:test_1_OptTf} erreicht. Dies stellt aufgrund der Exit Flag $1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist, als vorgegeben.
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_2_1}
-\MyCaption{Versuch 1 - Ergebnis 1}{}\label{img:test_2_1_OptTf}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_1}
+\MyCaption{Ergebnis von Versuch 1.}{}\label{img:test_1_OptTf}
 \end{center}
 \end{figure}
-
-\begin{table}[htbp]
-    \centering
-    \caption{Technischer Aufwand Versuch 1.1 und Stop-Kriterium.}\label{tab:test_2_1}
-    \begin{tabularx}{.9\textwidth}{Zccc}
-        \toprule
-        \textbf{Iterationen} & \textbf{Laufzeit} & \textbf{Exitflag} \\
-        \textbf{in \text{[$1$]}} & \textbf{in \text{[$s$]}} &  \\
-        \midrule
-        1231      &   0,00892 &   -2     \\
-        \bottomrule
-    \end{tabularx}
-\end{table}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_1_staudruck_OptTf} dargestellt.
 \begin{figure}[H]
 \begin{center}
-\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_2_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_2_1_staudruck_OptTf}
+\includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 1.}{}\label{img:test_1_staudruck_OptTf}
 \end{center}
 \end{figure}
