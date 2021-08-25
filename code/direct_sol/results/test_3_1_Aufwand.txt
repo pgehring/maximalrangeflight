@@ -1,0 +1,6 @@
+Funktionswert: -102713.3569
+Exitflag: 2
+Berechnungsdauer in Minuten: 334.723
+Anzahl Funktionsauswertungen: 15617295
+Anzahl Iterationen: 12970
+Optimalitaetsmass: 0.021006

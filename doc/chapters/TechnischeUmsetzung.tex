@@ -95,16 +95,16 @@ Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine 
 
 Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Ein wichtige Rolle spielte hierbei der Rückgabewert \texttt{exitflag} der Funktion \texttt{fmincon} (vgl. Tabelle \ref{tab:Exitflag}). Bei Werten größer null kann von einem lokalen Minimum ausgegangen werden und bei Werten gleich null sollte die Anzahl der Iterationen erhöht werden. Werte kleiner null zeugen von numerischen Problemen oder Abbrüchen.
 
- Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
-
-Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fern hält \cite{Matlab2016}. Daneben zeigte sich, dass das SQP-Verfahren robuster ist. So hatte die Wahl des Startwertes einen nicht so starken Einfluss wie beim IP-Verfahren und erleichterte die Durchführung der numerischen Experimente. 
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
-        \MyCaption{Vergleich von IP- und SQP-Verfahren}{Vergleich des Funktionswertes über der Anzahl der Iterationen} \label{img:Vergleich_SQP_IP}
-    \end{center}
-\end{figure}
+%Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
+%
+%Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fern hält \cite{Matlab2016}. Daneben zeigte sich, dass das SQP-Verfahren robuster ist. So hatte die Wahl des Startwertes einen nicht so starken Einfluss wie beim IP-Verfahren und erleichterte die Durchführung der numerischen Experimente. 
+%
+%\begin{figure}[H]
+%    \begin{center}
+%        \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
+%        \MyCaption{Vergleich von IP- und SQP-Verfahren}{Vergleich des Funktionswertes über der Anzahl der Iterationen} \label{img:Vergleich_SQP_IP}
+%    \end{center}
+%\end{figure}
 
 \section{Schießverfahren}
 
@@ -139,11 +139,21 @@ Der Hauptgrund für dieses Problem liegt in der gegebenen festes Endzeit $t_f$ u
 
 Um nun zufriedenstellende Ergebnisse zu erreichen werden verschiedene Versuche aufgestellt, in welchen verschiedene Parameter und die gegebene Endzeit $t_f$ variieren, beziehungsweise neue Parameter und Beschränkungen eingeführt sind. 
 
-In Versuch \ref{kap:Versuch1} wird die gegebenen Endzeit $t_f$ von $1800 \ s$ einmal auf $t_f = 300$ (Versuch \ref{kap:Versuch11}) und einmal auf $t_f = 350$ (Versuch \ref{kap:Versuch12}) reduziert. 
+\begin{itemize}
+\item In Versuch \ref{kap:Versuch1} wird die gegebenen Endzeit $t_f$ von $1800 \ s$ einmal auf $t_f = 300$ (Versuch \ref{kap:Versuch11}) und einmal auf $t_f = 350$ (Versuch \ref{kap:Versuch12}) reduziert. 
+%
+\item 
+%
+\item In Versuch \ref{kap:Versuch3} wird das Startgewicht $m$ und die Endzeit $t_f$ angepasst. Damit wird das Startgewicht einem real vorkommenden Startgewicht $m = 500.000 \ kg$ für das Flugzeug A380-800 angepasst. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert.
+%
+\item In Versuch \ref{kap:Versuch4} werden zum angepassten Startgewicht $m = 500.000 \ kg$ und der angepassten Endzeit $t_f$ auch noch zusätzliche physikalische Boxschranken gesetzt, die das Problem und das Flugzeug betreffen. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert.
+\end{itemize}
 
-In Versuch \ref{kap:Versuch3} wird das Startgewicht $m$ und die Endzeit $t_f$ angepasst. Damit wird das Startgewicht einem real vorkommenden Startgewicht $m = 500.000 \ kg$ für das Flugzeug A380-800 angepasst. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert. 
 
-In Versuch \ref{kap:Versuch4} werden zum angepassten Startgewicht $m = 500.000 \ kg$ und der angepassten Endzeit $t_f$ auch noch zusätzliche physikalische Boxschranken gesetzt, die das Problem und das Flugzeug betreffen. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert.
+
+
+
+
 
 
 

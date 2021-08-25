@@ -19,15 +19,11 @@ addpath('./config');
 addpath('./results');
 
 %% Loading the corresponding configuration file
-configs = ["test_4_1"];
-% configs = ["test_0_1","test_0_2",...
-%            "test_1_1","test_1_2","test_1_3",...
-%            "test_2_1","test_2_2","test_2_3",...
-%            "test_3_1","test_3_2","test_3_3",...
-%            "test_4_1","test_4_2","test_4_3"];
-
-configs = ["test_4_1","test_4_2"];
-configs = ["test_1_1"];
+configs = ["test_0_1","test_0_2"];
+% configs = ["test_2_1","test_2_2"];
+% configs = ["test_1_1"];
+% configs = ["test_3_1","test_3_2"];
+% configs = ["test_4_1","test_4_2"];
 solutions = {};
 for i = 1:length(configs)
     % Load configuration file
@@ -75,11 +71,20 @@ for j=1:length(solutions)
     [results_name, prob, prob_sol, options] = solution{:};
     % Plot solution
     fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
-    plotter.plot_staudruck(prob_sol,prob,results_name);
+    plotter.plot_staudruck(prob.t,prob_sol,prob,results_name);
     % Save the graphics
     fprintf('Saving the graphics ...\n');
     print(fig,'-dpdf','-r600',strcat('./results/',results_name,'.pdf'));
     savefig(fig,strcat('./results/',results_name,'.fig'));
+    %
+    fmincon_gesamt = readmatrix(strcat('./results/',results_name,'_fmincon.txt'));
+    Aufwand(1,1) = strcat("Funktionswert: ",string(fmincon_gesamt(end,1)));
+    Aufwand(2,1) = strcat("Exitflag: ",string(fmincon_gesamt(end,2)));
+    Aufwand(3,1) = strcat("Berechnungsdauer in Minuten: ",string(sum(fmincon_gesamt(:,3))/60));
+    Aufwand(4,1) = strcat("Anzahl Funktionsauswertungen: ",string(sum(fmincon_gesamt(:,5))));
+    Aufwand(5,1) = strcat("Anzahl Iterationen: ",string(sum(fmincon_gesamt(:,4))));
+    Aufwand(6,1) = strcat("Optimalitaetsmass: ",string(fmincon_gesamt(end,6)));
+    writematrix(Aufwand,strcat('./results/',results_name,'_Aufwand.txt'));
     % Save the data
     fprintf('Saving the data ...\n');
     writematrix(prob_sol,strcat('./results/',results_name,'.txt'));

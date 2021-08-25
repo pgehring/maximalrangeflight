@@ -10,7 +10,7 @@
 results_name = 'test_3_2';
 
 %% Testparameter
-N = 100;               % Anzahl an Diskretisierungen
+N = 200;               % Anzahl an Diskretisierungen
 
 z_0 = [     20,...     % h_start in [m]
              9,...     % gamma_start in [Grad]  

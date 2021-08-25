@@ -1,270 +1,68 @@
-\chapter{Programmcode direkte Lösungsverfahren und Versuchsprotokolle}\label{Anhang:DirektV}
-
-%\section{Aufbau Programmcode}
-%Für das Lösen des Optimalsteuerungsproblem mit direkten Lösungsverfahren wurde folgende Programmcodestruktur aufgebaut:
-%\begin{itemize}
-%\item \texttt{config}: In diesem Ordner sind die Versuchsskripte abgespeichert. Beispielhaft ist in Programmcode \ref{code:direct_test_4_1} das Versuchsskript von Versuch Null Ergebnis eins (Kapitel \ref{kap:Versuch41}) dargestellt.
-%%
-%\item \texttt{results}: In diesem Ordner werden nach erfolgreicher Berechnung des entsprechenden Versuchs die Lösungsdaten und Lösungsgraphik, als zum Beispiel \texttt{test\_0\_1.txt} und \texttt{test\_0\_1.png}, abgespeichert.
-%\item \texttt{main.m}: Mit diesem Matlab Skript wird das entsprechende Versuchsskript geladen und mit dem direkten Lösungsverfahren berechnet.
-%%
-%\item \texttt{maximalrangeflight.m}: In dieser Klasse (Programmcode \ref{code:direct_maximalrangeflight}) sind alle Parameter und Funktionen des Problems beziehungsweise Funktionen für das Lösen mit der Matlab Funktion \texttt{fmincon} definiert. 
-%%
-%\item \texttt{ode\_methods}: Diese Klasse (Programmcode \ref{code:direct_odemethods}) stellt explizite und implizite Algorithmen zum lösen von gewöhnlichen Differentialgleichungen zur Verfügung. Diese werden in der Problemklasse \texttt{maximalrangeflight.m} benötigt.
-%\end{itemize}
-%
-%Allgemein wird für die Matlab Funktion \verb|fmincon| die Startmatrix  \verb|prob.z_0| 
-%\[\begin{pmatrix}
-%[20,9,6000,90,1259999,1.47] \\ 
-%\vdots \\ 
-%\vdots
-%\end{pmatrix}\]
-%für die Optimierung verwendet. Es sind also alle Zustandsvektoren für jeden Diskretisierungspunkt identisch.
-%
-%Nachfolgend sind die Programmcodes für das direkte Lösungsverfahren aufgelistet:
-%
-%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von Versuchsskript \texttt{test\_4\_1.m}.}, label=code:direct_test_4_1]
-%%% Speicher Parameter
-%results_name = 'test_4_1';
-%%% Testparameter
-%N = 100;               % Anzahl an Diskretisierungen
-%z_0 = [     20,...     % h_start in [m]
-%             9,...     % gamma_start in [Grad]  
-%          6000,...     % x_start in [m]
-%            90,...     % v_start in [m/s]
-%       1259999,...     % T_start in [N]
-%          1.47];       % C_L_start in []
-%X_0 = [   0;           % h_0 in [m]
-%       0.27;           % gamma_0 in [Grad]
-%          0;           % x_0 in [m]
-%        100];          % v_0 in [m/s]
-%X_T = [10668;          % h_t in [m]
-%           0];         % gamma_t  in [Grad]
-%params = [       0,... % t_0:   Anfangszeitpunkt in [s]
-%               550,... % t_f:   Endzeitpunkt in [s]
-%          1.247015,... % alpha: Parameter zur Berechung der Luftdichte in []
-%          0.000104,... % beta: 
-%              9.81,... % g:     Erdbeschleunigung in [N/s^2]
-%             0.032,... % C_D_0: Nullluftwiderstandsbeiwert in []
-%               0.8,... % e:     Oswaldfaktor in []
-%               845,... % F:     Wirksame Flaeche in [m^2]
-%               7.5,... % AR:    Fluegelstreckung in []
-%            500000,... % m:     Leergewicht des A380 in [kg]
-%             44154];   % q_max: Maximaler Staudruck in [N/m^2]  
-%t = linspace(params(1),params(2),N);
-%%% Boxbeschraenkungen
-%lb = [     0.0,...
-%         -80.0,...
-%           0.0,...
-%           0.0,...
-%           0.0,...     % T_min:   Minimale Schubkraft in [N]
-%           0.0];       % C_L_min: Minimaler Auftriebsbeiwert in []
-%ub = [   13100,...
-%          80.0,...
-%      15200000,...
-%           266,...
-%       1260000,...     % T_max:   Maximale Schubkraft in [N]
-%          1.48];       % C_L_max: Maximaler Auftriebsbeiwert in []
-%%% Loesungsmethode der ODE und Objekt der Problemklasse erhalten
-%ode_methods = ode_methods();
-%ode_method = @ode_methods.explicit_euler;
-%prob = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method);
-%%% Optionen fuer fmincon von Matlab
-%options = optimoptions('fmincon','Display','iter','Algorithm','sqp','MaxFunctionEvaluations',2000.0e+03,'MaxIterations',4.0e+05,'UseParallel',true);
-%\end{lstlisting}
-%
-%
-%
-%
-%
-%
-%
-%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{main.m}.}, label=code:direct_main]
-%clear  variables; close  all; clc;
-%%% Memory paths
-%addpath('../utils');
-%addpath('./config');
-%addpath('./results');
-%%% Loading the corresponding configuration file
-%test_4_1;
-%%% Solving the control problem with fmincon
-%prob_sol = fmincon(@prob.F_sol,prob.z_0,[],[],[],[],prob.lb,prob.ub,@prob.nonlcon,options);
-%%% Plot the solution
-%plotter = Plotter();
-%titles = ["Flughoehe","Anstellwinkel","Zurueckgelegte Streckte",...
-%          "Geschwindigkeit","\textbf{Steuerung 1: Schub}",...
-%          "\textbf{Steuerung 2: Auftriebsbeiwert}"];
-%labels = ["$h_{sol}$ in $[m]$","$\gamma_{sol}$ in $[^{\circ}]$",...
-%          "$x_{sol}$ in $[m]$","$v_{sol}$ in $[\frac{m}{s}]$",...
-%          "$T_{sol}$ in $[N]$","$C_{L_{sol}}$ in $[1]$"];
-%frame_prop = [0.5,0.5,0.5,0.5,2,2];
-%line_style = ["b-","b-","b-","b-","r-","r-"];
-%order = [3,1,5,2,4,6];
-%fig = plotter.plot_fmincon(prob.t,prob_sol,results_name,titles,labels,order,frame_prop,line_style);
-%%% Save the graphics and the data
-%saveas(fig,strcat('./results/',results_name,'.png'));
-%writematrix(prob_sol,strcat('./results/',results_name,'.txt'));
-%\end{lstlisting}
-%
-%
-%
-%
-%
-%
-%
-%\begin{lstlisting}[style=num_octave, caption={Matlab Programmcode von \texttt{maximalrangeflight.m}.}, label=code:direct_maximalrangeflight]
-%classdef MaximalRangeFlight
-%    properties
-%        %% Parameters for the optimal control problem
-%        t_0                 % Starting time in [s]
-%        t_f                 % End time in [s]
-%        X_0 = [   0;        % h_0 in [m]
-%               0.27;        % gamma_0 in [rad]
-%                  0;        % x_0 in [m]
-%                100];       % v_0 in [m/s]
-%        X_T = [10668;       % h_t in [m]
-%                   0];      % gamma_t in [Grad]
-%        alpha = 1.247015;   % Parameters for calculating the air density in []
-%        beta = 0.000104;    % Parameters for calculating the air density in []
-%        g = 9.81;           % Gravitational acceleration in [N/s^2]
-%        C_D_0 = 0.032;      % Zero air resistance coefficient in []             
-%        e = 0.8;            % Oswaldfactor in []
-%        F = 845;            % Effective area in [m^2]
-%        AR = 7.5;           % Aspect ratio in []
-%        k;                  % Factor for calculation of the drag coefficient in []
-%        m = 276800;         % Empty weight of the A380 in [kg]
-%        q_max = 44154;      % Maximum dynamic pressure in [N/m^2]
-%        T_min = 0;          % Minimum thrust in [N]
-%        T_max = 1260000;    % Maximum thrust in [N]
-%        C_L_min = 0.0;      % Minimum lift coefficient in []
-%        C_L_max = 1.48;     % Maximum lift coefficient in []
-%        %% Problem sizes
-%        n_x = 4;            % Size of the state vector
-%        n_u = 2;            % Control vector size
-%        n_s = 1;            % Size of the pure state constraint vector
-%        n_psi = 8;          % Size of the boundary condition vector
-%        %% Variables for the calculation
-%        N;                  % Number of discretisations
-%        t;                  % Variable for the time vector
-%        ode_method;         % Implicit or explicit iterative methods to approximate the solution of a ODE
-%        z_0;                % Array for the start values for fmincon
-%        lb;                 % lower bounds for fmincon
-%        ub;                 % upper bounds for fmincon
-%    end
-%    methods
-%        %% Constructor: Set initial conditions of the direct solver
-%        function obj = MaximalRangeFlight(N,t,z_0,X_0,X_T,params,lb,ub,ode_method)
-%            % Grid size
-%            obj.N = N;
-%            obj.t = t;
-%            % Method for solving the ODE
-%            obj.ode_method = ode_method;
-%            % Start vector fmincon
-%            if obj.N == size(z_0,1)
-%                obj.z_0 = z_0;
-%            else
-%                obj.z_0 = z_0 .* ones(obj.N,obj.n_x+obj.n_u);
-%            end
-%            % Box conditions
-%            obj.lb = lb .* ones(obj.N,obj.n_x+obj.n_u);
-%            obj.ub = ub .* ones(obj.N,obj.n_x+obj.n_u);
-%            % Parameters
-%            obj.t_0 = params(1);
-%            obj.t_f = params(2);
-%            obj.X_0 = X_0;
-%            obj.X_T = X_T;
-%            obj.alpha = params(3);
-%            obj.beta = params(4);
-%            obj.g = params(5);
-%            obj.C_D_0 = params(6);
-%            obj.e = params(7);
-%            obj.F = params(8);
-%            obj.AR = params(9);
-%            obj.k = 1/(pi*obj.e*obj.AR);
-%            obj.m = params(10);
-%            obj.q_max = params(11);
-%        end
-%        %% Differential equation
-%        function X = f(obj,t,z)
-%            X = [z(4)*sind(z(2)),...
-%                 (1/(2*obj.m*z(4))) * (obj.F*z(6)*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*cosd(z(2))),...
-%                 z(4)*cosd(z(2)),...
-%                 (1/(2*obj.m)) * (2*z(5) + (-obj.C_D_0 - obj.k*(z(6))^2)*obj.F*(z(4))^2*obj.alpha*exp(-obj.beta*z(1)) - 2*obj.m*obj.g*sind(z(2)))];
-%        end
-%        %% Objective function
-%        function T = F_sol(obj,z)
-%            T = -(z(end,3)-obj.X_0(3));
-%        end
-%        %% Nonlinear constraint functions
-%        function [c,ceq] = nonlcon(obj,z)
-%            % Equality constraints
-%            c = 0.5 * obj.alpha * exp(-obj.beta*z(:,1)) .* (z(:,4)).^2 - obj.q_max; % (n_c+n_s)*(N+1)=(0+1)*((100-1)+1)=100
-%            % Inequality constraints
-%            x = obj.ode_method(@obj.f,obj.t,z,obj.N,obj.n_x);
-%            ceq = zeros(1,obj.n_x*(obj.N-1)+obj.n_psi); % (n_x*N)+n_psi=(4*(100-1))+8=404
-%            ceq(1:obj.n_x*(obj.N-1)) = (z(1:end-1,1:obj.n_x) + x - z(2:end,1:obj.n_x))';
-%            ceq((obj.n_x*(obj.N-1)+1):(obj.n_x*(obj.N-1)+obj.n_psi)) = [  z(1,1)-obj.X_0(1),...
-%                                                                          z(1,2)-obj.X_0(2),...
-%                                                                          z(1,3)-obj.X_0(3),...
-%                                                                          z(1,4)-obj.X_0(4),...
-%                                                                        z(end,1)-obj.X_T(1),...
-%                                                                        z(end,2)-obj.X_T(2),...
-%                                                                                          0,...
-%                                                                                          0];
-%        end
-%    end
-%end
-%\end{lstlisting}
-
-
-
-
-
-
-
-
-
-
-
-
-
+\chapter{Direkte Lösungsverfahren - Versuche und Ergebnisse}\label{Anhang:DirektV}
 
 \section{Versuch 0}\label{kap:Versuch0}
-Bei diesem Versuch wird das gegebene Problem ohne Veränderungen mit dem direkten Lösungsverfahren gelöst.
-
-\subsection{Ergebnis 1}\label{kap:Versuch01}
-Verwendet werden die Parameter aus Tabelle \ref{tab:ProblemPara}:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Startvektor: $z_0 = (9000,5,800000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL.
-\item SQP-Verfahren zum lösen des Optimierungsproblems.
-\end{itemize}
-Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:test_0_1} erreicht werden. Der technische Aufwand für dieses Ergebnis ist in Tabelle \ref{tab:test_0_1} festgehalten. Trotz dieses Aufwandes konnte also kein Optimum des Problems gefunden werden. Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_staudruck} dargestellt.
-\begin{figure}[H]
-\begin{center}
-\includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
-\MyCaption{Versuch 1 - Ergebnis 1}{} \label{img:test_0_1}
-\end{center}
-\end{figure}
-
-\begin{table}[htbp]
+Bei diesem Versuch wird das gegebene Problem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} ohne Veränderungen gelöst. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch0} verwendet.
+\begin{table}[H]
     \centering
-    \caption{Technischer Aufwand Versuch 1.1 und Stop-Kriterium.}\label{tab:test_0_1}
+    \caption{Einstellungen von Versuch 0.1 und 0.2.}\label{tab:Versuch0}
     \begin{tabularx}{.9\textwidth}{Zccc}
         \toprule
-        \textbf{Iterationen} & \textbf{Laufzeit} & \textbf{Exitflag} \\
-        \textbf{in \text{[$1$]}} & \textbf{in \text{[$s$]}} &  \\
+        \textbf{Einstellungen} & \textbf{Versuch 0.1} & \textbf{Versuch 0.2} \\
         \midrule
-        1231      &   0,00892 &   -2     \\
+        Anzahl Diskretisierungen & $N = 100$ & $N = 100$ \\
+        Lösungsverfahren der DGL & Explizites Euler Verfahren & Explizites Euler Verfahren \\
+        Optimierungsverfahren & SQP-Verfahren & Innere-Punkte-Verfahren \\
+        Startvektor & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        800000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix} $ & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        800000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix}$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+Für die Ergebnisse von Versuch 0.1 (Kapitel \ref{kap:Versuch01}) und Versuch 0.2 (Kapitel \ref{kap:Versuch02}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch0_TA}) benötigt.
+\begin{table}[H]
+    \centering
+    \caption{Technischer Aufwand von Versuch 0.1 und 0.2.}\label{tab:Versuch0_TA}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+         & \textbf{Versuch 0.1} & \textbf{Versuch 0.2} \\
+        \midrule
+        Funktionswert der Zielfunktion & $-1768382.0703$ & $-1020675.0231$ \\
+        Anzahl Iterationen & $5394$ & $14887$ \\
+        Anzahl Funktionsauswertungen & $3251455$ & $8968016$ \\
+        Exit Flag von \textit{MATLAB} & $-2$ & $-2$ \\
+        Optimalität des Ergebnis & $15.2438$ & $886.3152$ \\
+        Berechnungsdauer & $47.3956 \ min$ & $154.133 \ min$ \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
+
+
+\subsection{Ergebnis von Versuch 0.1}\label{kap:Versuch01}
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund der Exit Flag $-2$ kein Optimum des Problems da. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
+\MyCaption{Ergebnis von Versuch 0.1.}{} \label{img:test_0_1}
+\end{center}
+\end{figure}
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch01} dem maximalen Staudruck annähert.}\label{img:test_0_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 0.1.}{}\label{img:test_0_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -272,27 +70,19 @@ Mit diesen Parametern und Methoden konnte das Ergebnis in Abbildung \ref{img:tes
 
 
 
-\subsection{Ergebnis 2}\label{kap:Versuch02}
-Verwendet wird:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item Innere-Punkte-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+\subsection{Ergebnis von Versuch 0.2}\label{kap:Versuch02}
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund der Exit Flag $-2$ kein Optimum des Problems da.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2}
-\MyCaption{Versuch 1 - Ergebnis 2}{} \label{img:test_0_2}
+\MyCaption{Ergebnis von Versuch 0.2.}{} \label{img:test_0_2}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch02} dem maximalen Staudruck annähert.}\label{img:test_0_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 0.2.}{}\label{img:test_0_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -308,88 +98,92 @@ Es folgt das Ergebnis
 
 \newpage
 \section{Versuch 1}\label{kap:Versuch1}
-Die Problemstellung gibt eine Endzeit beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch soll diese nun verkürzt werden, um Beobachtungen zu erhalten wie sich die optimale Lösung aufgrund der Veränderungen verhält. %$z_0 = (20,9,6000,90,1259999,1.47)$
+Die Problemstellung \ref{prob:MaxRF} gibt den Parametern {tab:ProblemPara} eine feste Endzeit $t_f = 1800 \ s$ beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch wird diese nun verkürzt, auf $t_f = 300 \ s$ und $t_f = 350 \ s$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch1} verwendet.
+\begin{table}[H]
+    \centering
+    \caption{Einstellungen von Versuch 1.1 und 1.2.}\label{tab:Versuch1}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Einstellungen} & \textbf{Versuch 1.1} & \textbf{Versuch 1.2} \\
+        \midrule
+        Reduzierte Endzeit & $t_f = 300 \ s$ & $t_f = 350 \ s$ \\
+        Anzahl Diskretisierungen & $N = 100$ & $N = 100$ \\
+        Lösungsverfahren der DGL & Explizites Euler Verfahren & Explizites Euler Verfahren \\
+        Optimierungsverfahren & SQP-Verfahren & SQP-Verfahren \\
+        Startvektor & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        80000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix} $ & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        800000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix}$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+Für die Ergebnisse von Versuch 1.1 (Kapitel \ref{kap:Versuch11}) und Versuch 1.2 (Kapitel \ref{kap:Versuch12}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch1_TA}) benötigt.
+\begin{table}[H]
+    \centering
+    \caption{Technischer Aufwand von Versuch 1.1 und 1.2.}\label{tab:Versuch1_TA}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+         & \textbf{Versuch 1.1} & \textbf{Versuch 1.2} \\
+        \midrule
+        Funktionswert der Zielfunktion & $-55444.2939$ & $-57922.1277$ \\
+        Anzahl Iterationen & $3023$ & $2989$ \\
+        Anzahl Funktionsauswertungen & $1846035$ & $1802834$ \\
+        Exit Flag von \textit{MATLAB} & $2$ & $2$ \\
+        Optimalität des Ergebnis & $0.0012243$ & $0.00011134$ \\
+        Berechnungsdauer & $70.7353 \ min$ & $21.3019 \ min$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
-\subsection{Ergebnis 1}\label{kap:Versuch11}
-Verwendet wird:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 300 \ [s]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+
+
+
+\subsection{Ergebnis von Versuch 1.1}\label{kap:Versuch11}
+In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1}
-\MyCaption{Versuch 1 - Ergebnis 1}{} \label{img:test_1_1}
+\MyCaption{Ergebnis von Versuch 1.1.}{} \label{img:test_1_1}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch11} dem maximalen Staudruck annähert.}\label{img:test_1_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 1.1.}{}\label{img:test_1_1_staudruck}
 \end{center}
 \end{figure}
 
 
 
 
-\subsection{Ergebnis 2}\label{kap:Versuch12}
-Verwendet wird:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 350 \ [s]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+\subsection{Ergebnis von Versuch 1.2}\label{kap:Versuch12}
+In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2}
-\MyCaption{Versuch 1 - Ergebnis 2}{} \label{img:test_1_2}
+\MyCaption{Ergebnis von Versuch 1.2.}{} \label{img:test_1_2}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_1_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch12} dem maximalen Staudruck annähert.}\label{img:test_1_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 1.2.}{}\label{img:test_1_2_staudruck}
 \end{center}
 \end{figure}
 
-
-
-
-%\subsection{Ergebnis 3}\label{kap:Versuch13}
-%Verwendet wird:
-%\begin{itemize}
-%\item Anzahl an Diskretisierungen: $N = 100$ 
-%\item Reduzierte Endzeit: $t_f = 300 \ [s]$
-%\item Startvektor für \texttt{fmincon}: $z_0 = (9000,5,800000,250,1259999,1.4)$
-%\item Explizites Euler Verfahren zum Lösen der DGL
-%%
-%\item Innere-Punkte-Verfahren
-%\end{itemize}
-%Es folgt das Ergebnis
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_3}
-%\caption{Versuch 1 - Ergebnis 3}\label{img:test_1_3}
-%\end{center}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_3_staudruck}
-%\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch13} dem maximalen Staudruck annähert.}\label{img:test_1_3_staudruck}
-%\end{center}
-%\end{figure}
 
 
 
@@ -407,91 +201,93 @@ Es folgt das Ergebnis
 
 \newpage
 \section{Versuch 2}\label{kap:Versuch2}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich die Starthöhe des Flugzeuges angepasst.
+Zusätzlich zur verkürzten Endzeit wie in Versuch \ref{kap:Versuch1} wird in Versuch 2 auch die Starthöhe des Flugzeuges angepasst. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch2} verwendet.
+\begin{table}[H]
+    \centering
+    \caption{Einstellungen von Versuch 2.1 und 2.2.}\label{tab:Versuch2}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Einstellungen} & \textbf{Versuch 2.1} & \textbf{Versuch 2.2} \\
+        \midrule
+        Reduzierte Endzeit & $t_f = 250 \ s$ & $t_f = 300 \ s$ \\
+        Angepasste Starthöhe & $h_0 = 4000 \ m$ & $h_0 = 4000 \ m$ \\
+        Anzahl Diskretisierungen & $N = 100$ & $N = 100$ \\
+        Lösungsverfahren der DGL & Explizites Euler Verfahren & Explizites Euler Verfahren \\
+        Optimierungsverfahren & SQP-Verfahren & SQP-Verfahren \\
+        Startvektor & $z_0 = \begin{pmatrix}
+        5000 \\ 
+        5 \\ 
+        8000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix} $ & $z_0 = \begin{pmatrix}
+        9000 \\ 
+        5 \\ 
+        8000 \\
+        250 \\
+        1259999 \\ 
+        1.4
+        \end{pmatrix}$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+Für die Ergebnisse von Versuch 2.1 (Kapitel \ref{kap:Versuch21}) und Versuch 2.2 (Kapitel \ref{kap:Versuch22}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch2_TA}) benötigt.
+\begin{table}[H]
+    \centering
+    \caption{Technischer Aufwand von Versuch 2.1 und 2.2.}\label{tab:Versuch2_TA}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+         & \textbf{Versuch 2.1} & \textbf{Versuch 2.2} \\
+        \midrule
+        Funktionswert der Zielfunktion & $-17067.0955$ & $-70301.9291$ \\
+        Anzahl Iterationen & $1259$ & $4699$ \\
+        Anzahl Funktionsauswertungen & $771293$ & $2826056$ \\
+        Exit Flag von \textit{MATLAB} & $-2$ & $2$ \\
+        Optimalität des Ergebnis & $116.9551$ & $0.0004094$ \\
+        Berechnungsdauer & $398.7814 \ min$ & $20.6724 \ min$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
-\subsection{Ergebnis 1}\label{kap:Versuch21}
-Verwendet werden:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 250 \ [s]$
-\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+
+
+
+\subsection{Ergebnis von Versuch 2.1}\label{kap:Versuch21}
+In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund der Exit Flag $-2$ kein Optimum des Problems da.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1}
-\MyCaption{Versuch 2 - Ergebnis 1}{} \label{img:test_2_1}
+\MyCaption{Ergebnis von Versuch 2.1.}{} \label{img:test_2_1}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch21} dem maximalen Staudruck annähert.}\label{img:test_2_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 2.1.}{}\label{img:test_2_1_staudruck}
 \end{center}
 \end{figure}
 
 
 
 
-\subsection{Ergebnis 2}\label{kap:Versuch22}
-Verwendet werden:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 300 \ [s]$
-\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+\subsection{Ergebnis von Versuch 2.2}\label{kap:Versuch22}
+In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2}
-\MyCaption{Versuch 2 - Ergebnis 3}{} \label{img:test_2_2}
+\MyCaption{Ergebnis von Versuch 2.2.}{} \label{img:test_2_2}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch22} dem maximalen Staudruck annähert.}\label{img:test_2_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 2.2.}{}\label{img:test_2_2_staudruck}
 \end{center}
 \end{figure}
 
-
-
-
-%\subsection{Ergebnis 3}\label{kap:Versuch23}
-%Verwendet werden:
-%\begin{itemize}
-%\item Anzahl an Diskretisierungen: $N = 100$ 
-%\item Reduzierte Endzeit: $t_f = 250 \ [s]$
-%\item Angepasste Starthöhe: $h_0 = 4000 \ [m]$
-%\item Startvektor für \texttt{fmincon}: $z_0 = (5000,5,8000,250,1259999,1.4)$
-%\item Explizites Euler Verfahren zum Lösen der DGL.
-%%
-%\item Innere-Punkte-Verfahren
-%\end{itemize}
-%Es folgt das Ergebnis
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_3}
-%\caption{Versuch 2 - Ergebnis 3}\label{img:test_23}
-%\end{center}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_3_staudruck}
-%\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch23} dem maximalen Staudruck annähert.}\label{img:test_2_3_staudruck}
-%\end{center}
-%\end{figure}
 
 
 
@@ -507,91 +303,92 @@ Es folgt das Ergebnis
 
 \newpage
 \section{Versuch 3}\label{kap:Versuch3}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560.000 \ [kg]$ \cite{A380Tech}. Gewählt wird eine Masse von $500.000 \ [kg]$.
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560.000 \ [kg]$ \cite{A380Tech}. Gewählt wird eine Masse von $500.000 \ [kg]$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch3} verwendet.
+\begin{table}[H]
+    \centering
+    \caption{Einstellungen von Versuch 3.1 und 3.2.}\label{tab:Versuch3}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Einstellungen} & \textbf{Versuch 3.1} & \textbf{Versuch 3.2} \\
+        \midrule
+        Reduzierte Endzeit & $t_f = 550 \ s$ & $t_f = 600 \ s$ \\
+        Angepasstes Startgewicht & $m = 500000 \ kg$ & $m = 500000 \ kg$ \\
+        Anzahl Diskretisierungen & $N = 200$ & $N = 200$ \\
+        Lösungsverfahren der DGL & Explizites Euler Verfahren & Explizites Euler Verfahren \\
+        Optimierungsverfahren & SQP-Verfahren & SQP-Verfahren \\
+        Startvektor & $z_0 = \begin{pmatrix}
+        20 \\ 
+        9 \\ 
+        6000 \\
+        90 \\
+        1259999 \\ 
+        1.47
+        \end{pmatrix} $ & $z_0 = \begin{pmatrix}
+        20 \\ 
+        9 \\ 
+        6000 \\
+        90 \\
+        1259999 \\ 
+        1.47
+        \end{pmatrix}$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+Für die Ergebnisse von Versuch 3.1 (Kapitel \ref{kap:Versuch31}) und Versuch 3.2 (Kapitel \ref{kap:Versuch32}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch3_TA}) benötigt.
+\begin{table}[H]
+    \centering
+    \caption{Technischer Aufwand von Versuch 3.1 und 3.2.}\label{tab:Versuch3_TA}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+         & \textbf{Versuch 3.1} & \textbf{Versuch 3.2} \\
+        \midrule
+        Funktionswert der Zielfunktion & $-102713.3569$ & $-140202.4068$ \\
+        Anzahl Iterationen & $12970$ & $6432$ \\
+        Anzahl Funktionsauswertungen & $15617295$ & $7740311$ \\
+        Exit Flag von \textit{MATLAB} & $2$ & $2$ \\
+        Optimalität des Ergebnis & $0.021006$ & $0.0043122$ \\
+        Berechnungsdauer & $334.723 \ min$ & $251.0802 \ min$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
-\subsection{Ergebnis 1}\label{kap:Versuch31}
-Verwendet werden:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 550 \ [s]$
-\item Neues Startgewicht: $m = 500000 \ [kg]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+\subsection{Ergebnis von Versuch 3.1}\label{kap:Versuch31}
+
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1}
-\MyCaption{Versuch 3 - Ergebnis 1}{} \label{img:test_3_1}
+\MyCaption{Ergebnis von Versuch 3.1.}{} \label{img:test_3_1}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_1_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch31} dem maximalen Staudruck annähert.}\label{img:test_3_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 3.1.}{}\label{img:test_3_1_staudruck}
 \end{center}
 \end{figure}
 
 
 
 
-\subsection{Ergebnis 2}\label{kap:Versuch32}
-Verwendet werden:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 600 \ [s]$
-\item Neues Startgewicht: $m = 500000 \ [kg]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+\subsection{Ergebnis von Versuch 3.2}\label{kap:Versuch32}
+
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2}
-\MyCaption{Versuch 3 - Ergebnis 2}{} \label{img:test_3_2}
+\MyCaption{Ergebnis von Versuch 3.2.}{} \label{img:test_3_2}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\)}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch32} dem maximalen Staudruck annähert.}\label{img:test_3_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 3.2.}{}\label{img:test_3_2_staudruck}
 \end{center}
 \end{figure}
 
-
-
-
-%\subsection{Ergebnis 3}\label{kap:Versuch33}
-%Verwendet werden:
-%\begin{itemize}
-%\item Anzahl an Diskretisierungen: $N = 100$ 
-%\item Reduzierte Endzeit: $t_f = 550 \ [s]$
-%\item Neues Startgewicht: $m = 500000 \ [kg]$
-%\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-%\item Explizites Euler Verfahren zum Lösen der DGL
-%%
-%\item Innere-Punkte-Verfahren
-%\end{itemize}
-%Es folgt das Ergebnis
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_3}
-%\caption{Versuch 3 - Ergebnis 3}\label{img:test_3_3}
-%\end{center}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_3_staudruck}
-%\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch33} dem maximalen Staudruck annähert.}\label{img:test_3_3_staudruck}
-%\end{center}
-%\end{figure}
 
 
 
@@ -629,88 +426,89 @@ v(t) &\in [0,266] & & \forall t \in [t_0,t_f] \\
 T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\
 C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
 \end{align*}
+Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch4} verwendet.
+\begin{table}[H]
+    \centering
+    \caption{Einstellungen von Versuch 4.1 und 4.2}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+        \textbf{Einstellungen} & \textbf{Versuch 4.1} & \textbf{Versuch 4.2} \\
+        \midrule
+        Reduzierte Endzeit & $t_f = 550 \ s$ & $t_f = 600 \ s$ \\
+        Angepasstes Startgewicht & $m = 500000 \ kg$ & $m = 500000 \ kg$ \\
+        Anzahl Diskretisierungen & $N = 100$ & $N = 100$ \\
+        Lösungsverfahren der DGL & Explizites Euler Verfahren & Explizites Euler Verfahren \\
+        Optimierungsverfahren & SQP-Verfahren & SQP-Verfahren \\
+        Startvektor & $z_0 = \begin{pmatrix}
+        20 \\ 
+        9 \\ 
+        6000 \\
+        90 \\
+        1259999 \\ 
+        1.47
+        \end{pmatrix} $ & $z_0 = \begin{pmatrix}
+        20 \\ 
+        9 \\ 
+        6000 \\
+        90 \\
+        1259999 \\ 
+        1.47
+        \end{pmatrix}$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+Für die Ergebnisse von Versuch 4.1 (Kapitel \ref{kap:Versuch41}) und Versuch 4.2 (Kapitel \ref{kap:Versuch42}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch4_TA}) benötigt.
+\begin{table}[H]
+    \centering
+    \caption{Technischer Aufwand von Versuch 4.1 und 4.2.}\label{tab:Versuch4_TA}
+    \begin{tabularx}{.9\textwidth}{Zccc}
+        \toprule
+         & \textbf{Versuch 4.1} & \textbf{Versuch 4.2} \\
+        \midrule
+        Funktionswert der Zielfunktion & $-104259.8227$ & $-132811.3929$ \\
+        Anzahl Iterationen & $2105$ & $2813$ \\
+        Anzahl Funktionsauswertungen & $1277653$ & $1692519$ \\
+        Exit Flag von \textit{MATLAB} & $2$ & $2$ \\
+        Optimalität des Ergebnis & $0.0023675$ & $0.0004094$ \\
+        Berechnungsdauer & $19.1492 \ min$ & $0.00045547 \ min$ \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
 
 
-\subsection{Ergebnis 1}\label{kap:Versuch41}
-Verwendet werden:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 550 \ [s]$
-\item Neues Startgewicht: $m = 500000 \ [kg]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+
+
+\subsection{Ergebnis von Versuch 4.1}\label{kap:Versuch41}
+In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1}
-\MyCaption{Versuch 4 - Ergebnis 1}{} \label{img:test_4_1}
+\MyCaption{Ergebnis von Versuch 4.1.}{} \label{img:test_4_1}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_4_1_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1_staudruck}
-\MyCaption{}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch41} dem maximalen Staudruck annähert.}\label{img:test_4_1_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 4.1.}{}\label{img:test_4_1_staudruck}
 \end{center}
 \end{figure}
 
 
 
 
-\subsection{Ergebnis 2}\label{kap:Versuch42}
-Verwendet werden:
-\begin{itemize}
-\item Anzahl an Diskretisierungen: $N = 100$ 
-\item Reduzierte Endzeit: $t_f = 600 \ [s]$
-\item Neues Startgewicht: $m = 500000 \ [kg]$
-\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-\item Explizites Euler Verfahren zum Lösen der DGL
-%
-\item SQP-Verfahren
-\end{itemize}
-Es folgt das Ergebnis
+\subsection{Ergebnis von Versuch 4.2}\label{kap:Versuch42}
+In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz. Bei diesem Versuch ist zu beobachten, dass mit der möglichen Steuerung die physikalische Grenze der maximal Geschwindigkeit erreicht wird. Diese wird dann auf maximalem Niveau bis zum Endpunkt gehalten, um eine maximale Geschwindigkeit zu erreichen.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2}
-\MyCaption{Versuch 4 - Ergebnis 2}{} \label{img:test_4_2}
+\MyCaption{Ergebnis von Versuch 4.2.}{} \label{img:test_4_2}
 \end{center}
 \end{figure}
-
+Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_4_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2_staudruck}
-\MyCaption{}{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch42} dem maximalen Staudruck annähert.}\label{img:test_4_2_staudruck}
+\MyCaption{Überprüfung Staudruck \(q\) von Versuch 4.2.}{}\label{img:test_4_2_staudruck}
 \end{center}
 \end{figure}
-
-
-
-
-%\subsection{Ergebnis 3}\label{kap:Versuch43}
-%Verwendet werden:
-%\begin{itemize}
-%\item Anzahl an Diskretisierungen: $N = 100$ 
-%\item Reduzierte Endzeit: $t_f = 550 \ [s]$
-%\item Neues Startgewicht: $m = 500000 \ [kg]$
-%\item Startvektor für \texttt{fmincon}: $z_0 = (20,9,6000,90,1259999,1.47)$
-%\item Explizites Euler Verfahren zum Lösen der DGL
-%%
-%\item Innere-Punkte-Verfahren
-%\end{itemize}
-%Es folgt das Ergebnis
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_3}
-%\caption{Versuch 4 - Ergebnis 3}\label{img:test_4_3}
-%\end{center}
-%\end{figure}
-%
-%\begin{figure}[H]
-%\begin{center}
-%\includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_3_staudruck}
-%\caption{Untersuchung, ob sich der Staudruck bei Versuch \ref{kap:Versuch43} dem maximalen Staudruck annähert.}\label{img:test_4_3_staudruck}
-%\end{center}
-%\end{figure}
