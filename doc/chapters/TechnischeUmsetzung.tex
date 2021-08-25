@@ -6,11 +6,29 @@ Die Steifigkeit einer Differentialgleichung beschreibt eine numerische Eigenscha
 
 Um die Steifigkeit der Zustandsdifferentialgleichung des Optimalsteuerungsproblems (vgl. \eqref{equ:state_space}) bewerten zu können, wird ein Steifigkeitskoeffizient der Eigenwerte gebildet.
 
+Für den Fall einer linearen Differentialgleichung
+\begin{equation} \label{equ:lin_dgl}
+    y' = Ay+f(x)
+\end{equation}
+mit der Lösung
+\begin{equation}
+    y = \sum_{t=1}^n \kappa_t \cdot \exp^{\lambda t} c_t + g(x)
+\end{equation}
+ergibt sich der Steifigkeitskoeffizient
+\begin{equation}
+    \frac{Re(\overline{\lambda})}{Re(\underline{\lambda})}
+\end{equation}
+mit den Eigenwerten \(Re(\lambda_t) < 0\) mit \(t = 1,\,2,\,...\,,n\).
+
+Da die Differentialgleichungssysteme der Zustandsdifferentialgleichung und der adjungierten Differentialgleichungen nichtliniear sind, wird sie für den Ansatz in Gleichung \eqref{equ:lin_dgl} linearisiert. Aus der Linearisierung nach Taylor folgt somit die Jacobimatrix \(\dfrac{\partial G(t,Z(t),U(t))}{\partial Z}\) (vgl. \eqref{equ:jacobi} für den Fall der adjungierten Differentialgleichungen).
+
+Hier zeigt sich, dass die Forderung \(Re(\lambda_t < 0)\) für \(t=3\) der Matrix \eqref{equ:jacobi} nicht gegeben ist, da der Eigenwert null ist.
+Die Steifigkeit des Optimalsteuerungsproblems kann somit nicht über den Steifigkeitsquotienten bewertet werden und wird in den Folgenden Abschnitten experimentell beurteilt.
 
 
 \section{Numerische Lösung von gewöhnlichen Differentialgleichungen} \label{sec:num_ode}
 Das gezeigte Modell des Flugzeugs ist durch ein System von gewöhnlichen Differentialgleichungen abgebildet. Um dieses Modell lösen zu können, werden Methoden von \textit{MATLAB} und eigens implementierte Methoden zur Integration verwendet.
-Um die Anwendbarkeit der zur Verfügung stehenden Methoden zu überprüfen, werden diese mit konstanten Werten für die Steuerfunktionen \(T\) und \(C_L\) gelöst. Hierbei werden die Werte innerhalb ihres definierten Intervalls ausgewählt und konstante Werte dem Löser übergeben.
+Um die Stabilität der zur Verfügung stehenden Methoden zu überprüfen, werden diese Systeme mit konstanten Werten für die Steuerfunktionen \(T\) und \(C_L\) gelöst. Hierbei werden die Werte innerhalb ihres definierten Intervalls ausgewählt und konstante Werte dem Löser übergeben.
 
 % define new column for ragged right content
 \newcolumntype{Z}{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}X}
@@ -62,7 +80,7 @@ Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine 
 \begin{table}[htbp]
     \centering
     \caption{Exit Flags der \textit{MATLAB}-Funktion \texttt{fmincon} }  \label{tab:Exitflag}
-    \begin{tabularx}{.9\textwidth}{Zccc}
+    \begin{tabularx}{.9\textwidth}{cZ}
         \toprule
         \textbf{Exit Flag}  & \textbf{Bedeutung} \\
         \midrule
@@ -75,7 +93,7 @@ Das Innere-Punkt-Verfahren, auch Barrieremethode genannt, löst sukzessive eine 
     \end{tabularx}
 \end{table}
 
-Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Ein wichtige Rolle spielte hierbei der Rückgabewert \texttt{exitflag} der Funktion \texttt{fmincon} (Tabelle \ref{tab:Exitflag}). Bei Werten größer null kann von einem lokalen Minimum ausgegangen werden und bei Werten gleich null sollte die Anzahl der Iterationen erhöht werden. Werte kleiner null zeugen von numerischen Problemen oder Abbrüchen.
+Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen der einzelnen Verfahren und einem Vergleich der Ergebnisse. Ein wichtige Rolle spielte hierbei der Rückgabewert \texttt{exitflag} der Funktion \texttt{fmincon} (vgl. Tabelle \ref{tab:Exitflag}). Bei Werten größer null kann von einem lokalen Minimum ausgegangen werden und bei Werten gleich null sollte die Anzahl der Iterationen erhöht werden. Werte kleiner null zeugen von numerischen Problemen oder Abbrüchen.
 
  Dabei wurden sowohl die Anzahl der Iterationen, als auch die Funktionswert im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert schneller konvergiert und die Funktionswert kleiner ist. In den folgenden numerischen Untersuchungen wird stets das SQP-Verfahren verwendet.
 

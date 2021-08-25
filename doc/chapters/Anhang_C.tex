@@ -45,7 +45,7 @@ Das Randwertproblem aus Problem \ref{prob:ZweiRand} benötigt die Ableitung der 
 \end{equation}
 
 Die bereits in \autoref{cha:indirect} eingeführte Jacobimatrix der Matrix \(G\) ergibt sich zu
-\begin{equation} \label{equ:jacobi}
+\begin{equation} \label{equ:jacobiB}
     \dfrac{\partial G(t,Z(t),U(t))}{\partial Z} = 
     \begin{pmatrix}
         0 & J_G^{(1,2)} & 0 & J_G^{(1,4)} & 0 & 0 & 0 & 0 \\ 
@@ -59,7 +59,7 @@ Die bereits in \autoref{cha:indirect} eingeführte Jacobimatrix der Matrix \(G\)
     \end{pmatrix}
 \end{equation}
 
-Die Einträge in Gleichung \eqref{equ:jacobi} werden für die numerische Lösung des Randwertproblem benötigt und können wie folgt aufgeschrieben werden.
+Die Einträge in Gleichung \eqref{equ:jacobiB} werden für die numerische Lösung des Randwertproblem benötigt und können wie folgt aufgeschrieben werden.
 \begin{align}
     J_G^{(1,2)} &= v(t) \cos(\gamma(t)) \\
     J_G^{(1,4)} &= \sin(\gamma(t)) \\
