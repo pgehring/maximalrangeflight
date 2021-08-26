@@ -51,18 +51,18 @@ Für die Ergebnisse von Versuch 0.1 (Anhang \ref{kap:Versuch01}) und Versuch 0.2
 
 
 \subsection{Ergebnis von Versuch 0.1}\label{kap:Versuch01}
-In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = -2$ kein Optimum des Problems da (Unzulässige Lösung). 
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems da (kein zulässiger Punkt gefunden). 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
-\MyCaption{Ergebnis von Versuch 0.1.}{} \label{img:test_0_1}
+\caption{Ergebnis von Versuch 0.1.}\label{img:test_0_1}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 0.1.}{}\label{img:test_0_1_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 0.1.}\label{img:test_0_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -71,18 +71,18 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_stau
 
 
 \subsection{Ergebnis von Versuch 0.2}\label{kap:Versuch02}
-In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = -2$ kein Optimum des Problems da (Unzulässige Lösung).
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems da (kein zulässiger Punkt gefunden).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2}
-\MyCaption{Ergebnis von Versuch 0.2.}{} \label{img:test_0_2}
+\caption{Ergebnis von Versuch 0.2.}\label{img:test_0_2}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 0.2.}{}\label{img:test_0_2_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 0.2.}\label{img:test_0_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -150,18 +150,18 @@ Für die Ergebnisse von Versuch 1.1 (Anhang \ref{kap:Versuch11}) und Versuch 1.2
 
 
 \subsection{Ergebnis von Versuch 1.1}\label{kap:Versuch11}
-In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$.
+In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1}
-\MyCaption{Ergebnis von Versuch 1.1.}{} \label{img:test_1_1}
+\caption{Ergebnis von Versuch 1.1.}\label{img:test_1_1}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 1.1.}{}\label{img:test_1_1_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 1.1.}\label{img:test_1_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -169,18 +169,18 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 
 \subsection{Ergebnis von Versuch 1.2}\label{kap:Versuch12}
-In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
+In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2}
-\MyCaption{Ergebnis von Versuch 1.2.}{} \label{img:test_1_2}
+\caption{Ergebnis von Versuch 1.2.}\label{img:test_1_2}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_1_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 1.2.}{}\label{img:test_1_2_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 1.2.}\label{img:test_1_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -254,18 +254,18 @@ Für die Ergebnisse von Versuch 2.1 (Anhang \ref{kap:Versuch21}) und Versuch 2.2
 
 
 \subsection{Ergebnis von Versuch 2.1}\label{kap:Versuch21}
-In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = -2$ kein Optimum des Problems da (Unzulässige Lösung).
+In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems da (kein zulässiger Punkt gefunden).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1}
-\MyCaption{Ergebnis von Versuch 2.1.}{} \label{img:test_2_1}
+\caption{Ergebnis von Versuch 2.1.}\label{img:test_2_1}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 2.1.}{}\label{img:test_2_1_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 2.1.}\label{img:test_2_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -273,18 +273,18 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 
 \subsection{Ergebnis von Versuch 2.2}\label{kap:Versuch22}
-In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
+In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2}
-\MyCaption{Ergebnis von Versuch 2.2.}{} \label{img:test_2_2}
+\caption{Ergebnis von Versuch 2.2.}\label{img:test_2_2}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 2.2.}{}\label{img:test_2_2_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 2.2.}\label{img:test_2_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -357,18 +357,18 @@ Für die Ergebnisse von Versuch 3.1 (Anhang \ref{kap:Versuch31}) und Versuch 3.2
 
 
 \subsection{Ergebnis von Versuch 3.1}\label{kap:Versuch31}
-In Versuch 3.1 wird das Ergebnis in Abbildung \ref{img:test_3_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-12}$.
+In Versuch 3.1 wird das Ergebnis in Abbildung \ref{img:test_3_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-12}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1}
-\MyCaption{Ergebnis von Versuch 3.1.}{} \label{img:test_3_1}
+\caption{Ergebnis von Versuch 3.1.}\label{img:test_3_1}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_1_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 3.1.}{}\label{img:test_3_1_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 3.1.}\label{img:test_3_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -376,18 +376,18 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_1_stau
 
 
 \subsection{Ergebnis von Versuch 3.2}\label{kap:Versuch32}
-In Versuch 3.2 wird das Ergebnis in Abbildung \ref{img:test_3_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-12}$.
+In Versuch 3.2 wird das Ergebnis in Abbildung \ref{img:test_3_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-12}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2}
-\MyCaption{Ergebnis von Versuch 3.2.}{} \label{img:test_3_2}
+\caption{Ergebnis von Versuch 3.2.}\label{img:test_3_2}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 3.2.}{}\label{img:test_3_2_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 3.2.}\label{img:test_3_2_staudruck}
 \end{center}
 \end{figure}
 
@@ -481,18 +481,18 @@ Für die Ergebnisse von Versuch 4.1 (Anhang \ref{kap:Versuch41}) und Versuch 4.2
 
 
 \subsection{Ergebnis von Versuch 4.1}\label{kap:Versuch41}
-In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$.
+In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1}
-\MyCaption{Ergebnis von Versuch 4.1.}{} \label{img:test_4_1}
+\caption{Ergebnis von Versuch 4.1.}\label{img:test_4_1}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_4_1_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 4.1.}{}\label{img:test_4_1_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 4.1.}\label{img:test_4_1_staudruck}
 \end{center}
 \end{figure}
 
@@ -500,17 +500,17 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_4_1_stau
 
 
 \subsection{Ergebnis von Versuch 4.2}\label{kap:Versuch42}
-In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$.
+In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2}
-\MyCaption{Ergebnis von Versuch 4.2.}{} \label{img:test_4_2}
+\caption{Ergebnis von Versuch 4.2.}\label{img:test_4_2}
 \end{center}
 \end{figure}
 Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_4_2_staudruck} dargestellt.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2_staudruck}
-\MyCaption{Überprüfung Staudruck \(q\) von Versuch 4.2.}{}\label{img:test_4_2_staudruck}
+\caption{Überprüfung Staudruck $q(v(t),h(t))$ von Versuch 4.2.}\label{img:test_4_2_staudruck}
 \end{center}
 \end{figure}
