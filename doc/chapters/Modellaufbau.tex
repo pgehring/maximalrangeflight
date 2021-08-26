@@ -1,6 +1,6 @@
 \chapter{Optimalsteuerungsproblem} \label{cha:optim}
 
-Im folgenden wird ein Differentialgleichungssystem für den quasi-statischen Flug hergeleitet. Modelliert wird das Flugzeug A380-800 der Firma Airbus bei einem Steigflug. Es wird sowohl die Dynamik in vertikaler ($y$-Achse) als auch in horizontaler ($h$-Achse) Richtung berücksichtigt. Dabei seien
+Im Folgenden wird ein Differentialgleichungssystem für den quasi-statischen Flug hergeleitet. Modelliert wird das Flugzeug A380-800 der Firma Airbus bei einem Steigflug. Es wird sowohl die Dynamik in vertikaler ($y$-Achse) als auch in horizontaler ($h$-Achse) Richtung berücksichtigt. Dabei seien
 \begin{itemize}
     \item $x(t)$: $x$-Koordinate des Massenschwerpunktes $S$
     \item $h(t)$: $h$-Koordinate des Massenschwerpunktes $S$
@@ -9,7 +9,7 @@ Im folgenden wird ein Differentialgleichungssystem für den quasi-statischen Flu
     \item $T(t)$: Schub (Steuerung)
     \item $C_L(t)$: Auftriebsbeiwert (Steuerung)
 \end{itemize}
-Um die Kräfte welche auf das Flugzeug einwirken, berechnen zu können, werden folgende Hilfsgrößen benötigt:
+Um die auf das Flugzeug einwirkenden Kräfte berechnen zu können, werden folgende Hilfsgrößen benötigt:
 \begin{itemize}
     \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
     
@@ -31,7 +31,7 @@ Mit dem 2. Newtons'schen Axiom $F = m \cdot a$ lässt sich die Differentialgleic
 für die Geschwindigkeit $v$ aufstellen.
 Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichung
 \[F_{ZP} := \dfrac{m v^2}{r} \Rightarrow \dot{\gamma}(t) = \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}\]
-für den Ansstellwinkel $\gamma$ aufstellen.
+für den Anstellwinkel $\gamma$ aufstellen.
 Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels der Geschwindigkeit und des Anstellwinkels bestimmen.
 \[\begin{split}
     \dot{x}(t) &= v(t) \cos(\gamma(t))\\\
