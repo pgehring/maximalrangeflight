@@ -178,16 +178,6 @@
   \end{table}
 \end{frame}
 
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Vergleich von Optimierungs-Verfahren}
-% \vspace{-2.6cm}
-  \includegraphics[scale=0.75]{images/Vergleich_SQP_IP.pdf}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
-\end{frame}
-
 \section{Lösung mit direkten Verfahren}
 \begin{frame}
   \begin{block}{Direkte Formulierung des Optimierungsproblems}
@@ -229,7 +219,7 @@
     \begin{itemize}
       \item[\(\rightarrow\)] Ergebnisse nicht gut interpretierbar
     \end{itemize}
-    \item Anpassung der Parameter zur physikalisch und technisch sinnvollen Werten
+    \item Anpassung der Parameter zu physikalisch und technisch sinnvollen Werten
     \begin{itemize}
       \item[\(\rightarrow\)] teils interpretierbare Ergebnisse
     \end{itemize}
@@ -239,6 +229,28 @@
 \begin{frame}
   \includegraphics[scale=.75]{images/test_0_1.pdf}
 \end{frame}
+
+\begin{frame}
+  % TODO: section title aus
+  \frametitle{Vergleich von Optimierungs-Verfahren}
+  \includegraphics[scale=0.75]{images/Vergleich_SQP_IP.pdf}
+  \begin{itemize}
+    \item Zuverlässigkeit von \texttt{fmincon} und dem SQP-Verfahren konvergiert gegen \texttt{0}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \includegraphics[scale=.75]{images/test_1_1.pdf}
+\end{frame}
+
+\begin{frame}
+  \includegraphics[scale=.75]{images/test_3_2.pdf}
+\end{frame}
+
+\begin{frame}
+  \includegraphics[scale=.75]{images/test_4_2.pdf}
+\end{frame}
+
 
 % 3. Folie
 \section{Lösung mit indirekten Verfahren}
