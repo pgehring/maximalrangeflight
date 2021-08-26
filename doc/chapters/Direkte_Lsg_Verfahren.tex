@@ -1,6 +1,6 @@
 \chapter{Formulierung des Optimalsteuerungsproblem für direkte Lösungsverfahren} \label{cha:direct}
 
-Direkte Lösungsverfahren basieren auf einer Diskretisierung des Optimalsteuerungsproblems. Dadurch wird das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) auf ein endlichdimensionales Optimierungsproblem transformiert, welches mit einem numerischen Optimierungsverfahren gelöst werden kann.
+Direkte Lösungsverfahren basieren auf einer Diskretisierung des Optimalsteuerungsproblems \cite{Stryk1992}. Dadurch wird das Optimalsteuerungsproblem (Problem \ref{prob:MaxRF}) auf ein endlichdimensionales Optimierungsproblem transformiert, welches mit einem numerischen Optimierungsverfahren gelöst werden kann.
 
 \section{Diskretisierung des Optimalsteuerungsproblems}
 Unter der Diskretisierung wird die Aufgabe verstanden, für feste Zeitpunkte $t_0 < t_f$ einen Zustand $X \in W^{1, \infty} ([t_0,t_f], \R^{n_X})$ und eine Steuerung $U \in L^{\infty} ([t_0,t_f], \R^{n_U})$ zu finden, sodass die Zielfunktion unter der Betrachtung der gegebenen Bedingungen minimal wird.
