@@ -1,18 +1,18 @@
-\chapter{Motivation und Ziel der Arbeit}
+\chapter{Motivation und Ziel der Projektarbeit}
 Die Berechnung von Flugtrajektorien zur Reichweitenmaximierung haben eine lange Historie, siehe \cite{Burrows1982, Murrieta2016, Schaback2017, Pierson1989}.  Dabei wurden verschiedene mathematische Techniken angewandt, die von Parametrisierungen von Trajektorien \cite{Burrows1982}, Energiebetrachtungen \cite{Calise1977}, über Mehrzieloptimierung mit verschiedenen Kostenfunktionen \cite{Gardi2016} bis hin zur Anwendung der Optimalsteuerungstheorie \cite{Javier2016}  reichen. 
 
-Eine einfache Lösung für den reichweitenmaximierten Flug ist für den Horizontalflug bekannt, siehe beispielsweise \cite{Peckham1974}. Diese folgt aus der Maximierung des Verhältnisses $\sqrt{C_{L}/C_{D}}$ der Auftriebs- und Widerstandskoeffizienten. Daraus resultiert eine Geschwindigkeit, die um den Faktor $\sqrt{4/3}$ größer ist als die Geschwindigkeit zur Maximierung des Verhältnisses von Auftrieb- zu Widerstandskoeffizienten $C_{L}/C_{D}$. \cite{Schaback2017}
+Eine einfache Lösung für den reichweitenmaximierten Flug ist für den Horizontalflug bekannt, siehe beispielsweise \cite{Peckham1974}. Diese folgt aus der Maximierung des Verhältnisses $\sqrt{C_{L}/C_{D}}$ der Auftriebs- und Widerstandskoeffizienten. Daraus resultiert eine Geschwindigkeit, die um den Faktor $\sqrt{4/3}$ größer ist als die Geschwindigkeit zur Maximierung des Verhältnisses von Auftrieb- zu Widerstandskoeffizienten $C_{L}/C_{D}$ \cite{Schaback2017}. 
 
-Diese Projektarbeit bietet eine Erweiterung auf den Steigflug und konzentriert sich dabei auf numerische Standardmethoden, die für das Lösen von Optimalsteuerungsproblemen verwendet werden. Modelliert wird dabei ein zweidimensionaler Flug eines Flugzeugs in der $x$-$h$-Ebene (Abbildung \ref{img:Flugzeug}), bei dem der Auftriebsbeiwert $C_L(t)$ und den Schub $T(t)$ gesteuert werden kann.
+Diese Projektarbeit bietet eine Erweiterung auf den Steigflug und konzentriert sich dabei auf numerische Standardmethoden, die für das Lösen von Optimalsteuerungsproblemen verwendet werden. Modelliert wird dabei ein zweidimensionaler Flug eines Flugzeugs in der $x$-$h$-Ebene (Abbildung \ref{img:Flugzeug}), bei dem der Auftriebsbeiwert $C_L(t)$ und der Schub $T(t)$ gesteuert werden kann.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=\textwidth]{images/01_Modellaufbau/Flugzeug.pdf}
-        \MyCaption{2D-Skizze eines Flugzeuges in der $x$-$h$-Ebene}{mit angreifenden Kräften $L$ (Auftriebskraft), $D$ (Luftwiederstand), $W$ (Erdanziehungskraft) und $T$ (Schub) am Schwerpunkt $S$. Des Weiteren beschreibt $v$ die Geschwindigkeit und $\gamma$ den Anstellwinkel.}\label{img:Flugzeug}
+        \MyCaption{Freikörperdiagramm eines Flugzeuges in der $x$-$h$-Ebene}{mit angreifenden Kräften $L$ (Auftriebskraft), $D$ (Luftwiederstand), $W$ (Erdanziehungskraft) und $T$ (Schub) am Schwerpunkt $S$. Des Weiteren beschreibt $v$ die Geschwindigkeit und $\gamma$ den Anstellwinkel.}\label{img:Flugzeug}
     \end{center}
 \end{figure}
 
-Das Ziel ist es, das Flugzeug von einer gegebenen Anfangsposition so zu steuern, dass eine vorgegebene Reisehöhe $h_f = 10668\ m$ und ein Anstellwinkel $\gamma_f = 0\ ^{\circ}$ in einer Flugzeit von $1800 \ s$ erreicht  wird, wobei die zurückgelegte Strecke maximal wird. Dabei dürfen die Steuerbeschränkungen für den Schub und Auftriebsbeiwert nicht verletzt und ein maximaler Staudruck nicht überschritten werden. 
+Ziel ist es, das Flugzeug von einer gegebenen Anfangsposition so zu steuern, dass eine vorgegebene Reisehöhe $h_f = 10668\ m$ und ein Anstellwinkel $\gamma_f = 0\ ^{\circ}$ in einer Flugzeit von $1800 \ s$ erreicht  wird, wobei die zurückgelegte Strecke maximal wird. Dabei dürfen die Steuerbeschränkungen für den Schub und Auftriebsbeiwert nicht verletzt und ein maximaler Staudruck nicht überschritten werden. 
 
 Beginnend mit der Herleitung der Gleichungen für den quasi-statischen Flug in \autoref{cha:optim}, folgt die Formulierung des Optimalsteuerungsproblems für direkte (\autoref{cha:direct}) und indirekte (\autoref{cha:indirect}) Lösungsverfahren. Anschließend folgt die numerische Umsetzung und Lösung des Optimalsteuerungsproblems (\textbf{Kapitel XXX}), sowie die Diskussion der Ergebnisse (\textbf{Kapitel XXX}) .
 
