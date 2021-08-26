@@ -18,7 +18,7 @@
 
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
 \usepackage{times}
 \usepackage{graphicx}
 \usepackage{fancyvrb}
@@ -26,7 +26,8 @@
 \usepackage{colortbl}
 \usepackage[framemethod=TikZ]{mdframed}
 
-\usepackage{amssymb, amsmath, amsthm} % Pakete für Mathe-Umgebungen und -Symbole
+\usepackage{tabularx} 
+\usepackage{booktabs}
 
 % Mengen Buchstaben:
 \newcommand{\E}{\mathbb{E}}
@@ -89,7 +90,7 @@
 
 \section{Problemformulierung}
 \begin{frame}
-  \frametitle{Modellskizze}
+  \frametitle{Freikörperbild}
   \vspace{1em}
    \begin{center}
   	\includegraphics[scale=.75]{images/Flugzeug.pdf}
@@ -139,73 +140,99 @@
 
 
 
+% \begin{frame}
+%   \frametitle{Autonomes Mayer-Problem???}
+% \vspace{-2.6cm}
+%   \begin{itemize}
+%     \item ????
+%   \end{itemize}
+% \end{frame}
+\section{Numerische Untersuchungen}
 \begin{frame}
-  % TODO: section title aus
-  \frametitle{Autonomes Mayer-Problem???}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
-\end{frame}
+  \frametitle{Numerische Lösungsverfahren gewöhnlicher Differentialgleichungen}
+  % \vspace{-2.6cm}
+  \includegraphics[scale=0.75]{images/methods_plot_d_x.pdf}%
+  \includegraphics[scale=0.75]{images/methods_plot_d_v.pdf}\\
 
-
-% 2. Folie
-\section{Lösung mit direktem Verfahren}
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Vollständige Diskretisierung}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
-    \item Aufz\"{a}hlung 2
-    \item Aufz\"{a}hlung 3
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Auswahl Lösungsverfahren}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
+  \newcolumntype{Z}{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}X}
+  \begin{table}[htbp]
+      \scriptsize
+      \centering
+      \begin{tabularx}{.6\paperwidth}{Zccc}
+          \toprule
+          \textbf{Algorithmus}        & \textbf{Laufzeit} & \textbf{Laufzeitdifferenz } \\
+                                      & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} \\
+          \midrule
+          explizites Euler Verfahren  &   0,00708 &   0 \\
+          implizites Euler Verfahren  &   0,0185  &   0,0115\\
+          \textit{MATLAB} \texttt{ode23s}      &   0,0914  &   0,0843 \\
+          \textit{MATLAB} \texttt{ode45}       &   0,529   &   0,522 \\
+          RADAU-2A Verfahren         &   1,36    &   1,35 \\
+          \bottomrule
+      \end{tabularx}
+  \end{table}
 \end{frame}
 
 \begin{frame}
   % TODO: section title aus
   \frametitle{Vergleich von Optimierungs-Verfahren}
-\vspace{-2.6cm}
+% \vspace{-2.6cm}
+  \includegraphics[scale=0.75]{images/Vergleich_SQP_IP.pdf}
   \begin{itemize}
     \item ????
   \end{itemize}
 \end{frame}
 
+\section{Lösung mit direkten Verfahren}
+\begin{frame}
+  \begin{block}{Direkte Formulierung des Optimierungsproblems}
+    \scriptsize
+    Endlichdimensionales, nichtlineares Optimierungsproblem der Form
+    \begin{align*}
+        \min_{z \in S} F(z) &:= \varphi(X_0,X_{N-1}) & & \\
+        \text{unter} \hspace{10mm} G(z) &\leq 0_{n_s \cdot N} & &  \text{(Ungleichungsnebenbedingungen)} \\
+        H(z) &= 0_{n_X \cdot (N-1) + n_{\psi}} & & \text{(Gleichungsnebenbedingungen)}\\
+        z &\in S := \R^{n_X \cdot N} \times [U_{\min},U_{\max}]^{N} & &  \text{(Zulässige Menge)}
+    \end{align*}
+    mit der Optimierungsvariable
+    \begin{equation*}
+        z := (X_0,X_1,...,X_{N-1},U_0,U_1,...,U_{N-1})^T
+    \end{equation*}
+    und den Nebenbedingungsfunktionen 
+    \begin{equation*}
+        G(z) := 
+        \begin{pmatrix}
+            s(t_0,X_0,U_0) \\ 
+            \vdots \\ 
+            s(t_{N-1},X_{N-1},U_{U-1})
+        \end{pmatrix}
+        \ \text{und}\ H(z) := 
+        \begin{pmatrix}
+            X_0 + h_0 f(t_0,X_0,U_0) - X_1 \\ 
+            \vdots \\ 
+            X_{N-2} + h_{N-2} f(t_{N-2},X_{N-2},U_{U-2}) - X_{N-1} \\
+            \psi(X_0,X_N)
+        \end{pmatrix} 
+    \end{equation*}
+    \end{block}
+\end{frame}
 
 \begin{frame}
-  % TODO: section title aus
-  \frametitle{Ergebnisse}
-\vspace{-2.6cm}
+  \frametitle{Versuchsdurchführung mit direktem Löser}
   \begin{itemize}
-    \item ????
+    \item Simulation des Modells mit vorgegebenen Parametern
+    \begin{itemize}
+      \item[\(\rightarrow\)] Ergebnisse nicht gut interpretierbar
+    \end{itemize}
+    \item Anpassung der Parameter zur physikalisch und technisch sinnvollen Werten
+    \begin{itemize}
+      \item[\(\rightarrow\)] teils interpretierbare Ergebnisse
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  % TODO: section title aus
-  \frametitle{Ergebnisse}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Ergebnisse}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
+  \includegraphics[scale=.75]{images/test_0_1.pdf}
 \end{frame}
 
 % 3. Folie

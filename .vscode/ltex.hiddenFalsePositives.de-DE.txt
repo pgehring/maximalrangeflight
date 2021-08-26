@@ -1,0 +1,4 @@
+{"rule":"Z_ANSTATT_T","sentence":"^\\QIm Folgenden wird ein Differentialgleichungssystem für den quasi-statischen Flug hergeleitet.\\E$"}
+{"rule":"Z_ANSTATT_T","sentence":"^\\QNewtons'schen Axiom \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q lässt sich die Differentialgleichung \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q für die Geschwindigkeit \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q aufstellen.\\E$"}
+{"rule":"Z_ANSTATT_T","sentence":"^\\QMit der Gleichung für die Zentripetalkraft \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q lässt sich die Differentialgleichung \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q für den Ansstellwinkel \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q aufstellen.\\E$"}
+{"rule":"Z_ANSTATT_T","sentence":"^\\QDie Differentialgleichungen für die \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q und \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q lassen mittels der Geschwindigkeit und des Anstellwinkels bestimmen.\\E$"}
