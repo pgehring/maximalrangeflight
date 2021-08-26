@@ -240,15 +240,21 @@
 \end{frame}
 
 \begin{frame}
+  \begin{center}
   \includegraphics[scale=.75]{images/test_1_1.pdf}
+    \end{center}
 \end{frame}
 
 \begin{frame}
+ \begin{center}
   \includegraphics[scale=.75]{images/test_3_2.pdf}
+ \end{center}
 \end{frame}
 
 \begin{frame}
+ \begin{center}
   \includegraphics[scale=.75]{images/test_4_2.pdf}
+ \end{center}
 \end{frame}
 
 
@@ -256,8 +262,10 @@
 \section{Lösung mit indirekten Verfahren}
 \begin{frame}
   \frametitle{Minimumprinzip von Pontryagin}
+   \begin{center}
   \scriptsize
   \begin{block}{Hamilton-Funktion}  
+          \vspace{-5mm}
  \begin{align*} 
         H(X(t),U(t),\lambda(t)) &= \lambda_0 f_0(X(t),U(t)) + \lambda(t)^T f(X(t),U(t)) \\\
         &= \lambda(t)^T f(X(t),U(t)) \\\
@@ -269,6 +277,7 @@
         &\hspace{7mm} - g \sin(\gamma(t)) \lambda_4(t)
 \end{align*}
 \end{block}
+ \end{center}
 \end{frame}
 
 
@@ -285,7 +294,7 @@
     und 
     \[\dfrac{\partial^2}{\partial U^2} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
     0 & - \dfrac{k F \alpha e^{-\beta h(t)} v^2(t) \lambda_4(t)}{m} 
-    \end{pmatrix} \stackrel{!}{\geq} 0\] wobei \[\sigma(x(t),\lambda(t)) := H_u(X^{\ast}(t),U^{\ast}(t),\lambda(t))\] Schaltfunktion genannt wird. 
+    \end{pmatrix} \stackrel{!}{\geq} 0\] wobei \[\sigma(x(t),\lambda(t)) := H_u(X^{\ast}(t),U^{\ast}(t),\lambda(t))\] 
   \end{block}
 \end{frame}
 
@@ -335,7 +344,7 @@ Für die Bestimmung der Steuerfunktion des Auftriebsbeiwerts lässt sich die Ham
   \frametitle{Minimumprinzip von Pontryagin}
   \begin{block}{Synthesesteuerung}  
   \scriptsize
-  Damit folgt für die Steuerfunktion des Auftriebsbeiwerts
+  Damit folgt aus allen Fallunterscheidungen die Steuerfunktion des Auftriebsbeiwerts
 \[C_L(t) = \left\lbrace 
 \begin{array}{ll}
 C_{L, \min} & ,\text{falls Bedingung } 2,3,6 \text{ oder } 9.2 \text{ gilt} \\ 
@@ -396,7 +405,7 @@ Im Endzeitpunkt $t_f$ gilt die Transversalitätsbedingung mit dem Vektor $\nu \i
 
 
 \begin{frame}
-\begin{block}{Zweipunkt-Randwertproblem } 
+\begin{block}{Zweipunkt-Randwertproblem} 
   \scriptsize
 Bestehend aus den beiden Funktionen $G(t,Z(t),U(t))$ und $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ für $n_Z = 8$. Für $G(t,Z(t),U(t))$ ergibt sich
 \begin{align*} 
@@ -423,6 +432,64 @@ und für die Ableitung die Matrix
 \end{frame}
 
 
+\begin{frame}
+\begin{block}{Zweipunkt-Randwertproblem } 
+  \scriptsize
+Für $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ müssen zunächst die Endbedingungen mit
+\begin{align*}
+X_i(t_f) &= c_i & & (i=1,...,n_{\psi}=2) \\
+\lambda_i(t_f) &= \lambda_0 g_{X_i}(X^{\ast}(t_f)) & &(i=n_{\psi}+1,...,n_X=4)
+\end{align*}
+aus
+\begin{align*}
+c = \begin{pmatrix} h_f  \gamma_f \end{pmatrix} \text{und} \  g_{X}(X^{\ast}(t_f)) = \begin{pmatrix} 0  0 -1 0 \end{pmatrix}
+\end{align*}
+gebildet werden. Es ergibt sich dann
+\begin{align*}
+R(Z(t_0),Z(t_f)) = 0_{n_Z} = \begin{pmatrix}
+h(t_0) - h_0 \\ 
+\gamma(t_0) - \gamma_0 \\
+x(t_0) - x_0 \\ 
+v(t_0) - v_0 \\ 
+h(t_f) - h_f \\ 
+\gamma(t_f) - \gamma_f \\
+\lambda_3(t_f) + \lambda_0 \\ 
+\lambda_4(t_f) - 0
+\end{pmatrix}
+\end{align*}
+   \end{block}
+\end{frame}
+
+
+\begin{frame}
+\begin{block}{Zweipunkt-Randwertproblem } 
+  \scriptsize
+\begin{align*}
+\dfrac{d R(Z(t_0),Z(t_f))}{d Z(t_0)} = \begin{pmatrix}
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+\dfrac{d R(Z(t_0),Z(t_f))}{d Z(t_f)} = \begin{pmatrix}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 1
+\end{pmatrix}
+\end{align*}
+   \end{block}
+\end{frame}
 
 
 
@@ -430,21 +497,14 @@ und für die Ableitung die Matrix
 \begin{frame}
   % TODO: section title aus
   \frametitle{Schwierigkeiten}
-\vspace{-2.6cm}
+
   \begin{itemize}
-    \item ????
+    \item Lösung mittels Einfach- und Mehrfachschießverfahren scheiterte an numerischen Schwierigkeiten
+    \item Bestimmung der Nullstellen von $R(Z(t_0),Z(t_f))$ nicht möglich durch singuläre Jacobimatrix in Newton-Verfahren
+    \item Versuch das unterbestimmte Gleichungssystem mittels Gauss-Seidel- Vefahren zu lösen gelang ebenfalls nicht
+    \item Folglich konnten keine Ergebnisse mit den Schießverfahren berechnet werden
   \end{itemize}
 \end{frame}
-
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Ergebnisse}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
-\end{frame}
-
 
 % Letzte Folie
 \section{Fazit und Ausblick}
@@ -454,18 +514,125 @@ und für die Ableitung die Matrix
     \vspace{1em}
 \small
   \begin{itemize}
-    \item Steigflug des Airbus A380-800 von einem vorgegeben Anfangspunkt zu einer Reiseflughöhe mit Hilfe der Optimalsteuerungstheorie
-     \item Lösen mit direktem Verfahren unter Verwendung von explizitem Euler- und SQP-Verfahren
-      \item Mit Hilfe des Minimumsprinzip's von Pontryagin umformulieren des Problems in ein Zweipunkt-Randwertproblem umformuliert, und lösen mit  Einfach- und Mehrfachschießverfahren
-       \item Lösen mittels Einfach- und Mehrfachschießverfahren scheiterte an numerischen Schwierigkeiten
-        \item Numerische Untersuchung ergab, dass sich die direkten Verfahren eignen, das gegebene Optimalsteuerungsproblem zu lösen.  
-
-	 \item Betrachtung des Optimalsteuerungsproblems mit anderen Methoden wie dem Homotopieverfahren wurden offen gelassen. 
+    \item \textbf{Optimalsteuerungsproblem}: Steigflug von Anfangspunkt zu einer Reiseflughöhe in fester Zeit, wobei zurückgelegte Strecke maximal
+     \item Lösen mit \textbf{direktem Verfahren} unter Verwendung von explizitem Euler- und SQP-Verfahren
+      \item Umformulieren mit Hilfe des \textbf{Minimumsprinzips von Pontryagin} in ein Zweipunkt-Randwertproblem 
+       \item Lösen mittels Einfach- und Mehrfachschießverfahren scheiterte an \textbf{numerischen Schwierigkeiten}
+        \item Numerische Untersuchung ergab, dass sich die direkten Verfahren eignen, das gegebene Optimalsteuerungsproblem zu lösen.  	 \item Betrachtung des Optimalsteuerungsproblems mit anderen Methoden, wie dem Homotopieverfahren, wurde offen gelassen
 
   \end{itemize}
 \end{frame}
 
 \begin{frame}[plain]{}
+\end{frame}
+
+
+% Backup Folien
+\section*{Zusatz}
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+          \item[2.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = 0 = C_{L, \min}$.
+        %
+        \item[3.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \min}$.
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+        \item[4.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = C_{L, \max}$.
+        %
+        \item[5.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} = 0$: Daraus folgt für die Steuerfunktion $C_L(t) = \text{beliebig} \in [C_{L, \min},C_{L, \max}]$.
+                \item[6.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = C_{L, \min}$.
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+   \item[7.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \max}$.
+        %
+        \item[8.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = 0$. Es gilt also $C_L(t) = C_{L, \max}$.
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+\item[9.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+\[\begin{split}
+\frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+\frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+\end{split}\]
+So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$. Für das Minimum bestimme man nun die Nullstellen von $\tilde{H}$:
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+
+  \setbeamertemplate{itemize/enumerate subbody begin}{  \tiny}
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+        \begin{enumerate}
+\item[9.1.)] Für die Bestimmung der Nullstellen von $\tilde{H}$ gilt
+\[\begin{split}
+\tilde{H} \stackrel{!}{=} 0 &= - K_2(t) C_L^2(t) + K_1(t)C_L(t) \\\
+&= (- K_2(t) C_L(t) + K_1(t)) C_L(t) \\\
+0 &= K_1(t) - K_2(t)C_L(t) \\\
+C_L(t) &= \dfrac{K_1(t)}{K_2(t)}
+\end{split}\]
+So gilt $\tilde{H} = 0$ bei $C_L(t) = 0$ und $C_L(t) = \dfrac{K_1(t)}{K_2(t)}$ Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} < C_{L,\max}$, so gilt also $C_L(t) = C_{L, \max}$.
+%
+\item[9.2.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} > C_{L,\max}$, so gilt $C_L(t) = C_{L,\min}$.
+\item[9.3.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} = C_{L,\max}$, so gilt $C_L(t) = C_{L,\max} \vee C_{L,\min}$.
+    \end{enumerate}
+      \end{block}
 \end{frame}
 
 \end{document}

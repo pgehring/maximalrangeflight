@@ -1,6 +1,6 @@
 \chapter{Formulierung des Optimalsteuerungsproblem für indirekte Lösungsverfahren} \label{cha:indirect}
 
-Bei den indirekten Lösungsverfahren werden notwendige Bedingungen für eine optimale Lösung des Steuerungsproblems aufgestellt. Diese notwendigen Bedingungen für das Optimalsteuerungsproblem überführen das Problem in ein  Randwertproblem, welches mit verschiedenen Methoden, wie zum Beispiel dem Einfachschiess- oder Mehrfachschießverfahren ausgewertet werden kann.
+Bei den indirekten Lösungsverfahren werden notwendige Bedingungen für eine optimale Lösung des Steuerungsproblems aufgestellt. Diese notwendigen Bedingungen für das Optimalsteuerungsproblem überführen das Problem in ein  Randwertproblem, welches mit verschiedenen Methoden, wie zum Beispiel dem Einfachschieß- oder Mehrfachschießverfahren \cite{Deuflhard2013,MultipleShoot1962} ausgewertet werden kann.
 
 \section{Notwendige Optimalitätsbedinungen (Minimumpinzip von Pontryagin)}\label{kap:NOpt}
 %Aus dem Modellaufbau ergeben sich die Definitionen 
@@ -59,7 +59,7 @@ Für die Notwendigen Optimalitätsbedingungen muss zunächst die Hamilton-Funkti
         &\hspace{7mm} - g \sin(\gamma(t)) \lambda_4(t)
     \end{split}
 \end{equation}
-Mit der Hamilton-Funktion (s. Gleichung \ref{equ:hamilt_func}) lassen sich nun die notwendigen Optimalitätsbedingungen des Minimumprinzips von Pontryagin untersuchen:
+Mit der Hamilton-Funktion (s. Gleichung \ref{equ:hamilt_func}) lassen sich nun die notwendigen Optimalitätsbedingungen des Minimumprinzips von Pontryagin \cite{OptiControl2018} untersuchen:
 \begin{enumerate}
     \item \textbf{Minimumbedingung:} Es gilt an allen Stetigkeitsstellen $t \in [t_0,t_f]$ von $u^{\ast}(t)$ die Minimumbedingung \[H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \min_{U(t) \in \mathcal{U}} H(X^{\ast}(t),U(t),\lambda(t))\] Leitet man nun nach der Steuerfunktion $U(t)$ ab, so ergibt sich für den unbeschränkten Fall der Steuerung die Minimumbedingung
     \[\dfrac{\partial}{\partial U} H(X^{\ast}(t),U^{\ast}(t),\lambda(t)) = \begin{pmatrix}
@@ -332,6 +332,7 @@ mit
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
 \end{pmatrix}
 \end{equation}
+und
 \begin{equation}\label{func:RZtf}
 \dfrac{d R(Z(t_0),Z(t_f))}{d Z(t_f)} = \begin{pmatrix}
 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 
