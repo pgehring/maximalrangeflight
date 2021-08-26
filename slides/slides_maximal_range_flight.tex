@@ -18,7 +18,7 @@
 
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
 \usepackage{times}
 \usepackage{graphicx}
 \usepackage{fancyvrb}
@@ -26,7 +26,8 @@
 \usepackage{colortbl}
 \usepackage[framemethod=TikZ]{mdframed}
 
-\usepackage{amssymb, amsmath, amsthm} % Pakete für Mathe-Umgebungen und -Symbole
+\usepackage{tabularx} 
+\usepackage{booktabs}
 
 % Mengen Buchstaben:
 \newcommand{\E}{\mathbb{E}}
@@ -140,7 +141,6 @@
 
 
 \begin{frame}
-  % TODO: section title aus
   \frametitle{Autonomes Mayer-Problem???}
 \vspace{-2.6cm}
   \begin{itemize}
@@ -148,27 +148,29 @@
   \end{itemize}
 \end{frame}
 
-
-% 2. Folie
-\section{Lösung mit direktem Verfahren}
 \begin{frame}
-  % TODO: section title aus
-  \frametitle{Vollständige Diskretisierung}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item Das ist eine M\"{o}glichkeit f\"{u}r eine Aufz\"{a}hlung
-    \item Aufz\"{a}hlung 2
-    \item Aufz\"{a}hlung 3
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  % TODO: section title aus
   \frametitle{Auswahl Lösungsverfahren}
-\vspace{-2.6cm}
-  \begin{itemize}
-    \item ????
-  \end{itemize}
+  % \vspace{-2.6cm}
+  \includegraphics[scale=0.75]{images/methods_plot_d_x.pdf}%
+  \includegraphics[scale=0.75]{images/methods_plot_d_v.pdf}\\
+
+  \newcolumntype{Z}{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}X}
+  \begin{table}[htbp]
+      \scriptsize
+      \centering
+      \begin{tabularx}{.6\paperwidth}{Zccc}
+          \toprule
+          \textbf{Algorithmus}        & \textbf{Laufzeit} & \textbf{Laufzeitdifferenz } \\
+                                      & \textbf{in \text{[$s$]}} & \textbf{in \text{[$s$]}} \\
+          \midrule
+          explizites Euler Verfahren  &   0,00708 &   0 \\
+          implizites Euler Verfahren  &   0,0185  &   0,0115\\
+          \textit{MATLAB} \texttt{ode23s}      &   0,0914  &   0,0843 \\
+          \textit{MATLAB} \texttt{ode45}       &   0,529   &   0,522 \\
+          RADAU-2A Verfahren         &   1,36    &   1,35 \\
+          \bottomrule
+      \end{tabularx}
+  \end{table}
 \end{frame}
 
 \begin{frame}
