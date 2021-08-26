@@ -11,7 +11,7 @@ mit den Schrittweiten $h_i = t_{i+1} - t_i \ \forall i = 0,...,N-2$ muss dabei n
 \begin{itemize}
     \item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
 
-    \item \textbf{Diskretisierungsverfahren für die Differentialgleichung:} Die Differentialgleichung des Problems wird mit Hilfe eines Diskretisierungsverfahren diskretisiert, um die Lösung im Optimierungsproblem verarbeiten zu können. Hierfür eignen sich zum Beispiel allgemeine oder spezielle Einschrittverfahren wie das explizite Eulerverfahren oder das implizite Runge-Kutta Verfahren.
+    \item \textbf{Diskretisierungsverfahren für die Differentialgleichung:} Die Differentialgleichung des Problems wird mithilfe eines Diskretisierungsverfahren diskretisiert, um die Lösung im Optimierungsproblem verarbeiten zu können. Hierfür eignen sich zum Beispiel allgemeine oder spezielle Einschrittverfahren wie das explizite Eulerverfahren oder das implizite Runge-Kutta Verfahren.
 
     \item \textbf{Ranbedingungen und Beschränkungen:} Die Anfangs- und Endbedingungen aus Problem~\ref{prob:MaxRF} werden zusammen in einer Randbedingungsfunktion $\psi : \R^{n_X} \times \R^{n_X} \to \R^{n_{\psi}}$ mit $n_{\psi} = 8$
     \[\psi(X_0,X_N) = 0_{n_{\psi}} = 
@@ -30,7 +30,7 @@ mit den Schrittweiten $h_i = t_{i+1} - t_i \ \forall i = 0,...,N-2$ muss dabei n
 Somit geht das Optimalsteuerungsproblem (Problem~\ref{prob:MaxRF}) in das diskretisierte Optimalsteuerungsproblem (Problem \ref{prob:VolldisOpt}) über.
 
 \begin{problem}[Vollständig diskretisiertes Optimalsteuerungsproblem]\label{prob:VolldisOpt}
-    Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\] sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
+    Finde die Gitterfunktionen \[X_h : \mathbb{G}_h \to \R^{n_X} \text{ mit } t_i \mapsto X_h(t_i) =: X_i\] und \[U_h : \mathbb{G}_h \to \R^{n_U} \text{ mit } t_i \mapsto U_h(t_i) =: U_i\], sodass die Zielfunktion \[\varphi(X_0,X_{N-1})\] minimal wird unter der Betrachtung der diskretisierten  Differentialgleichung (hier mit explizitem Eulerverfahren): \[X_{i+1} = X_{i} + h_i f(t_i,X_i,U_i) \ \ \ \ \forall i = 0,1,...,N-2\] den Randbedingungen: \[\psi(X_0,X_N) = 0_{n_{\psi}}\] den reinen Zustandsbeschränkungen: \[s(t_i,X_i) \leq 0_{n_s} \ \ \ \ \forall i = 0,1,...,N-1\] und den Mengenbeschränkungen: \[U_{\min} \leq U_i \leq U_{\max} \ \ \ \ \forall i = 0,1,...,N-1\]
 \end{problem}
 
 
