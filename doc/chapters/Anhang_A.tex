@@ -30,7 +30,7 @@ Bei diesem Versuch wird das gegebene Problem \ref{prob:MaxRF} mit den Parametern
         \bottomrule
     \end{tabularx}
 \end{table}
-Für die Ergebnisse von Versuch 0.1 (Kapitel \ref{kap:Versuch01}) und Versuch 0.2 (Kapitel \ref{kap:Versuch02}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch0_TA}) benötigt.
+Für die Ergebnisse von Versuch 0.1 (Anhang \ref{kap:Versuch01}) und Versuch 0.2 (Anhang \ref{kap:Versuch02}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch0_TA}) benötigt.
 \begin{table}[H]
     \centering
     \caption{Technischer Aufwand von Versuch 0.1 und 0.2.}\label{tab:Versuch0_TA}
@@ -51,7 +51,7 @@ Für die Ergebnisse von Versuch 0.1 (Kapitel \ref{kap:Versuch01}) und Versuch 0.
 
 
 \subsection{Ergebnis von Versuch 0.1}\label{kap:Versuch01}
-In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund der Exit Flag $-2$ kein Optimum des Problems da. 
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = -2$ kein Optimum des Problems da (Unzulässige Lösung). 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
@@ -71,7 +71,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_stau
 
 
 \subsection{Ergebnis von Versuch 0.2}\label{kap:Versuch02}
-In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund der Exit Flag $-2$ kein Optimum des Problems da.
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = -2$ kein Optimum des Problems da (Unzulässige Lösung).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2}
@@ -98,7 +98,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 \newpage
 \section{Versuch 1}\label{kap:Versuch1}
-Die Problemstellung \ref{prob:MaxRF} gibt den Parametern {tab:ProblemPara} eine feste Endzeit $t_f = 1800 \ s$ beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch wird diese nun verkürzt, auf $t_f = 300 \ s$ und $t_f = 350 \ s$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch1} verwendet.
+Die Problemstellung \ref{prob:MaxRF} gibt den Parametern \ref{tab:ProblemPara} eine feste Endzeit $t_f = 1800 \ s$ beziehungsweise einen Zeitraum vor in welchem das Problem gelöst werden soll. In diesem Versuch wird diese nun verkürzt, auf $t_f = 300 \ s$ und $t_f = 350 \ s$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch1} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 1.1 und 1.2.}\label{tab:Versuch1}
@@ -128,7 +128,7 @@ Die Problemstellung \ref{prob:MaxRF} gibt den Parametern {tab:ProblemPara} eine 
         \bottomrule
     \end{tabularx}
 \end{table}
-Für die Ergebnisse von Versuch 1.1 (Kapitel \ref{kap:Versuch11}) und Versuch 1.2 (Kapitel \ref{kap:Versuch12}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch1_TA}) benötigt.
+Für die Ergebnisse von Versuch 1.1 (Anhang \ref{kap:Versuch11}) und Versuch 1.2 (Anhang \ref{kap:Versuch12}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch1_TA}) benötigt.
 \begin{table}[H]
     \centering
     \caption{Technischer Aufwand von Versuch 1.1 und 1.2.}\label{tab:Versuch1_TA}
@@ -150,7 +150,7 @@ Für die Ergebnisse von Versuch 1.1 (Kapitel \ref{kap:Versuch11}) und Versuch 1.
 
 
 \subsection{Ergebnis von Versuch 1.1}\label{kap:Versuch11}
-In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz.
+In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1}
@@ -169,7 +169,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 
 \subsection{Ergebnis von Versuch 1.2}\label{kap:Versuch12}
-In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
+In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2}
@@ -232,7 +232,7 @@ Zusätzlich zur verkürzten Endzeit wie in Versuch \ref{kap:Versuch1} wird in Ve
         \bottomrule
     \end{tabularx}
 \end{table}
-Für die Ergebnisse von Versuch 2.1 (Kapitel \ref{kap:Versuch21}) und Versuch 2.2 (Kapitel \ref{kap:Versuch22}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch2_TA}) benötigt.
+Für die Ergebnisse von Versuch 2.1 (Anhang \ref{kap:Versuch21}) und Versuch 2.2 (Anhang \ref{kap:Versuch22}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch2_TA}) benötigt.
 \begin{table}[H]
     \centering
     \caption{Technischer Aufwand von Versuch 2.1 und 2.2.}\label{tab:Versuch2_TA}
@@ -254,7 +254,7 @@ Für die Ergebnisse von Versuch 2.1 (Kapitel \ref{kap:Versuch21}) und Versuch 2.
 
 
 \subsection{Ergebnis von Versuch 2.1}\label{kap:Versuch21}
-In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund der Exit Flag $-2$ kein Optimum des Problems da.
+In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = -2$ kein Optimum des Problems da (Unzulässige Lösung).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1}
@@ -273,7 +273,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 
 \subsection{Ergebnis von Versuch 2.2}\label{kap:Versuch22}
-In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
+In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2}
@@ -303,7 +303,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 \newpage
 \section{Versuch 3}\label{kap:Versuch3}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560.000 \ [kg]$ \cite{A380Tech}. Gewählt wird eine Masse von $500.000 \ [kg]$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch3} verwendet.
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Anhang \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560000 \ kg$ \cite{A380Tech}. Gewählt wird eine Masse von $500000 \ kg$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch3} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 3.1 und 3.2.}\label{tab:Versuch3}
@@ -334,7 +334,7 @@ Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}
         \bottomrule
     \end{tabularx}
 \end{table}
-Für die Ergebnisse von Versuch 3.1 (Kapitel \ref{kap:Versuch31}) und Versuch 3.2 (Kapitel \ref{kap:Versuch32}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch3_TA}) benötigt.
+Für die Ergebnisse von Versuch 3.1 (Anhang \ref{kap:Versuch31}) und Versuch 3.2 (Anhang \ref{kap:Versuch32}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch3_TA}) benötigt.
 \begin{table}[H]
     \centering
     \caption{Technischer Aufwand von Versuch 3.1 und 3.2.}\label{tab:Versuch3_TA}
@@ -342,19 +342,22 @@ Für die Ergebnisse von Versuch 3.1 (Kapitel \ref{kap:Versuch31}) und Versuch 3.
         \toprule
          & \textbf{Versuch 3.1} & \textbf{Versuch 3.2} \\
         \midrule
-        Funktionswert der Zielfunktion & $-102713.3569$ & $-140202.4068$ \\
-        Anzahl Iterationen & $12970$ & $6432$ \\
-        Anzahl Funktionsauswertungen & $15617295$ & $7740311$ \\
+        Funktionswert der Zielfunktion & $-103327.3544$ & $-140216.741$ \\
+        Anzahl Iterationen & $15763$ & $6864$ \\
+        Anzahl Funktionsauswertungen & $18975672$ & $8260083$ \\
         Exit Flag von \textit{MATLAB} & $2$ & $2$ \\
-        Optimalität des Ergebnis & $0.021006$ & $0.0043122$ \\
-        Berechnungsdauer & $334.723 \ min$ & $251.0802 \ min$ \\
+        Optimalität des Ergebnis & $0.0011298$ & $0.00015495$ \\
+        Berechnungsdauer & $394.887 \ min$ & $262.6699 \ min$ \\
         \bottomrule
     \end{tabularx}
 \end{table}
 
+
+
+
+
 \subsection{Ergebnis von Versuch 3.1}\label{kap:Versuch31}
-
-
+In Versuch 3.1 wird das Ergebnis in Abbildung \ref{img:test_3_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-12}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1}
@@ -373,8 +376,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_1_stau
 
 
 \subsection{Ergebnis von Versuch 3.2}\label{kap:Versuch32}
-
-
+In Versuch 3.2 wird das Ergebnis in Abbildung \ref{img:test_3_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-12}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2}
@@ -402,13 +404,13 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_3_2_stau
 
 \newpage
 \section{Versuch 4}\label{kap:Versuch4}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Kapitel \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst, sowie Box-Beschränkungen für die Zustände gesetzt. Diese zusätzlichen Box-Beschränkungen spiegeln die technischen Eigenschaften des Flugzeuges A380-800 der Firma Airbus wieder \cite{A380Tech}:
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Anhang \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst, sowie Box-Beschränkungen für die Zustände gesetzt. Diese zusätzlichen Box-Beschränkungen spiegeln die technischen Eigenschaften des Flugzeuges A380-800 der Firma Airbus wieder \cite{A380Tech}:
 \begin{itemize}
 \item \textbf{Höchstgeschwindigkeit:} Die maximale Geschwindigkeit beträgt $960 \ \frac{km}{h}$ ($266 \ \frac{m}{s}$).
 %
-\item \textbf{Maximale Flughöhe:} Die maximale Flughöhe beträgt $13.100 \ m$.
+\item \textbf{Maximale Flughöhe:} Die maximale Flughöhe beträgt $13100 \ m$.
 %
-\item \textbf{Maximale Reichweite:} Die maximale Reichweite bei maximaler Auslastung beträgt $15.200.000 \ m$.
+\item \textbf{Maximale Reichweite:} Die maximale Reichweite bei maximaler Auslastung beträgt $15200000 \ m$.
 %
 \item \textbf{Anstellwinkel:} Für die Boxschranken des Anstellwinkels wurde $\gamma \in [-80,80]$ in Grad gewählt. 
 \end{itemize}
@@ -457,7 +459,7 @@ Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab
         \bottomrule
     \end{tabularx}
 \end{table}
-Für die Ergebnisse von Versuch 4.1 (Kapitel \ref{kap:Versuch41}) und Versuch 4.2 (Kapitel \ref{kap:Versuch42}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch4_TA}) benötigt.
+Für die Ergebnisse von Versuch 4.1 (Anhang \ref{kap:Versuch41}) und Versuch 4.2 (Anhang \ref{kap:Versuch42}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch4_TA}) benötigt.
 \begin{table}[H]
     \centering
     \caption{Technischer Aufwand von Versuch 4.1 und 4.2.}\label{tab:Versuch4_TA}
@@ -479,7 +481,7 @@ Für die Ergebnisse von Versuch 4.1 (Kapitel \ref{kap:Versuch41}) und Versuch 4.
 
 
 \subsection{Ergebnis von Versuch 4.1}\label{kap:Versuch41}
-In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz.
+In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1}
@@ -498,7 +500,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_4_1_stau
 
 
 \subsection{Ergebnis von Versuch 4.2}\label{kap:Versuch42}
-In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund der Exit Flag $2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz. Bei diesem Versuch ist zu beobachten, dass mit der möglichen Steuerung die physikalische Grenze der maximal Geschwindigkeit erreicht wird. Diese wird dann auf maximalem Niveau bis zum Endpunkt gehalten, um eine maximale Geschwindigkeit zu erreichen.
+In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Toleranz von hier $StepToleranz = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2}
