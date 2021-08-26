@@ -93,7 +93,7 @@ Bei diesem Versuch wird das neu aufgestellte Problem \ref{prob:MaxRFEndzeit} mit
         \bottomrule
     \end{tabularx}
 \end{table}
-Für die Ergebnisse von Versuch 0 (Kapitel \ref{kap:Versuch0_OptTf}) und Versuch 1 (Kapitel \ref{kap:Versuch1_OptTf}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch_TA}) benötigt.
+Für die Ergebnisse von Versuch 0 (Anhang \ref{kap:Versuch0_OptTf}) und Versuch 1 (Anhang \ref{kap:Versuch1_OptTf}) wird der folgende technische Aufwand (Tabelle \ref{tab:Versuch_TA}) benötigt.
 \begin{table}[H]
     \centering
     \caption{Technischer Aufwand von Versuch 0 und 1.}\label{tab:Versuch_TA}
@@ -101,12 +101,12 @@ Für die Ergebnisse von Versuch 0 (Kapitel \ref{kap:Versuch0_OptTf}) und Versuch
         \toprule
          & \textbf{Versuch 0} & \textbf{Versuch 1} \\
         \midrule
-        Funktionswert der Zielfunktion & $279.2052$ & $-70301.9291$ \\
-        Anzahl Iterationen & $1259$ & $4699$ \\
-        Anzahl Funktionsauswertungen & $771293$ & $2826056$ \\
-        Exit Flag von \textit{MATLAB} & $1$ & $2$ \\
-        Optimalität des Ergebnis & $116.9551$ & $0.0004094$ \\
-        Berechnungsdauer & $398.7814 \ min$ & $20.6724 \ min$ \\
+        Funktionswert der Zielfunktion & $279.2113$ & $515.8404$ \\
+        Anzahl Iterationen & $7153$ & $9551$ \\
+        Anzahl Funktionsauswertungen & $5034191$ & $6715691$ \\
+        Exit Flag von \textit{MATLAB} & $1$ & $1$ \\
+        Optimalität des Ergebnis & $1.2877 \cdot 10^{-07}$ & $1.1043 \cdot 10^{-07}$ \\
+        Berechnungsdauer & $47.5949 \ min$ & $57.8622 \ min$ \\
         \bottomrule
     \end{tabularx}
 \end{table}
@@ -115,7 +115,7 @@ Für die Ergebnisse von Versuch 0 (Kapitel \ref{kap:Versuch0_OptTf}) und Versuch
 
 
 \subsection{Ergebnis Versuch 0}\label{kap:Versuch0_OptTf}
-In Versuch 0 wird das Ergebnis in Abbildung \ref{img:test_0_OptTf} erreicht. Dies stellt aufgrund der Exit Flag $1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist, als vorgegeben.
+In Versuch 0 wird das Ergebnis in Abbildung \ref{img:test_0_OptTf} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist als hier $OptimalityTolerance = 10^{-6}$ und die maximale Beschränkungsverletzung kleiner ist als hier $ConstraintTolerance = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0}
@@ -135,7 +135,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_staudr
 
 
 \subsection{Ergebnis Versuch 1}\label{kap:Versuch1_OptTf}
-In Versuch 1 wird das Ergebnis in Abbildung \ref{img:test_1_OptTf} erreicht. Dies stellt aufgrund der Exit Flag $1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist, als vorgegeben.
+In Versuch 1 wird das Ergebnis in Abbildung \ref{img:test_1_OptTf} erreicht. Dies stellt aufgrund der $\texttt{exitflag} = 1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist als hier $OptimalityTolerance = 10^{-6}$ und die maximale Beschränkungsverletzung kleiner ist als hier $ConstraintTolerance = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_1}

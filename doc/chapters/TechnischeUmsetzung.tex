@@ -68,7 +68,16 @@ Um die Stabilität der zur Verfügung stehenden Methoden zu überprüfen, werden
 \paragraph{Explizites Euler Verfahren}
 Die vorangeganenen Untersuchungen zeigen, dass sich das explizite Euler Verfahren am Besten mit Hinsicht auf die Laufzeit und die Genauigkeit zur Lösung des gegebenen Optimalsteuerungsproblems eignet. Das Verfahren wurde nach \cite{Brokate2016} in \textit{MATLAB} implementiert.
 
-\section{Beschränkte nichtlineare Optimierungsverfahren}
+
+
+
+
+
+
+
+
+
+\section{Beschränkte nichtlineare Optimierungsverfahren}\label{kap:OptVerfahren}
 Bei den direkten Verfahren wird ein Trajektorienoptimierungsproblem durch Umwandlung in ein nichtlineares Programm (NLP) gelöst. Im vorliegenden Projekt wird in \autoref{cha:direct} dabei ein gradientenbasiertes lokales Verfahren verwendet, welches durch die \textit{Optimization Toolbox} von \textit{MATLAB} bereitgestellt wird. Zwei wichtige gradientenbasierte Methoden zur Lösung von beschränkten nichtlinearen Optimierungsproblemen sind die sequentielle quadratische Programmierung (SQP) und das Innere-Punkte-Verfahren (IP). Beide reduzieren dieses Problem in einfachere Teilprobleme und lösen diese nacheinander, bis ein lokales Optimum gefunden ist \cite{Betts2010}.
 
 SQP-Verfahren lösen eine Folge von quadratischen Programmen (QP), um die Abstiegsrichtung zu finden, daher der Name sequentielle quadratische Programmierung. Das Minimum ist erreicht, wenn die Karush-Kuhn-Tucker (KKT)-Bedingungen erfüllt sind \cite{Matlab2016}.
@@ -106,12 +115,12 @@ Die Auswahl des Optimierungsverfahren erfolgte durch numerische Untersuchungen d
 %    \end{center}
 %\end{figure}
 
-\section{Schießverfahren}
-
-Was wird verwendet:
-Anfangswert probleme mit einschritt verfahren explizit und implizit
-Sensitivitäts DGL
-Zusammenbau in Schießverfahren
+%\section{Schießverfahren}
+%
+%Was wird verwendet:
+%Anfangswert probleme mit einschritt verfahren explizit und implizit
+%Sensitivitäts DGL
+%Zusammenbau in Schießverfahren
 
 
 \section{Aufbau des Lösers}
@@ -125,29 +134,52 @@ Das Optimalsteuerungsproblem wurde mit einem direkten Lösungsverfahren und eine
 \end{figure}
 
 
+
+
+
+
+
+
+
+
+
+
+
 \section{Diskussion der numerischen Versuche und Ergebnisse mit direkten Lösungsverfahren}
-Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} wurden in die Form von Problem \ref{prob:EndNichtOpt} gebracht und technisch in Anhang \ref{Anhang:DirektV} mit \textit{MATLAB} umgesetzt (siehe Kapitel \ref{kap:Versuch0}). Dabei wurden zunächst beide Optimierungsverfahren aus Kapitel \ref{kap:OptVerfahren} auf das Problem angewendet. Während das SQP-Verfahren in Versuch \ref{Versuch01} ein Ergebnis berechnet, welches plausibel erscheint, liefert das Innere-Punkte-Verfahren in Versuch \ref{kap:Versuch02} ein stark oszilierendes, nicht plausibles Ergebnis. Daher wurden zunächst eine die numerische Untersuchungen der beiden Optimierungsverfahren durchgeführt. Es wurden sowohl die Anzahl der Iterationen als auch die Funktionswerte im Minimum verglichen (Abbildung \ref{img:Vergleich_SQP_IP}). Dabei zeigt sich, dass das SQP-Verfahren für den selben Startwert sowohl schneller konvergiert als auch einen kleineren Funktionswert besitzt. Dies könnte daran liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}. In den nachfolgenden numerischen Untersuchungen wird deshalb stets das SQP-Verfahren verwendet.
+Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} ist in die Form von Problem \ref{prob:EndNichtOpt} umgestellt und wird technisch in Anhang \ref{Anhang:DirektV} mit \textit{MATLAB} umgesetzt und gelöst.
+
+Zunächst werden beide Optimierungsverfahren, welche in Kapitel \ref{kap:OptVerfahren} vorgestellt werden, auf das Problem in Versuch 0 (Anhang\ref{kap:Versuch0}) angewendet. Während das SQP-Verfahren in Versuch 0.1 (Anhang\ref{kap:Versuch01}) zu einem Ergebnis kommt, welches plausibel erscheint, liefert das Innere-Punkte-Verfahren in Versuch 0.1 (\ref{kap:Versuch02}) ein stark oszilierendes, nicht plausibles Ergebnis.
+
+Daher wurde im weiteren Vorgehen eine numerische Untersuchung der beiden Optimierungsverfahren durchgeführt. Für die Untersuchung wird die Anzahl an benötigten Iterationen, der erreichte Funktionswert und die Zulässigkeit des Ergebnisses herangezogen. In Abbildung \ref{img:Vergleich_SQP_IP} zeigt sich, dass das SQP-Verfahren für den selben Startwert, sowohl schneller konvergiert, als auch einen kleineren Funktionswert nach Abbruch des Verfahrens besitzt. Gründe für dieses Verhalten könnten darin liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}. In den nachfolgenden numerischen Versuchen wird deshalb stets das SQP-Verfahren verwendet.
 \begin{figure}[H]
     \begin{center}
         \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
-        \caption{Vergleich von IP- und SQP-Verfahren}\label{img:Vergleich_SQP_IP}
+        \caption{Vergleich von IP- und SQP-Verfahren.}\label{img:Vergleich_SQP_IP}
     \end{center}
 \end{figure}
-Trotz alle dem stellt Versuch \ref{kap:Versuch01} kein zufriedenstellendes Ergebnis da. Es konnte kein globales Optmimum erreicht werden (nur Exitflag 2) und auch physikalisch ist diese Lösung für das Flugzeug A380-800 nicht plausibel. Die Steuerstrategie liegt in einer Art Parabelflug, da die Trajektorie der Höhe einer Parabel gleicht (Abbildung \ref{img:Versuch_01}). Das Flugzeug wird möglichst schnell auf eine maximale Höhe gesteuert, um von diesem Punkt aus dann auf die Endhöhe $h_f$ zu segeln. Die physikalischen Grenzen von den berechneten Höhen und Geschwindigkeiten werden dabei deutlich überschritten.
+Zwar scheint das Ergebnis in Versuch 0.1 noch plausibel zu sein, aber auch hier wird wie in Versuch 0.2 die $\texttt{exitflag} = -2$ erreicht (Unzulässige Lösung). Auch physikalischer Betrachtung sind diese Ergebnisse für das Flugzeug A380-800 nicht plausibel. Die Strategie der Steuerung liegt in einer Art Parabelflug, da die Trajektorie der Höhe einer Parabel gleicht (Abbildung \ref{img:Versuch_01}). Dabei wird das Flugzeug möglichst schnell auf eine maximale Höhe gesteuert, um von diesem Punkt aus dann auf die Endhöhe $h_f$ mit abnehmender Geschwindigkeit zu segeln. Die physikalischen Grenzen $h_{\max} = 13.100 \ m$ und $v_{\max} = 266 \ \frac{m}{s}$ aus \cite{A380Tech} von den berechneten Höhen und Geschwindigkeiten werden dabei deutlich überschritten.
 
-Der Hauptgrund für dieses Problem liegt in der gegebenen festes Endzeit $t_f$ und den fehlenden physikalischen Beschränkungen des Flugzeuges A380-800. Vor allem die fest gegebene Endzeit $t_f$ wirft zunächst die Frage auf, ob für diese Zeitdauer das Steuerungsproblem überhaupt lösbar ist. Um diese Frage zu beantworten wurde das Optimalsteuerungsproblem \ref{prob:MaxRF} und deren Zielfunktion wie in Anhang {kap:OptTf} transformiert auf das Optimalsteuerungsproblem \ref{prob:MaxRFEndzeit}, bei welchem die optimale = minimale Endzeit $t_f$ unter Einhaltung der Start- und Endbedingungen bestimmt wird. Es ergeben sich aus den Versuchen \ref{kap:Versuch0_OptTf} und \ref{kap:Versuch1_OptTf} die optimalen Endzeiten $t_f = ...$ und $t_f = ...$. Da diese kleiner sind als als die gegebene Endzeit $t_f = 1800 \ s$, ist das Steuerungsproblem demnach lösbar.
+Der Hauptgrund für dieses Problem liegt in der gegebenen festes Endzeit $t_f$ und den fehlenden physikalischen Grenzen des Flugzeuges A380-800. Vor allem die fest gegebene Endzeit $t_f$ wirft zunächst die Frage auf, ob für diese Zeitdauer das Steuerungsproblem überhaupt lösbar ist. Um diese Frage zu beantworten wurde das Optimalsteuerungsproblem \ref{prob:MaxRF} und deren Zielfunktion wie in Anhang \ref{kap:OptTf} transformiert auf das Optimalsteuerungsproblem \ref{prob:MaxRFEndzeit}. Bei diesem liegt das Ziel nun darin, die optimale = minimale Endzeit $t_f$ unter Einhaltung der Start- und Endbedingungen zu bestimmen. Aus den Versuchen 1 (Anhang \ref{kap:Versuch0_OptTf}) und 2 (Anhang \ref{kap:Versuch1_OptTf}) ergeben sich die optimalen Endzeiten $t_f = 279,2113 \ s$ und $t_f = 515,8404 \ s$. Da diese kleiner sind als als die gegebene Endzeit $t_f = 1800 \ s$, ist das Steuerungsproblem demnach lösbar.
 
-Um nun zufriedenstellende Ergebnisse zu erreichen werden verschiedene Versuche aufgestellt, in welchen verschiedene Parameter und die gegebene Endzeit $t_f$ variieren, beziehungsweise neue Parameter und Beschränkungen eingeführt sind. 
-
+In weiteren Versuchen mit dem Steuerungsproblem \ref{prob:MaxRF}, Anhang \ref{kap:Versuch1}, \ref{kap:Versuch2}, \ref{kap:Versuch3} und \ref{kap:Versuch4} variieren verschiedene Parameter und die gegebene Endzeit $t_f$, beziehungsweise werden neue Parameter und Beschränkungen eingeführt. Ziel dieser Versuche ist es, somit aussagekräftige Ergebnisse für das Problem zu erhalten, welche auch die physikalischen Kriterien erfüllen:
 \begin{itemize}
-\item In Versuch \ref{kap:Versuch1} wird die gegebenen Endzeit $t_f$ von $1800 \ s$ einmal auf $t_f = 300$ (Versuch \ref{kap:Versuch11}) und einmal auf $t_f = 350$ (Versuch \ref{kap:Versuch12}) reduziert. 
+\item \textbf{Versuch 1:} In Versuch 1 (Anhang \ref{kap:Versuch1}) wird die gegebenen Endzeit $t_f$ von $1800 \ s$ einmal auf $t_f = 300$ (Versuch 1.1, Anhang \ref{kap:Versuch11}) und einmal auf $t_f = 350$ (Versuch 1.2, Anhang \ref{kap:Versuch12}) reduziert. 
 %
-\item 
+\item \textbf{Versuch 2:} In Versuch 2 (Anhang \ref{kap:Versuch2}) wird neben der gegebenen Endzeit $t_f$ auch die Starthöhe $h_0 = 4000 \ m$ angepasst. Die gegebene Endzeit wird von $1800 \ s$ einmal auf $t_f = 300$ (Versuch 2.1, Anhang \ref{kap:Versuch21}) und einmal auf $t_f = 350$ (Versuch 2.2, Anhang \ref{kap:Versuch22}) reduziert.
 %
-\item In Versuch \ref{kap:Versuch3} wird das Startgewicht $m$ und die Endzeit $t_f$ angepasst. Damit wird das Startgewicht einem real vorkommenden Startgewicht $m = 500.000 \ kg$ für das Flugzeug A380-800 angepasst. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert.
+\item \textbf{Versuch 3:} In Versuch 3 (Anhang \ref{kap:Versuch3}) wird das Startgewicht $m$ und die Endzeit $t_f$ angepasst. Damit wird das Startgewicht einem real vorkommenden Startgewicht $m = 500.000 \ kg$ für das Flugzeug A380-800 angepasst. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch 3.1, Anhang \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch 3.2, Anhang \ref{kap:Versuch32}) reduziert. Bei diesen Versuchen wurde des Weitern die Anzahl an Diskretisierungen erhöht. Dies hat zwar eine höhere Berechnungsdauer zur Folge, verbesserte allerdings die Ergebnisse enorm.
 %
-\item In Versuch \ref{kap:Versuch4} werden zum angepassten Startgewicht $m = 500.000 \ kg$ und der angepassten Endzeit $t_f$ auch noch zusätzliche physikalische Boxschranken gesetzt, die das Problem und das Flugzeug betreffen. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch \ref{kap:Versuch31}) und einmal auf $t_f = 600$ (Versuch \ref{kap:Versuch32}) reduziert.
+\item \textbf{Versuch 4:} In Versuch 4 (Anhang \ref{kap:Versuch4}) werden zum angepassten Startgewicht $m = 500.000 \ kg$ und der angepassten Endzeit $t_f$ auch noch zusätzliche physikalische Boxschranken gesetzt, die das Problem und das Flugzeug betreffen. Die gegebenen Endzeit $t_f$ wird von $1800 \ s$ einmal auf $t_f = 550$ (Versuch 4.1, Anhang \ref{kap:Versuch41}) und einmal auf $t_f = 600$ (Versuch 4.2, Anhang \ref{kap:Versuch42}) reduziert.
 \end{itemize}
+Grundsätzlich wurde bei diesen Versuchen kein Ergebnis mit $\texttt{exitflag} = 1$ erreicht, also ein mögliches lokales oder globales Optimum, sondern nur Lösungen mit maximal $\texttt{exitflag} = 2$. Daher gilt es zunächst kritisch den Ergebnissen gegenüber zu sein. Es zeichnet sich jedoch bei der Mehrheit der Ergebnisse eine gemeinsame Steuerstrategie heraus, welche auch mit den Ergebnissen aus den Versuchen 0 und 1 (Anhang \ref{kap:Versuch0_OptTf} und \ref{kap:Versuch1_OptTf}) korrelieren.
+
+Für die Beschreibung dieser gemeinsamen Steuerstrategie wird das Ergebnis von Versuch 1.1 (Abbildung \ref{img:img:test_1_1}) betrachtet. Darin ist zu beobachten, dass die Steuerung Schub sich nur der Schranken der zulässigen Menge bedient, also entweder $T_{\max}$ oder $T_{\min}$ einstellt. Wie aus der Funktion \ref{equ:state_space} ersichtlich wird, beeinflusst der Schub lediglich die Änderung der Geschwindigkeit und damit auch das Verhalten der Geschwindigkeit. Bei der Steuerung Anstellwinkel zeichnet sich ein anderes Verhalten ab. Hier werden nicht nur die Schranken der zullässigen Menge, sondern auch reelle Werte dazwischen eingestellt. Ebenfalls aus \ref{equ:state_space} ersichtlich, beeinflusst der Auftriebsbeiwert nicht nur die Änderung der Geschwindigkeit, sondern auch die Änderung des Anstellwinkels. Die gemeinsame Strategie aus Schub und Auftriebsbeiwert lautet zu Beginn daher, das Flugzeug möglichst schnell mit $T_{\max}$ auf eine hohe Geschwindigkeit beschleunigen und diese dann zu halten. Hierdurch zeichnet sich eine hohe gleichbleibende Änderung der zu optimierenden Reichweite aus. Um das Endziel $h_f = 10668 \ m$ und mit dem Antstellwinkel $\gamma_f = 0 \ ^\circ$ zu erreichen, wird kurz vor erreichen der Endzeit $t_f$ der Schub vollständig auf $T_{\min}$ gesetzt und ein maximaler Auftriebsbeiwert $C_{L, \max}$ eingestellt. Diese Einstellungen rufen schnelle Veränderungen des Anstellwinkels und der Geschwindigkeit hervor. Da die Änderung der Flughöhe genau von diesen beiden Zustandsvariablen abhängig ist, wird durch deren Reduzierung ein Nicken des Flugzeuges erreicht, welches am Verlauf der Flughöhe ersichtlich ist. Abschließend wird so die Endposition des horizontal Fluges auf einer Höhe von $h_f = 10668 \ m$ erreicht, wobei die Steuerung so stark ein greift, dass die Geschwindigkeit nahe bei $v_f = 0$ liegt. Dieses Verhalten scheint aber aufgrund des gegebenen Modells und Problems plausibel zu sein.
+
+Bei dem Ergebnis aus Versuch 3.2 (Anhang \ref{\ref{kap:Versuch32}) zeigt sich der Einfluss der gesetzten Endzeit $t_f$. Während sich die Steuerung zunächst wie bei der Mehrheit verhält, wird vor allem die zweite Hälfte des Zeitraumes anders gestaltet. Es steht der Steuerung ein so großes Zeitfenster zu Verfügung, um das gewünschte Endziel zu erreichen, sodass nur eine Anpassung des Auftriebsbeiwertes nötig ist. Das hat zur Folge, dass der Schub konstant auf $T_{\max}$ gehalten wird, um die Geschwindigkeit monoton zu erhöhen. Über die Anpassung des Auftriebsbeiwertes wird ab der zweiten Zeithälfte dann der Anstellwinkel reduziert und damit auch die Höhe, wodurch das Endziel erreicht wird.  
+
+Das Ergebnis aus Versuch 4.2 (Anhang \ref{\ref{kap:Versuch42}) verhält sich ähnlich zum Ergebnis aus Versuch 3.2. Jedoch ist hier zu beobachten, dass mit der möglichen Steuerung die physikalische Grenze der maximal Geschwindigkeit erreicht wird und deshalb die Steuerung reduziert werden muss. Diese wird dahingehend angepasst, dass die Geschwindigkeit auf maximalem Niveau $v_{\max}$ bis zum Endpunkt gehalten wird, um die Reichweite zu maximieren.
+
+Die Ergebnisse aus den Versuchen 1.2 (Anhang \ref{\ref{kap:Versuch12}) und (Anhang \ref{\ref{kap:Versuch21}) sind nicht plausibel, da bei beiden negative Geschwindigkeiten erreicht werden.
 
 
 
@@ -157,23 +189,6 @@ Um nun zufriedenstellende Ergebnisse zu erreichen werden verschiedene Versuche a
 
 
 
-
-
-
-
-
-%Plausible Ergebnisse, nach dem Aspekt der physikalischen Möglichkeiten, wurden in den Versuchen \ref{kap:Versuch11}, \ref{kap:Versuch31} und  \ref{kap:Versuch41} erreicht. Ausschlaggebender Parameter stellt die Endzeit $t_f$ dar, welche über die Qualität des Ergebnisses bestimmt.
-%
-%Wie ist der Code / technische Umsetzung 
-%
-%Versuche / Probleme 
-%
-%Ergebnisse
-%
-%diskretisierung N=100 mehr bedeutet deutlich größeren Aufwand 
-%
-%Gedanken wie der Verlauf aussehen könnte:\\
-%Am Anfang maximaler Schub und maximaler Auftriebsbeiwert, um so schnell wie möglich die gewünschte Reisehöhe zu erhalten. Auftriebsbeiwert kann dann reduziert werden, um die Geschwindigkeit zu erhöhen. Dies bewirkt eine höhere Geschwindigkeit, wodurch die zurückgelegte Strecke maximiert wird.
 
 
 
