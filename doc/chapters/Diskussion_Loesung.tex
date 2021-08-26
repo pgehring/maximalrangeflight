@@ -3,14 +3,14 @@
 \section{Direkte Lösungsverfahren - Ergebnisse und Probleme}
 Das Optimalsteuerungsproblem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} ist in die Form von Problem \ref{prob:EndNichtOpt} umgestellt und wird technisch in Anhang \ref{Anhang:DirektV} mit \textit{MATLAB} umgesetzt und gelöst.
 
-Zunächst werden beide Optimierungsverfahren, welche in Kapitel \ref{kap:OptVerfahren} vorgestellt werden, auf das Problem in Versuch 0 (Anhang \ref{kap:Versuch0}) angewendet. Während das SQP-Verfahren in Versuch 0.1 (Anhang \ref{kap:Versuch01}) zu einem Ergebnis kommt, welches plausibel erscheint, liefert das Innere-Punkte-Verfahren in Versuch 0.1 (Anhang \ref{kap:Versuch02}) ein stark oszilierendes, nicht plausibles Ergebnis.
+Zunächst werden beide Optimierungsverfahren, welche in \ref{kap:OptVerfahren} vorgestellt werden, auf das Problem in Versuch 0 (Anhang \ref{kap:Versuch0}) angewendet. Während das SQP-Verfahren in Versuch 0.1 (Anhang \ref{kap:Versuch01}) zu einem Ergebnis kommt, welches plausibel erscheint, liefert das Innere-Punkte-Verfahren in Versuch 0.1 (Anhang \ref{kap:Versuch02}) ein stark oszilierendes, nicht plausibles Ergebnis.
 
 Daher wurde im weiteren Vorgehen eine numerische Untersuchung der beiden Optimierungsverfahren durchgeführt. Für die Untersuchung wird die Anzahl an benötigten Iterationen, der erreichte Funktionswert und die Zulässigkeit des Ergebnisses herangezogen. In Abbildung \ref{img:Vergleich_SQP_IP} zeigt sich, dass das SQP-Verfahren für den selben Startwert, sowohl schneller konvergiert, als auch einen kleineren Funktionswert nach Abbruch des Verfahrens besitzt. Gründe für dieses Verhalten könnten darin liegen, dass sich beide Steuerungen und teilweise auch die Zustandsvariablen am Rand der zulässigen Menge bewegen und die Barrierefunktion beim IP-Verfahren die Iterierten von den Grenzen der Ungleichheitsbedingungen fernhält \cite{Matlab2016}. In den nachfolgenden numerischen Versuchen wird deshalb stets das SQP-Verfahren verwendet.
 
 \begin{figure}[htbp]
     \begin{center}
         \includegraphics{images/03_TechnischeUmsetzung/Vergleich_SQP_IP.pdf}
-        \caption{Vergleich von IP- und SQP-Verfahren.}\label{img:Vergleich_SQP_IP}
+        \MyCaption{Vergleich von IP- und SQP-Verfahren}{} \label{img:Vergleich_SQP_IP}
     \end{center}
 \end{figure}
 
