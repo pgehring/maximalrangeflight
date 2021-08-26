@@ -7,9 +7,7 @@ Unter der Diskretisierung wird die Aufgabe verstanden, für feste Zeitpunkte $t_
 
 Für die Diskretisierung wird daher zunächst ein Gitter erzeugt, welches das Problem in explizite $N$ Diskretisierungspunkte unterteilt. Dieses Gitter 
 \[\mathbb{G}_h := \lbrace t_0 < t_1 < ... < t_{N-1} = t_f \rbrace\]
-mit den Schrittweiten 
-\[h_i = t_{i+1} - t_i \ \ \ \ \forall i = 0,...,N-2\]
-muss dabei nicht zwingend äquidistant unterteilt sein. Es stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
+mit den Schrittweiten $h_i = t_{i+1} - t_i \ \forall i = 0,...,N-2$ muss dabei nicht zwingend äquidistant unterteilt sein. Es stellt die Basis für die Parametrisierung der Steuerung und das Diskretisierungsverfahren für die Differentialgleichung:
 \begin{itemize}
     \item \textbf{Parametrisierung der Steuerung:} Dabei wird die Steuerfunktion $U$ durch eine von der Schrittweite abhängige Steuerfunktion $U_h$ ersetzt. Diese Steuerfunktion hängt dann nur noch von endlich vielen Parametern ab.
 

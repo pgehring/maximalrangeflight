@@ -178,6 +178,19 @@
   \end{table}
 \end{frame}
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 \section{Lösung mit direkten Verfahren}
 \begin{frame}
   \begin{block}{Direkte Formulierung des Optimierungsproblems}
@@ -213,31 +226,89 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Versuchsdurchführung mit direktem Löser}
-  \begin{itemize}
-    \item Simulation des Modells mit vorgegebenen Parametern
-    \begin{itemize}
-      \item[\(\rightarrow\)] Ergebnisse nicht gut interpretierbar
-    \end{itemize}
-    \item Anpassung der Parameter zu physikalisch und technisch sinnvollen Werten
-    \begin{itemize}
-      \item[\(\rightarrow\)] teils interpretierbare Ergebnisse
-    \end{itemize}
-  \end{itemize}
+  	\frametitle{Lösen des Optimierungsproblems}
+  	\begin{itemize}
+  		\item Programmcode: Parameterabhängig und in Klassen strukturiert, für die Wiederverwendbarkeit.
+  		\item \textit{MATLAB}-Methode \texttt{fmincon}:
+  			\begin{itemize}
+  				\item[\(\rightarrow\)] Benötigt: Nebenbedingungsfunktionen und Startwert.
+      			\item[\(\rightarrow\)] Lösen mit SQP-Verfahren oder Innere-Punkte-Verfahren.
+      			\item[\(\rightarrow\)] Ausgabe: Lösung und Abbruchkriterium.
+    		\end{itemize}
+    	\item Abbruchkriterium: Auskunft über die Qualität der berechneten Lösung.
+  	\end{itemize}
 \end{frame}
 
 \begin{frame}
-  \includegraphics[scale=.75]{images/test_0_1.pdf}
+	\frametitle{Versuch mit gegebenen Parametern und SQP-Verfahren}
+	Abbruchkriterium: -2 (Kein zulässiger Punkt gefunden)
+  	\begin{center}
+  		\includegraphics[scale=.6]{images/test_0_1.pdf}
+  	\end{center}
 \end{frame}
 
 \begin{frame}
-  % TODO: section title aus
-  \frametitle{Vergleich von Optimierungs-Verfahren}
-  \includegraphics[scale=0.75]{images/Vergleich_SQP_IP.pdf}
-  \begin{itemize}
-    \item Zuverlässigkeit von \texttt{fmincon} und dem SQP-Verfahren konvergiert gegen \texttt{0}
-  \end{itemize}
+	\frametitle{Versuch mit gegebenen Parametern und Innere-Punkte-Verfahren}
+  	Abbruchkriterium: -2 (Kein zulässiger Punkt gefunden)
+  	\begin{center}
+  		\includegraphics[scale=.6]{images/test_0_2.pdf}
+  	\end{center}
 \end{frame}
+
+\begin{frame}
+  	\frametitle{Vergleich von SQP- und Innere-Punkte-Verfahren}
+  	\begin{center}
+  		\includegraphics[scale=0.6]{images/Vergleich_SQP_IP.pdf}
+  	\end{center}
+  	\begin{itemize}
+    	\item SQP-Verfahren konvergiert schneller und erreicht kleineren Zielfunktionswert.
+    	\item Auswahl des SQP-Verfahrens für nachfolgende Untersuchungen.
+  	\end{itemize}
+\end{frame}
+
+\begin{frame}
+  	\begin{center}
+ 	\begin{block}{Angepasstes Optimalsteuerungsproblem - Maximal Range Flight}
+    \scriptsize   
+    Für das Optimalsteuerungsproblem ergibt sich mit dem Zustandsvektor $\tilde{X}(s) = (h(s),\gamma(s),x(s),v(s),t_f)^T$ und der Steuerfunktion $\tilde{U}(s) = (T(s),C_L(s))^T$ das Problem:
+	\begin{align*}
+		\min_{U} F(\tilde{X},\tilde{U}) &:= t_f \int^{\tilde{t}_f = 1}_{t_0 = 0} f_0(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) ds = t_f \\\
+		\text{unter} \hspace{10mm} \dot{\tilde{X}}(t) &= t_f f(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) = \begin{pmatrix}
+		t_f v(t) \sin(\gamma(t)) \\ 
+		t_f \left( \frac{F \alpha e^{-\beta h(t)} v(t) C_L(t)}{2m} - \frac{g \cos(\gamma(t))}{v(t)} \right) \\ 
+		t_f v(t) \cos(\gamma(t)) \\ 
+		t_f \left( \frac{T(t)}{m} - \frac{(C_{D_0} + k C_L^2(t)) F \alpha e^{-\beta h(t)} v^2(t)}{2m} - g \sin(\gamma(t)) \right) \\
+0
+		\end{pmatrix} \\\
+		(h,\gamma,x,v)(t_0) &= (h_0,\gamma_0,x_0,v_0) \\\
+		(h,\gamma)(\tilde{t}_f) &= (h_f,\gamma_f) \\\
+		q(v(s),h(s)) &\leq q_{\max}  \ \ \ \ \forall s \in [t_0,\tilde{t}_f]\\\
+		U(s) &= (T(s),C_L(s))^T \in \mathcal{U} \ \ \ \ \forall s \in [t_0,\tilde{t}_f]
+	\end{align*}
+  	\end{block}
+  	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Versuch: Optimierung der Endzeit $t_f$}
+  	\begin{center}
+  		\includegraphics[scale=.6]{images/test_0.pdf}
+  	\end{center}
+  	\begin{itemize}
+    	\item Abbruchkriterium: 1 (Optimum gefunden)
+    	\item Optimalsteuerungsproblem für gegebenen Zeitraum $0 - 1800 \ s$ lösbar.
+  	\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
 
 \begin{frame}
   \includegraphics[scale=.75]{images/test_1_1.pdf}

@@ -456,7 +456,7 @@ pdfborder=0 0 0	% keine Box um die Links!
 %------------------------------------------------------------------------------
 \tableofcontents
 \addcontentsline{toc}{chapter}{Inhaltsverzeichnis}
-\setcounter{SeitenzahlSpeicher}{\value{page}}
+
 % Abbildungsverzeichnis
 % \clearpage
 \listoffigures
@@ -469,7 +469,10 @@ pdfborder=0 0 0	% keine Box um die Links!
 
 % Abkuerzungsverzeichnis
 %\clearpage
-\input{chapters/Abkuerzungsverzeichnis}
+%\input{chapters/Abkuerzungsverzeichnis}
+
+\setcounter{SeitenzahlSpeicher}{\value{page}}
+
 %------------------------------------------------------------------------------
 % Hauptteil
 %------------------------------------------------------------------------------
