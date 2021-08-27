@@ -1,7 +1,7 @@
 \chapter{Direkte Lösungsverfahren - Versuche und Ergebnisse}\label{Anhang:DirektV}
 
 \section{Versuch 0}\label{kap:Versuch0}
-Bei diesem Versuch wird das gegebene Problem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} ohne Veränderungen gelöst. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch0} verwendet.
+Bei diesem Versuch wird das gegebene Problem \ref{prob:MaxRF} mit den Parametern aus Tabelle \ref{tab:ProblemPara} ohne Veränderungen gelöst. Für die beiden Versuche werden die Einstellungen aus Tabelle \ref{tab:Versuch0} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 0.1 und 0.2.}\label{tab:Versuch0}
@@ -51,7 +51,7 @@ Für die Ergebnisse von Versuch 0.1 (Anhang \ref{kap:Versuch01}) und Versuch 0.2
 
 
 \subsection{Ergebnis von Versuch 0.1}\label{kap:Versuch01}
-In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems da (kein zulässiger Punkt gefunden). 
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems dar (kein zulässiger Punkt gefunden). 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_1}
@@ -71,7 +71,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_0_1_stau
 
 
 \subsection{Ergebnis von Versuch 0.2}\label{kap:Versuch02}
-In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems da (kein zulässiger Punkt gefunden).
+In Versuch 0.1 wird das Ergebnis in Abbildung \ref{img:test_0_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems dar (kein zulässiger Punkt gefunden).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_0_2}
@@ -98,7 +98,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 \newpage
 \section{Versuch 1}\label{kap:Versuch1}
-Die Problemstellung \ref{prob:MaxRF} gibt den Parametern \ref{tab:ProblemPara} eine feste Endzeit $t_f = 1800 \ s$ beziehungsweise einen Zeitraum vor, in welchem das Problem gelöst werden soll. In diesem Versuch wird diese nun verkürzt, auf $t_f = 300 \ s$ und $t_f = 350 \ s$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch1} verwendet.
+Die Problemstellung \ref{prob:MaxRF} gibt den Parametern \ref{tab:ProblemPara} eine feste Endzeit $t_f = 1800 \ s$ beziehungsweise einen Zeitraum vor, in welchem das Problem gelöst werden soll. In diesem Versuch wird diese nun verkürzt auf $t_f = 300 \ s$ und $t_f = 350 \ s$. Für die beiden Versuche werden die Einstellungen aus Tabelle \ref{tab:Versuch1} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 1.1 und 1.2.}\label{tab:Versuch1}
@@ -150,7 +150,7 @@ Für die Ergebnisse von Versuch 1.1 (Anhang \ref{kap:Versuch11}) und Versuch 1.2
 
 
 \subsection{Ergebnis von Versuch 1.1}\label{kap:Versuch11}
-In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems dar, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 1.1 wird das Ergebnis in Abbildung \ref{img:test_1_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_1}
@@ -169,7 +169,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 
 \subsection{Ergebnis von Versuch 1.2}\label{kap:Versuch12}
-In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems dar, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
+In Versuch 1.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$. Die Unstetigkeiten im Verlauf des Anstellwinkels und der Geschwindigkeit deuten jedoch auf kein physikalisch plausibles Ergebnis hin.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_1_2}
@@ -201,7 +201,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_1_2_stau
 
 \newpage
 \section{Versuch 2}\label{kap:Versuch2}
-Zusätzlich zur verkürzten Endzeit wie in Versuch \ref{kap:Versuch1} wird in Versuch 2 auch die Starthöhe des Flugzeuges angepasst. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch2} verwendet.
+Zusätzlich zur verkürzten Endzeit wie in Versuch \ref{kap:Versuch1} wird in Versuch 2 auch die Starthöhe des Flugzeuges angepasst. Für die beiden Versuche werden die Einstellungen aus Tabelle \ref{tab:Versuch2} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 2.1 und 2.2.}\label{tab:Versuch2}
@@ -254,7 +254,7 @@ Für die Ergebnisse von Versuch 2.1 (Anhang \ref{kap:Versuch21}) und Versuch 2.2
 
 
 \subsection{Ergebnis von Versuch 2.1}\label{kap:Versuch21}
-In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems da (kein zulässiger Punkt gefunden).
+In Versuch 2.1 wird das Ergebnis in Abbildung \ref{img:test_2_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = -2$ kein Optimum des Problems dar (kein zulässiger Punkt gefunden).
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_1}
@@ -273,7 +273,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 
 \subsection{Ergebnis von Versuch 2.2}\label{kap:Versuch22}
-In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 2.2 wird das Ergebnis in Abbildung \ref{img:test_1_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_2_2}
@@ -303,7 +303,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_0_2_stau
 
 \newpage
 \section{Versuch 3}\label{kap:Versuch3}
-Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Anhang \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560000 \ kg$ \cite{A380Tech}. Gewählt wird eine Masse von $500000 \ kg$. Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch3} verwendet.
+Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Anhang \ref{kap:Versuch1}) wird nun zusätzlich das Gewicht des Flugzeuges angepasst. Das maximale Startgewicht eines A380-800 beträgt max. $560000 \ kg$ \cite{A380Tech}. Gewählt wird eine Masse von $500000 \ kg$. Für die beiden Versuche werden die Einstellungen aus Tabelle \ref{tab:Versuch3} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 3.1 und 3.2.}\label{tab:Versuch3}
@@ -357,7 +357,7 @@ Für die Ergebnisse von Versuch 3.1 (Anhang \ref{kap:Versuch31}) und Versuch 3.2
 
 
 \subsection{Ergebnis von Versuch 3.1}\label{kap:Versuch31}
-In Versuch 3.1 wird das Ergebnis in Abbildung \ref{img:test_3_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-12}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 3.1 wird das Ergebnis in Abbildung \ref{img:test_3_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-12}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_1}
@@ -376,7 +376,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_3_1_stau
 
 
 \subsection{Ergebnis von Versuch 3.2}\label{kap:Versuch32}
-In Versuch 3.2 wird das Ergebnis in Abbildung \ref{img:test_3_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-12}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 3.2 wird das Ergebnis in Abbildung \ref{img:test_3_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-12}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_3_2}
@@ -412,7 +412,7 @@ Zusätzlich zur verkürzten Endzeit wie in Versuch 1 (Anhang \ref{kap:Versuch1})
 %
 \item \textbf{Maximale Reichweite:} Die maximale Reichweite bei maximaler Auslastung beträgt $15200000 \ m$.
 %
-\item \textbf{Anstellwinkel:} Für die Boxschranken des Anstellwinkels wurde $\gamma \in [-80,80]$ in Grad gewählt. 
+\item \textbf{Anstellwinkel:} Für die Boxschranken des Anstellwinkels wurde $\gamma \in [-80^{\circ} , 80^{\circ}]$ gewählt. 
 \end{itemize}
 Damit ergibt sich das veränderte Optimalsteuerungsproblem:
 \begin{align*}
@@ -428,7 +428,7 @@ v(t) &\in [0,266] & & \forall t \in [t_0,t_f] \\
 T(t) &\in [T_{\min},T_{\max}] & & \forall t \in [t_0,t_f] \\
 C_L(t) &\in [C_{L, \min},C_{L, \max}] & & \forall t \in [t_0,t_f]
 \end{align*}
-Für die beiden Versuche werden die folgenden Einstellungen aus Tabelle \ref{tab:Versuch4} verwendet.
+Für die beiden Versuche werden die Einstellungen aus Tabelle \ref{tab:Versuch4} verwendet.
 \begin{table}[H]
     \centering
     \caption{Einstellungen von Versuch 4.1 und 4.2}
@@ -481,7 +481,7 @@ Für die Ergebnisse von Versuch 4.1 (Anhang \ref{kap:Versuch41}) und Versuch 4.2
 
 
 \subsection{Ergebnis von Versuch 4.1}\label{kap:Versuch41}
-In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 4.1 wird das Ergebnis in Abbildung \ref{img:test_4_1} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_1}
@@ -500,7 +500,7 @@ Der Verlauf des beschränkten Staudrucks ist in Abbildung \ref{img:test_4_1_stau
 
 
 \subsection{Ergebnis von Versuch 4.2}\label{kap:Versuch42}
-In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum des Problems da, da die Änderung des Zustandsvektors $z$ kleiner ist die gegebene Schrittweitentoleranz von hier $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 4.2 wird das Ergebnis in Abbildung \ref{img:test_4_2} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 2$ ein mögliches Optimum dar, da die Änderung des Zustandsvektors $z$ kleiner ist die Schrittweitentoleranz $SW_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/direct_sol/results/test_4_2}

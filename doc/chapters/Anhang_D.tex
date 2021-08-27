@@ -1,7 +1,7 @@
 \chapter{Bestimmung der optimalen Endzeit des Modells}\label{kap:OptTf}
 
 \section{Transformation des gegebenen Optimalsteuerungsproblems}
-Bei Problem \ref{prob:MaxRF} ist das Ziel die Zurückgelegte Strecke $x(t)$ zu maximieren. Dieses Problem lässt sich aber auch in ein Problem transformieren, bei welchem die Endzeit $t_f$, unter Einhaltung der Start- und Endbedingungen, minimiert werden soll. Hierfür müssen die Funktionen $g$ und $f_0$ angepasst werden, um anschließend das Problem mit freier Endzeit auf ein Problem mit fester Endzeit zu transformieren \cite{Gerdts2011}.
+Bei Problem \ref{prob:MaxRF} ist das Ziel die zurückgelegte Strecke $x(t)$ zu maximieren. Dieses Problem lässt sich aber auch in ein Problem transformieren, bei welchem die Endzeit $t_f$, unter Einhaltung der Start- und Endbedingungen, minimiert werden soll. Hierfür müssen die Funktionen $g$ und $f_0$ angepasst werden, um anschließend das Problem mit freier Endzeit auf ein Problem mit fester Endzeit zu transformieren \cite{Gerdts2011}.
 
 Für die Funktionen $g : \R^{n_X} \to \R$ und $f_0 : \R^{n_X} \times \R^{n_U} \to \R$ ergibt sich somit
 \begin{itemize}
@@ -16,7 +16,7 @@ Anschließend wird eine neue feste Endzeit $\tilde{t}_f = 1$, sowie eine neue Ze
 \end{split}\] 
 Nun wird nach der Zeitvariablen $s$ differenziert:
 \[\dfrac{d \tilde{X}(s)}{ds} = \dfrac{d X(s \cdot t_f)}{ds} = t_f \dfrac{d x(s \cdot t_f)}{dt} = t_f f(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) \]
-Damit lässt sich das Zielfunktional folgendermaßen um schreiben. Aus
+Damit lässt sich das Zielfunktional umschreiben. Aus
 \[\begin{split}
 F(X,U) &= g(x(t_f)) + \int^{t_f}_{t_0} f_0(t,X(t),U(t)) dt \\\
 \Rightarrow F(\tilde{X},\tilde{U}) &= g(\tilde{X}(\tilde{t}_f)) + t_f \int^{\tilde{t}_f = 1}_{t_0 = 0} f_0(s \cdot t_f,\tilde{X}(s),\tilde{U}(s)) ds 
@@ -115,7 +115,7 @@ Für die Ergebnisse von Versuch 0 (Anhang \ref{kap:Versuch0_OptTf}) und Versuch 
 
 
 \subsection{Ergebnis Versuch 0}\label{kap:Versuch0_OptTf}
-In Versuch 0 wird das Ergebnis in Abbildung \ref{img:test_0_OptTf} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist als die Optimalitätstoleranz $OT_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 0 wird das Ergebnis in Abbildung \ref{img:test_0_OptTf} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner als die Optimalitätstoleranz $OT_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$ ist.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_0}
@@ -135,7 +135,7 @@ Der Verlauf des Beschränkten Staudrucks ist in Abbildung \ref{img:test_0_staudr
 
 
 \subsection{Ergebnis Versuch 1}\label{kap:Versuch1_OptTf}
-In Versuch 1 wird das Ergebnis in Abbildung \ref{img:test_1_OptTf} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner ist als die Optimalitätstoleranz $OT_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$.
+In Versuch 1 wird das Ergebnis in Abbildung \ref{img:test_1_OptTf} erreicht. Dies stellt aufgrund des Abbruchkriteriums $EF = 1$ ein Optimum des Problems da, da das Optimalitätsmaß kleiner als die Optimalitätstoleranz $OT_{tol} = 10^{-6}$ und die maximale Verletzung der Beschränkungen kleiner ist als Beschränkungstoleranz $BS_{tol} = 10^{-6}$ ist.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=\textwidth]{../code/Freie_Endzeit_sol/results/test_1}

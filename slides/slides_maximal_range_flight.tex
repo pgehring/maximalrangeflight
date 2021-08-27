@@ -315,6 +315,63 @@
 
 % 3. Folie
 \section{Lösung mit indirekten Verfahren}
+
+
+\begin{frame}
+  % TODO: section title aus
+  \frametitle{Vorgehensweise}
+
+  \begin{itemize}
+    \item Anwendung des \textbf{Miniumumsprinzips von Pontryagin}
+            \begin{itemize}
+            \item Hamilton-Funktion
+            \item Minimumbedingung
+            \item Aufstellen Synthese-Steuerung für $C_L(t)$ und $T(t)$
+            \item Adjungierte DGL, Transversaltätsbedingung und Konstanz        
+     \end{itemize}
+    \item Transformation in Zweipunkt-Randwertproblem
+    \item Lösen mittels Einfach-und Mehrfachschießverfahren
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  % TODO: section title aus
+  \frametitle{Schwierigkeiten beim Lösen mittels Einfach- und Mehrfachschießverfahren} 
+
+  \begin{itemize}
+    \item Lösung mittels Einfach- und Mehrfachschießverfahren scheiterte an numerischen Schwierigkeiten
+    \item Bestimmung der Nullstellen von $R(Z(t_0),Z(t_f))$ nicht möglich durch singuläre Jacobimatrix in Newton-Verfahren
+    \item Versuch das unterbestimmte Gleichungssystem mittels Gauss-Seidel- Vefahren zu lösen gelang ebenfalls nicht
+    \item Folglich konnten keine Ergebnisse mit den Schießverfahren berechnet werden
+  \end{itemize}
+\end{frame}
+
+% Letzte Folie
+\section{Fazit und Ausblick}
+\begin{frame}
+  % TODO: section title aus
+  \frametitle{Fazit und Ausblick}
+    \vspace{1em}
+\small
+  \begin{itemize}
+    \item \textbf{Optimalsteuerungsproblem}: Steigflug von Anfangspunkt zu einer Reiseflughöhe in fester Zeit, wobei zurückgelegte Strecke maximal
+     \item Lösen mit \textbf{direktem Verfahren} unter Verwendung von explizitem Euler- und SQP-Verfahren
+      \item Umformulieren mit Hilfe des \textbf{Minimumsprinzips von Pontryagin} in ein Zweipunkt-Randwertproblem 
+       \item Lösen mittels Einfach- und Mehrfachschießverfahren scheiterte an \textbf{numerischen Schwierigkeiten}
+        \item Numerische Untersuchung ergab, dass sich die direkten Verfahren eignen, das gegebene Optimalsteuerungsproblem zu lösen.  	 \item Betrachtung des Optimalsteuerungsproblems mit anderen Methoden, wie dem Homotopieverfahren, wurde offen gelassen
+
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[plain]{}
+\end{frame}
+
+
+% Backup Folien
+\section*{Zusatz}
+
+
 \begin{frame}
   \frametitle{Minimumprinzip von Pontryagin}
    \begin{center}
@@ -334,7 +391,6 @@
 \end{block}
  \end{center}
 \end{frame}
-
 
 
 
@@ -392,6 +448,112 @@ Für die Bestimmung der Steuerfunktion des Auftriebsbeiwerts lässt sich die Ham
         \end{enumerate}
         %
         \end{enumerate}
+      \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+          \item[2.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = 0 = C_{L, \min}$.
+        %
+        \item[3.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \min}$.
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+        \item[4.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = C_{L, \max}$.
+        %
+        \item[5.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} = 0$: Daraus folgt für die Steuerfunktion $C_L(t) = \text{beliebig} \in [C_{L, \min},C_{L, \max}]$.
+                \item[6.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = C_{L, \min}$.
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+   \item[7.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \max}$.
+        %
+        \item[8.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+        \[\begin{split}
+        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
+        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+        \end{split}\]
+        So folgt für die Steuerfunktion $C_L(t) = 0$. Es gilt also $C_L(t) = C_{L, \max}$.
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+      \begin{enumerate}
+\item[9.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
+\[\begin{split}
+\frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
+\frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
+\end{split}\]
+So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$. Für das Minimum bestimme man nun die Nullstellen von $\tilde{H}$:
+        \end{enumerate}
+      \end{block}
+\end{frame}
+
+
+  \setbeamertemplate{itemize/enumerate subbody begin}{  \tiny}
+\begin{frame}
+  \frametitle{Minimumprinzip von Pontryagin}
+    \tiny
+  \begin{block}{Synthesesteuerung}  
+        \begin{enumerate}
+\item[9.1.)] Für die Bestimmung der Nullstellen von $\tilde{H}$ gilt
+\[\begin{split}
+\tilde{H} \stackrel{!}{=} 0 &= - K_2(t) C_L^2(t) + K_1(t)C_L(t) \\\
+&= (- K_2(t) C_L(t) + K_1(t)) C_L(t) \\\
+0 &= K_1(t) - K_2(t)C_L(t) \\\
+C_L(t) &= \dfrac{K_1(t)}{K_2(t)}
+\end{split}\]
+So gilt $\tilde{H} = 0$ bei $C_L(t) = 0$ und $C_L(t) = \dfrac{K_1(t)}{K_2(t)}$ Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} < C_{L,\max}$, so gilt also $C_L(t) = C_{L, \max}$.
+%
+\item[9.2.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} > C_{L,\max}$, so gilt $C_L(t) = C_{L,\min}$.
+\item[9.3.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} = C_{L,\max}$, so gilt $C_L(t) = C_{L,\max} \vee C_{L,\min}$.
+    \end{enumerate}
       \end{block}
 \end{frame}
 
@@ -547,147 +709,5 @@ h(t_f) - h_f \\
 \end{frame}
 
 
-
-
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Schwierigkeiten}
-
-  \begin{itemize}
-    \item Lösung mittels Einfach- und Mehrfachschießverfahren scheiterte an numerischen Schwierigkeiten
-    \item Bestimmung der Nullstellen von $R(Z(t_0),Z(t_f))$ nicht möglich durch singuläre Jacobimatrix in Newton-Verfahren
-    \item Versuch das unterbestimmte Gleichungssystem mittels Gauss-Seidel- Vefahren zu lösen gelang ebenfalls nicht
-    \item Folglich konnten keine Ergebnisse mit den Schießverfahren berechnet werden
-  \end{itemize}
-\end{frame}
-
-% Letzte Folie
-\section{Fazit und Ausblick}
-\begin{frame}
-  % TODO: section title aus
-  \frametitle{Fazit und Ausblick}
-    \vspace{1em}
-\small
-  \begin{itemize}
-    \item \textbf{Optimalsteuerungsproblem}: Steigflug von Anfangspunkt zu einer Reiseflughöhe in fester Zeit, wobei zurückgelegte Strecke maximal
-     \item Lösen mit \textbf{direktem Verfahren} unter Verwendung von explizitem Euler- und SQP-Verfahren
-      \item Umformulieren mit Hilfe des \textbf{Minimumsprinzips von Pontryagin} in ein Zweipunkt-Randwertproblem 
-       \item Lösen mittels Einfach- und Mehrfachschießverfahren scheiterte an \textbf{numerischen Schwierigkeiten}
-        \item Numerische Untersuchung ergab, dass sich die direkten Verfahren eignen, das gegebene Optimalsteuerungsproblem zu lösen.  	 \item Betrachtung des Optimalsteuerungsproblems mit anderen Methoden, wie dem Homotopieverfahren, wurde offen gelassen
-
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[plain]{}
-\end{frame}
-
-
-% Backup Folien
-\section*{Zusatz}
-\begin{frame}
-  \frametitle{Minimumprinzip von Pontryagin}
-    \tiny
-  \begin{block}{Synthesesteuerung}  
-      \begin{enumerate}
-          \item[2.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
-        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = 0 = C_{L, \min}$.
-        %
-        \item[3.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} < 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\geq 0 \Rightarrow \text{Minimum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \min}$.
-        \end{enumerate}
-      \end{block}
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Minimumprinzip von Pontryagin}
-    \tiny
-  \begin{block}{Synthesesteuerung}  
-      \begin{enumerate}
-        \item[4.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
-        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = C_{L, \max}$.
-        %
-        \item[5.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} = 0$: Daraus folgt für die Steuerfunktion $C_L(t) = \text{beliebig} \in [C_{L, \min},C_{L, \max}]$.
-                \item[6.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} = 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        \frac{d \tilde{H}}{d C_L} = K_1(t) &\stackrel{!}{=} 0 \\\
-        \frac{d^2 \tilde{H}}{d C_L^2} = 0 &\geq 0 \Rightarrow \text{Minimum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = C_{L, \min}$.
-        \end{enumerate}
-      \end{block}
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Minimumprinzip von Pontryagin}
-    \tiny
-  \begin{block}{Synthesesteuerung}  
-      \begin{enumerate}
-   \item[7.)] $\mathbf{K_1(t) < 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} < 0$. Es gilt also $C_L(t) = C_{L, \max}$.
-        %
-        \item[8.)] $\mathbf{K_1(t) = 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-        \[\begin{split}
-        \frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) &\stackrel{!}{=} 0 \\\
-        \frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
-        \end{split}\]
-        So folgt für die Steuerfunktion $C_L(t) = 0$. Es gilt also $C_L(t) = C_{L, \max}$.
-        \end{enumerate}
-      \end{block}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Minimumprinzip von Pontryagin}
-    \tiny
-  \begin{block}{Synthesesteuerung}  
-      \begin{enumerate}
-\item[9.)] $\mathbf{K_1(t) > 0 \wedge K_2(t)} > 0$: Für die Ableitungen von $\tilde{H}$ ergeben sich
-\[\begin{split}
-\frac{d \tilde{H}}{d C_L} = - 2 K_2(t) C_L(t) + K_1(t) &\stackrel{!}{=} 0 \\\
-\frac{d^2 \tilde{H}}{d C_L^2} = - 2 K_2(t) &\leq 0 \Rightarrow \text{Maximum}
-\end{split}\]
-So folgt für die Steuerfunktion $C_L(t) = \dfrac{K_1(t)}{2 K_2(t)} > 0$. Für das Minimum bestimme man nun die Nullstellen von $\tilde{H}$:
-        \end{enumerate}
-      \end{block}
-\end{frame}
-
-
-  \setbeamertemplate{itemize/enumerate subbody begin}{  \tiny}
-\begin{frame}
-  \frametitle{Minimumprinzip von Pontryagin}
-    \tiny
-  \begin{block}{Synthesesteuerung}  
-        \begin{enumerate}
-\item[9.1.)] Für die Bestimmung der Nullstellen von $\tilde{H}$ gilt
-\[\begin{split}
-\tilde{H} \stackrel{!}{=} 0 &= - K_2(t) C_L^2(t) + K_1(t)C_L(t) \\\
-&= (- K_2(t) C_L(t) + K_1(t)) C_L(t) \\\
-0 &= K_1(t) - K_2(t)C_L(t) \\\
-C_L(t) &= \dfrac{K_1(t)}{K_2(t)}
-\end{split}\]
-So gilt $\tilde{H} = 0$ bei $C_L(t) = 0$ und $C_L(t) = \dfrac{K_1(t)}{K_2(t)}$ Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} < C_{L,\max}$, so gilt also $C_L(t) = C_{L, \max}$.
-%
-\item[9.2.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} > C_{L,\max}$, so gilt $C_L(t) = C_{L,\min}$.
-\item[9.3.)] Falls $C_L(t) = \dfrac{K_1(t)}{K_2(t)} = C_{L,\max}$, so gilt $C_L(t) = C_{L,\max} \vee C_{L,\min}$.
-    \end{enumerate}
-      \end{block}
-\end{frame}
 
 \end{document}
