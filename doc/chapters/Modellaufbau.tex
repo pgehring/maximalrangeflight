@@ -11,7 +11,7 @@ Im Folgenden wird ein Differentialgleichungssystem für den quasi-statischen Flu
 \end{itemize}
 Um die auf das Flugzeug einwirkenden Kräfte berechnen zu können, werden folgende Hilfsgrößen benötigt:
 \begin{itemize}
-    \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ der Nullluftwiderstandsbeiwert, $e$ die Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
+    \item Luftwiderstandsbeiwert: \[C_D(C_L(t)) := C_{D_0} + k \cdot C^2_L(t) \ \ \ \ \text{mit} \ \ \ \ k = \dfrac{1}{\pi \cdot e \cdot AR}\] wobei $C_{D0}$ den Nullluftwiderstandsbeiwert, $e$ den Oswaldfaktor und $AR$ die Streckung (engl. \textit{aspect ratio}) bezeichnet. Dabei sind $C_{D0}$ und $k$ abhängig von der Machzahl, jedoch wird dieser Effekt zur Vereinfachung ignoriert. 
     
     \item Luftdichte: \[\rho(h(t)) := \alpha \cdot e^{-\beta \cdot h(t)}\]  wobei für die Berechnung der höhenabhängigen Luftdichte ein einfaches Exponentialmodell verwendet wird.%https://wind-data.ch/tools/luftdichte.php
 
@@ -32,7 +32,7 @@ für die Geschwindigkeit $v$ aufstellen.
 Mit der Gleichung für die Zentripetalkraft $F_{ZP} = \dfrac{m v^2}{r}$ lässt sich die Differentialgleichung
 \[F_{ZP} := \dfrac{m v^2}{r} \Rightarrow \dot{\gamma}(t) = \dfrac{v(t)}{r} = \dfrac{F_{ZP}(t)}{m v(t)} = \dfrac{L(v(t),h(t),C_L(t)) - W \cos(\gamma(t))}{m v(t)}\]
 für den Anstellwinkel $\gamma$ aufstellen.
-Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen mittels der Geschwindigkeit und des Anstellwinkels bestimmen.
+Die Differentialgleichungen für die $h(t)$ und $x(t)$ lassen sich mittels der Geschwindigkeit und des Anstellwinkels bestimmen.
 \[\begin{split}
     \dot{x}(t) &= v(t) \cos(\gamma(t))\\\
     \dot{h}(t) &= v(t) \sin(\gamma(t))

@@ -46,7 +46,7 @@ Bei den indirekten Lösungsverfahren werden notwendige Bedingungen für eine opt
 %    \end{pmatrix}
 %\end{equation}
 
-Für die Notwendigen Optimalitätsbedingungen muss zunächst die Hamilton-Funktion aufgestellt werden. Diese ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0$) und $\lambda : [t_0,t_f] \to \R^{n_X}$ zu
+Für die notwendigen Optimalitätsbedingungen muss zunächst die Hamilton-Funktion aufgestellt werden. Diese ergibt sich mit $\lambda_0 \in \R$ ($\lambda_0 \geq 0$) und $\lambda : [t_0,t_f] \to \R^{n_X}$ zu
 \begin{equation} \label{equ:hamilt_func}
     \begin{split}
         H(X(t),U(t),\lambda(t)) &= \lambda_0 f_0(X(t),U(t)) + \lambda(t)^T f(X(t),U(t)) \\\
@@ -260,7 +260,7 @@ H(X^{\ast}(t),U^{\ast}(t), \lambda(t)) = const \ \in [t_0,t_f]
 
 
 \section{Aufstellen des Zweipunkt-Randwertproblems}\label{kap:ZPRand}
-Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem umgestellt werden.
+Um das Optimalsteuerungsproblem \ref{prob:MaxRF} mit indirekten Lösungsverfahren lösen zu können, muss dieses zunächst auf ein Zweipunkt-Randwertproblem \cite{Gerdts2011} umgestellt werden.
 
 \begin{problem}[Zweipunkt-Randwertproblem]\label{prob:ZweiRand}
     Seien $G : [t_0,t_f] \times \R^{n_Z} \to \R^{n_Z}$ und $R : \R^{n_Z} \times \R^{n_Z} \to \R^{n_Z}$ gegeben. Gesucht ist eine Lösung $Z$ des Randwertproblems
@@ -294,7 +294,7 @@ und für die Ableitung die Matrix
         J_G^{(8,1)} & J_G^{(8,2)} & 0 & J_G^{(8,4)} & J_G^{(8,5)} & J_G^{(8,6)} & J_G^{(8,7)} & J_G^{(8,8)}
     \end{pmatrix}
 \end{equation}
-mit den Einträgen \(J_G^{(i,j)}\), welche die parteiellen Ableitungen von \(G\) nach jeder Komponente von \(Z\) enthalten (vgl. \autoref{Anhang:Jacobi}).
+mit den Einträgen \(J_G^{(i,j)}\), welche die partiellen Ableitungen von \(G\) nach jeder Komponente von \(Z\) enthalten (vgl. \autoref{Anhang:Jacobi}).
 %
 \item Für $R(Z(t_0),Z(t_f)) = 0_{n_Z}$ müssen zunächst die Endbedingungen mit
 \begin{align*}
